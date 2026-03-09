@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Create Post — Canvás</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0c0b;
+    --surface: #141210;
+    --surface2: #1c1a17;
+    --surface3: #242018;
+    --border: rgba(255,235,180,0.08);
+    --border-hover: rgba(255,220,120,0.22);
+    --gold: #e8c97a;
+    --gold-dim: rgba(232,201,122,0.55);
+    --gold-glow: rgba(232,201,122,0.12);
+    --text: #f0e8d5;
+    --text-muted: rgba(240,232,213,0.45);
+    --text-subtle: rgba(240,232,213,0.25);
+    --accent: #c9643a;
+    --accent-glow: rgba(201,100,58,0.18);
+    --radius: 4px;
+    --radius-lg: 10px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Instrument Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.032;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Ambient background blobs */
+  .ambient {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .ambient-1 {
+    width: 600px; height: 600px;
+    top: -200px; right: -150px;
+    background: radial-gradient(circle, rgba(232,201,122,0.06) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .ambient-2 {
+    width: 500px; height: 500px;
+    bottom: 100px; left: -200px;
+    background: radial-gradient(circle, rgba(201,100,58,0.07) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  /* Layout */
+  .app {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: 100vh;
+  }
+
+  /* Nav */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13,12,11,0.85);
+  }
+
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+  }
+  .logo span { font-style: italic; color: var(--text); }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .nav-avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-hover);
+    background: linear-gradient(135deg, #3a2c1a, #1c1a17);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem;
+    color: var(--gold-dim);
+    font-family: 'DM Mono', monospace;
+    cursor: pointer;
+  }
+
+  /* Main content */
+  main {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 0;
+    max-width: 1260px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 50px 40px;
+    align-items: start;
+  }
+
+  /* Section title */
+  .page-header {
+    grid-column: 1 / -1;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .page-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.6rem;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  .page-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .page-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-subtle);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* Left column - image upload */
+  .left-col {
+    padding-right: 50px;
+    border-right: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Drop zone */
+  .drop-zone {
+    border: 1.5px dashed var(--border-hover);
+    border-radius: var(--radius-lg);
+    padding: 50px 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, rgba(232,201,122,0.02), transparent);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .drop-zone::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, var(--gold-glow), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .drop-zone:hover::before, .drop-zone.drag-over::before { opacity: 1; }
+  .drop-zone:hover, .drop-zone.drag-over {
+    border-color: var(--gold);
+    background: linear-gradient(135deg, rgba(232,201,122,0.04), transparent);
+  }
+
+  .drop-icon {
+    width: 52px; height: 52px;
+    margin: 0 auto 20px;
+    border: 1.5px solid var(--border-hover);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold-dim);
+    transition: all 0.3s;
+    position: relative;
+    z-index: 1;
+  }
+
+  .drop-zone:hover .drop-icon {
+    border-color: var(--gold);
+    color: var(--gold);
+    transform: scale(1.08);
+  }
+
+  .drop-icon svg { width: 22px; height: 22px; }
+
+  .drop-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 6px;
+    position: relative; z-index: 1;
+  }
+
+  .drop-sub {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    position: relative; z-index: 1;
+    line-height: 1.5;
+  }
+
+  .drop-sub strong {
+    color: var(--gold-dim);
+    font-weight: 500;
+  }
+
+  input[type="file"] { display: none; }
+
+  /* Image preview grid */
+  .image-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .image-item {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--surface2);
+    cursor: pointer;
+    animation: fadeSlideIn 0.4s ease forwards;
+    opacity: 0;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s;
+  }
+
+  .image-item:hover { border-color: var(--border-hover); }
+
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: scale(0.92) translateY(8px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .image-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.2s;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 10px;
+  }
+
+  .image-item:hover .image-overlay { opacity: 1; }
+
+  .image-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .image-remove {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: rgba(201,100,58,0.8);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: background 0.2s;
+  }
+
+  .image-remove:hover { background: var(--accent); }
+  .image-remove svg { width: 10px; height: 10px; }
+
+  .image-primary-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: var(--gold);
+    color: var(--bg);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    padding: 3px 7px;
+    border-radius: 2px;
+    font-weight: 500;
+  }
+
+  .add-more-tile {
+    aspect-ratio: 1;
+    border-radius: var(--radius-lg);
+    border: 1.5px dashed var(--border-hover);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    background: transparent;
+    transition: all 0.25s;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.08em;
+  }
+
+  .add-more-tile:hover {
+    border-color: var(--gold-dim);
+    color: var(--gold-dim);
+    background: var(--gold-glow);
+  }
+
+  .add-more-tile svg { width: 18px; height: 18px; }
+
+  .img-count-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+  }
+
+  .img-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--text-subtle);
+    letter-spacing: 0.08em;
+  }
+
+  .img-count span {
+    color: var(--gold-dim);
+  }
+
+  /* Right column - form */
+  .right-col {
+    padding-left: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  /* Form groups */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .form-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .form-label .char-count {
+    font-size: 0.55rem;
+    color: var(--text-subtle);
+  }
+
+  .form-label .char-count.warn { color: var(--accent); }
+
+  input[type="text"],
+  textarea,
+  .tag-input-wrap {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    color: var(--text);
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.9rem;
+    padding: 14px 16px;
+    outline: none;
+    transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+    width: 100%;
+    resize: none;
+  }
+
+  input[type="text"]::placeholder,
+  textarea::placeholder { color: var(--text-subtle); }
+
+  input[type="text"]:focus,
+  textarea:focus,
+  .tag-input-wrap:focus-within {
+    border-color: var(--gold-dim);
+    background: var(--surface3);
+    box-shadow: 0 0 0 3px var(--gold-glow), 0 4px 20px rgba(0,0,0,0.4);
+  }
+
+  textarea {
+    min-height: 130px;
+    line-height: 1.6;
+  }
+
+  /* Tags */
+  .tag-input-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    cursor: text;
+    align-items: center;
+    min-height: 52px;
+    padding: 10px 14px;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, rgba(232,201,122,0.1), rgba(232,201,122,0.06));
+    border: 1px solid rgba(232,201,122,0.2);
+    border-radius: 3px;
+    padding: 4px 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--gold-dim);
+    letter-spacing: 0.06em;
+    animation: tagPop 0.22s ease;
+    white-space: nowrap;
+  }
+
+  @keyframes tagPop {
+    from { transform: scale(0.85); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+
+  .tag button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: var(--gold-dim);
+    display: flex;
+    align-items: center;
+    opacity: 0.6;
+    transition: opacity 0.15s;
+  }
+
+  .tag button:hover { opacity: 1; }
+  .tag button svg { width: 9px; height: 9px; }
+
+  .tag-real-input {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-size: 0.88rem;
+    font-family: 'Instrument Sans', sans-serif;
+    flex: 1;
+    min-width: 90px;
+    padding: 2px 0;
+  }
+
+  .tag-real-input::placeholder { color: var(--text-subtle); }
+
+  .tag-hint {
+    font-size: 0.68rem;
+    color: var(--text-subtle);
+    margin-top: -4px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* Category / Medium selector */
+  .chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .chip {
+    padding: 7px 14px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-family: 'Instrument Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .chip:hover {
+    border-color: var(--border-hover);
+    color: var(--text);
+  }
+
+  .chip.active {
+    border-color: var(--gold-dim);
+    background: linear-gradient(135deg, rgba(232,201,122,0.1), rgba(232,201,122,0.04));
+    color: var(--gold);
+  }
+
+  /* Visibility toggle */
+  .visibility-row {
+    display: flex;
+    gap: 10px;
+  }
+
+  .vis-option {
+    flex: 1;
+    padding: 12px 10px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    user-select: none;
+  }
+
+  .vis-option:hover { border-color: var(--border-hover); }
+
+  .vis-option.active {
+    border-color: var(--gold-dim);
+    background: linear-gradient(135deg, rgba(232,201,122,0.08), transparent);
+  }
+
+  .vis-icon {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+  }
+
+  .vis-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .vis-sub {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0;
+  }
+
+  /* Bottom actions */
+  .form-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding-top: 8px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 13px 24px;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    border: none;
+    transition: all 0.25s;
+    letter-spacing: 0.03em;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--border-hover);
+    color: var(--text);
+  }
+
+  .btn-draft {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  .btn-draft:hover {
+    border-color: var(--border-hover);
+    color: var(--text);
+    background: var(--surface3);
+  }
+
+  .btn-publish {
+    background: linear-gradient(135deg, #e8c97a, #d4a843);
+    color: #1a1200;
+    font-weight: 600;
+    box-shadow: 0 4px 20px rgba(232,201,122,0.2);
+    flex: 1;
+    justify-content: center;
+  }
+
+  .btn-publish:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 30px rgba(232,201,122,0.35);
+    background: linear-gradient(135deg, #f0d48a, #dbb650);
+  }
+
+  .btn-publish:active { transform: translateY(0); }
+
+  .btn svg { width: 16px; height: 16px; }
+
+  /* Progress indicator */
+  .post-progress {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .progress-step {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--text-subtle);
+    letter-spacing: 0.08em;
+  }
+
+  .progress-step.done { color: var(--gold-dim); }
+
+  .progress-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--border-hover);
+    flex-shrink: 0;
+  }
+
+  .progress-step.done .progress-dot {
+    background: var(--gold);
+  }
+
+  .progress-arrow { color: var(--text-subtle); font-size: 0.6rem; }
+
+  /* Scroll to top */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
+
+  @media (max-width: 900px) {
+    main {
+      grid-template-columns: 1fr;
+      padding: 30px 20px;
+    }
+    .left-col {
+      padding-right: 0;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 40px;
+    }
+    .right-col {
+      padding-left: 0;
+      padding-top: 40px;
+    }
+    nav { padding: 16px 20px; }
+    .image-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="ambient ambient-1"></div>
+<div class="ambient ambient-2"></div>
+
+<div class="app">
+  <nav>
+    <div class="logo">Canv<span>ás</span></div>
+    <div class="nav-right">
+      <div style="font-size:0.78rem; color:var(--text-muted);">New post</div>
+      <div class="nav-avatar">AK</div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Share your <em>work</em></h1>
+        <p class="page-label">New artwork post</p>
+      </div>
+    </div>
+
+    <!-- LEFT: Images -->
+    <div class="left-col">
+      <div class="section-label">Artwork images</div>
+
+      <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+        <div class="drop-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
+          </svg>
+        </div>
+        <div class="drop-title">Drop your artwork here</div>
+        <div class="drop-sub">
+          Drag & drop or <strong>browse files</strong><br/>
+          JPG, PNG, WEBP, GIF · Up to 20MB each
+        </div>
+      </div>
+      <input type="file" id="fileInput" multiple accept="image/*" onchange="handleFiles(this.files)"/>
+
+      <div id="imageGrid" class="image-grid" style="display:none;"></div>
+
+      <div class="img-count-bar">
+        <div class="img-count" id="imgCount">0 / 10 images added</div>
+        <div style="font-size:0.65rem; color:var(--text-subtle); font-family:'DM Mono',monospace;">
+          First image = cover
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Form -->
+    <div class="right-col">
+
+      <!-- Title -->
+      <div class="form-group">
+        <label class="form-label">
+          Title
+          <span class="char-count" id="titleCount">0 / 80</span>
+        </label>
+        <input type="text" id="titleInput" placeholder="Give your artwork a name…" maxlength="80"
+          oninput="updateCharCount('titleInput','titleCount',80)"/>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label class="form-label">
+          Description
+          <span class="char-count" id="descCount">0 / 500</span>
+        </label>
+        <textarea id="descInput" placeholder="What's the story behind this piece? Share your process, inspiration, or anything you'd like people to know…" maxlength="500"
+          oninput="updateCharCount('descInput','descCount',500)"></textarea>
+      </div>
+
+      <!-- Medium -->
+      <div class="form-group">
+        <div class="form-label">Medium</div>
+        <div class="chip-group" id="mediumChips">
+          <div class="chip" onclick="toggleChip(this,'medium')">Digital</div>
+          <div class="chip" onclick="toggleChip(this,'medium')">Oil Paint</div>
+          <div class="chip" onclick="toggleChip(this,'medium')">Watercolor</div>
+          <div class="chip" onclick="toggleChip(this,'medium')">Photography</div>
+          <div class="chip" onclick="toggleChip(this,'medium')">Illustration</div>
+          <div class="chip" onclick="toggleChip(this,'medium')">Sculpture</div>
+          <div class="chip" onclick="toggleChip(this,'medium')">Mixed Media</div>
+          <div class="chip" onclick="toggleChip(this,'medium')">Other</div>
+        </div>
+      </div>
+
+      <!-- Tags -->
+      <div class="form-group">
+        <div class="form-label">Tags</div>
+        <div class="tag-input-wrap" id="tagWrap" onclick="document.getElementById('tagInput').focus()">
+          <input type="text" class="tag-real-input" id="tagInput"
+            placeholder="Add a tag…"
+            onkeydown="handleTagInput(event)"/>
+        </div>
+        <div class="tag-hint">Press Enter or comma to add · max 12 tags</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Visibility -->
+      <div class="form-group">
+        <div class="form-label">Visibility</div>
+        <div class="visibility-row">
+          <div class="vis-option active" onclick="selectVis(this)">
+            <div class="vis-icon">🌐</div>
+            <span class="vis-label">Public</span>
+            <div class="vis-sub">Everyone can see</div>
+          </div>
+          <div class="vis-option" onclick="selectVis(this)">
+            <div class="vis-icon">🔗</div>
+            <span class="vis-label">Link only</span>
+            <div class="vis-sub">Share with link</div>
+          </div>
+          <div class="vis-option" onclick="selectVis(this)">
+            <div class="vis-icon">🔒</div>
+            <span class="vis-label">Private</span>
+            <div class="vis-sub">Only you</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button class="btn btn-draft" onclick="saveDraft()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M16.5 3.75a1.5 1.5 0 011.5 1.5v13.5a1.5 1.5 0 01-1.5 1.5H7.5a1.5 1.5 0 01-1.5-1.5V5.25a1.5 1.5 0 011.5-1.5h9zM9 7.5h6M9 12h6M9 16.5h3"/>
+          </svg>
+          Save Draft
+        </button>
+        <button class="btn btn-publish" onclick="publishPost()">
+          Publish
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 12L18 12M13 7l5 5-5 5"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Toast -->
+<div id="toast" style="
+  position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(20px);
+  background:var(--surface3); border:1px solid var(--border-hover);
+  padding:12px 22px; border-radius:8px;
+  font-size:0.82rem; color:var(--text);
+  display:flex; align-items:center; gap:10px;
+  opacity:0; transition:all 0.3s; z-index:9998;
+  pointer-events:none; white-space:nowrap;
+  backdrop-filter:blur(12px);
+">
+  <span id="toastIcon"></span>
+  <span id="toastMsg"></span>
+</div>
+
+<script>
+  // ── Images ───────────────────────────────────────────
+  let images = [];
+  const MAX_IMAGES = 10;
+
+  const dropZone = document.getElementById('dropZone');
+
+  dropZone.addEventListener('dragover', e => {
+    e.preventDefault();
+    dropZone.classList.add('drag-over');
+  });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    handleFiles(e.dataTransfer.files);
+  });
+
+  function handleFiles(files) {
+    const remaining = MAX_IMAGES - images.length;
+    if (remaining <= 0) { showToast('⚠️', 'Maximum 10 images allowed'); return; }
+    const toAdd = Array.from(files).slice(0, remaining);
+    toAdd.forEach(file => {
+      if (!file.type.startsWith('image/')) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        images.push({ src: e.target.result, name: file.name });
+        renderGrid();
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function renderGrid() {
+    const grid = document.getElementById('imageGrid');
+    const count = document.getElementById('imgCount');
+    grid.style.display = images.length ? 'grid' : 'none';
+    grid.innerHTML = '';
+
+    images.forEach((img, i) => {
+      const item = document.createElement('div');
+      item.className = 'image-item';
+      item.style.animationDelay = `${i * 0.04}s`;
+      item.innerHTML = `
+        ${i === 0 ? '<div class="image-primary-badge">Cover</div>' : ''}
+        <img src="${img.src}" alt="${img.name}"/>
+        <div class="image-overlay">
+          <span class="image-num">${String(i+1).padStart(2,'0')}</span>
+          <button class="image-remove" onclick="removeImage(${i})">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+      `;
+      grid.appendChild(item);
+    });
+
+    if (images.length < MAX_IMAGES) {
+      const add = document.createElement('div');
+      add.className = 'add-more-tile';
+      add.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 4.5v15m7.5-7.5h-15"/>
+        </svg>
+        Add more
+      `;
+      add.onclick = () => document.getElementById('fileInput').click();
+      grid.appendChild(add);
+    }
+
+    count.innerHTML = `<span>${images.length}</span> / ${MAX_IMAGES} images added`;
+  }
+
+  function removeImage(i) {
+    images.splice(i, 1);
+    renderGrid();
+  }
+
+  // ── Char count ─────────────────────────────────────
+  function updateCharCount(inputId, countId, max) {
+    const val = document.getElementById(inputId).value.length;
+    const el = document.getElementById(countId);
+    el.textContent = `${val} / ${max}`;
+    el.classList.toggle('warn', val > max * 0.9);
+  }
+
+  // ── Tags ──────────────────────────────────────────
+  let tags = [];
+  const MAX_TAGS = 12;
+
+  function handleTagInput(e) {
+    const input = document.getElementById('tagInput');
+    const val = input.value.trim().replace(/,/g, '');
+    if ((e.key === 'Enter' || e.key === ',') && val) {
+      e.preventDefault();
+      if (tags.length >= MAX_TAGS) { showToast('⚠️', 'Max 12 tags allowed'); return; }
+      if (!tags.includes(val)) {
+        tags.push(val);
+        renderTags();
+      }
+      input.value = '';
+    } else if (e.key === 'Backspace' && !input.value && tags.length) {
+      tags.pop();
+      renderTags();
+    }
+  }
+
+  function renderTags() {
+    const wrap = document.getElementById('tagWrap');
+    const input = document.getElementById('tagInput');
+    // Remove old tags
+    wrap.querySelectorAll('.tag').forEach(t => t.remove());
+    tags.forEach((tag, i) => {
+      const el = document.createElement('div');
+      el.className = 'tag';
+      el.innerHTML = `
+        #${tag}
+        <button onclick="removeTag(${i})">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      `;
+      wrap.insertBefore(el, input);
+    });
+  }
+
+  function removeTag(i) {
+    tags.splice(i, 1);
+    renderTags();
+  }
+
+  // ── Chips ─────────────────────────────────────────
+  const mediumSelected = new Set();
+  function toggleChip(el, group) {
+    const val = el.textContent;
+    if (el.classList.contains('active')) {
+      el.classList.remove('active');
+      mediumSelected.delete(val);
+    } else {
+      el.classList.add('active');
+      mediumSelected.add(val);
+    }
+  }
+
+  // ── Visibility ────────────────────────────────────
+  function selectVis(el) {
+    document.querySelectorAll('.vis-option').forEach(v => v.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // ── Actions ───────────────────────────────────────
+  function saveDraft() {
+    showToast('📄', 'Draft saved successfully');
+  }
+
+  function publishPost() {
+    const title = document.getElementById('titleInput').value.trim();
+    if (!title) { showToast('✍️', 'Please add a title first'); return; }
+    if (!images.length) { showToast('🖼️', 'Add at least one image'); return; }
+    showToast('🎨', 'Post published! Welcome to the gallery.');
+  }
+
+  // ── Toast ─────────────────────────────────────────
+  let toastTimer;
+  function showToast(icon, msg) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toastIcon').textContent = icon;
+    document.getElementById('toastMsg').textContent = msg;
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateX(-50%) translateY(20px)';
+    }, 3000);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id
+  name          String
+  username      String
+  bio           String    @default("")
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+  profile       Profile?
+
+  @@unique([email])
+  @@unique([username])
+  @@index([id])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model Profile {
+  userId      String       @id
+  artPosts    ArtPost[]
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  collections Collection[]
+  followers   Follow[]     @relation("followers")
+  following   Follow[]     @relation("following")
+  likes       Like[]
+  comments    Comment[]
+
+  @@index([userId])
+  @@map("profile")
+}
+
+model Follow {
+  followerId  String
+  followingId String
+
+  follower  Profile @relation("following", fields: [followerId], references: [userId], onDelete: Cascade)
+  following Profile @relation("followers", fields: [followingId], references: [userId], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([followerId, followingId])
+  @@index([followerId, followingId])
+  @@map("follow")
+}
+
+model ArtPost {
+  id          String       @id @default(uuid())
+  authorId    String
+  user        Profile      @relation(fields: [authorId], references: [userId])
+  artImages   String[]
+  tags        String[]
+  description String?
+  likes       Like[]
+  usersSaved  Collection[]
+  comments    Comment[]
+
+  @@unique([id])
+  @@index([id])
+  @@map("artPost")
+}
+
+model Collection {
+  artPostId     String
+  savedByUserId String
+
+  user    Profile @relation(fields: [savedByUserId], references: [userId])
+  artPost ArtPost @relation(fields: [artPostId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([artPostId, savedByUserId])
+  @@index([artPostId, savedByUserId])
+  @@map("collection")
+}
+
+model Like {
+  artPostId String
+  ownerId   String
+  artPost   ArtPost @relation(fields: [artPostId], references: [id])
+  user      Profile @relation(fields: [ownerId], references: [userId])
+
+  @@unique([artPostId, ownerId])
+  @@index([artPostId, ownerId])
+  @@map("like")
+}
+
+model Comment {
+  id        String  @id @default(uuid())
+  artPostId String
+  ownerId   String
+  artPost   ArtPost @relation(fields: [artPostId], references: [id])
+  user      Profile @relation(fields: [ownerId], references: [userId])
+
+  @@unique([id])
+  @@index([id])
+  @@map("comment")
+}
+
+model VerifiyUser {
+  email            String
+  verificationCode String
+
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@id([email, verificationCode])
+  @@unique([email, verificationCode])
+  @@index([email, verificationCode])
+  @@map("verify-user")
+}
