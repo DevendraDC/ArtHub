@@ -131,7 +131,16 @@
     @apply focus:outline-0;
   }
   .hover-col {
-    @apply hover:text-amber-500 transition-colors duration-500;
+    @apply hover:text-amber-300 transition-colors duration-300;
+  }
+  .box {
+    @apply bg-(--surface) border-border border rounded-xl
+  }
+  .button-1 {
+    @apply border-border text-(--text-muted) rounded-sm hover:border-(--border-hover) hover:text-(--text) hover:bg-(--surface2) transition-colors duration-300
+  }
+  .inp {
+    @apply border placeholder:text-(--text-subtle) rounded-sm resize-none focus:outline-0 border-border bg-(--surface2)
   }
 }
 
@@ -151,5 +160,6 @@
   --text: #f5f0e8;
   --text-muted: #8a8070;
   --text-subtle: #524e45;
+  --text-light: #c8bfb0;
   --danger: #ef4444;
 }

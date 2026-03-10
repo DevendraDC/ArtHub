@@ -13,6 +13,26 @@ datasource db {
   provider = "postgresql"
 }
 
+enum PostMedium {
+  DIGITAL
+  OIL_PAINT
+  WATERCOLOR
+  PHOTOGRAPHY
+  ILLUSTRATION
+  SCULPTURE
+  MIXED_MEDIA
+  SKETCH
+  THREE_D
+  ANIMATION
+  LINEART
+  CONCEPT_ART
+  ANIME_ART
+  MANGA_ART
+  PIXEL_ART
+  TRADITIONAL_ART
+  OTHER
+}
+
 model User {
   id            String    @id
   name          String
@@ -113,8 +133,10 @@ model ArtPost {
   id          String       @id @default(uuid())
   authorId    String
   user        Profile      @relation(fields: [authorId], references: [userId])
+  title       String
   artImages   String[]
   tags        String[]
+  medium      PostMedium[]
   description String?
   likes       Like[]
   usersSaved  Collection[]

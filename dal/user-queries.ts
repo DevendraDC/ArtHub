@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { uploadImage } from "@/utils/upload-to-cloudinary";
 
 interface userDataType {
+  id: string;
   email: string;
   image: File | null;
   name: string;
@@ -22,27 +23,15 @@ interface param {
   val: string;
 }
 
-export const getUser = async (inp: param) => {
-  let user = null;
-  if (inp.type === getUserBy.ID) {
-    user = await prisma.user.findUnique({
-      where: {
-        id: inp.val,
+export const getUser = async (username: string, userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      username,
+      NOT: {
+        id: userId,
       },
-    });
-  } else if (inp.type === getUserBy.EMAIL) {
-    user = await prisma.user.findUnique({
-      where: {
-        email: inp.val,
-      },
-    });
-  } else if (inp.type === getUserBy.USERNAME) {
-    user = await prisma.user.findUnique({
-      where: {
-        username: inp.val,
-      },
-    });
-  }
+    },
+  });
 
   return user;
 };
@@ -52,22 +41,35 @@ export const updateUser = async (userData: userDataType) => {
     if (!userData.name || !userData.username) {
       throw new Error("name and username are required");
     }
-    let img : string | null = null;
-    if(userData.image){
+    let img: string | null = null;
+    if (userData.image) {
       const res = await uploadImage(userData.image);
-      img = res.secure_url
+      img = res.secure_url;
     }
     await prisma.user.update({
       where: {
         email: userData.email,
       },
       data: {
-        image: img,
+        ...(img && { image: img }),
         name: userData.name,
         username: userData.username,
         bio: userData.bio,
       },
     });
+    const profile = await prisma.profile.findUnique({
+      where: {
+        userId: userData.id,
+      },
+    });
+    if (!profile) {
+      await prisma.profile.create({
+        data: {
+          userId: userData.id,
+        },
+      });
+    }
+
     return {
       success: true,
     };

@@ -64,20 +64,23 @@ export default function ProfileSettings({
     } = useForm({
         resolver: zodResolver(profileSchema),
         defaultValues: {
-            artistName: "",
-            username: "",
-            bio: ""
+            artistName: userSession.user.name,
+            username: userSession.user.username,
+            bio: userSession.user.bio,
+            userId : userSession.user.id
         },
     });
 
     const formSubmit = async (data: z.infer<typeof profileSchema>) => {
         const userData = {
+            id : userSession.user.id,
             name: data.artistName,
             username: data.username,
             bio: data.bio ? data.bio : "",
             image: curAvatar,
             email: userSession.user.email
         }
+        
         const { success, error } = await updateUser(userData)
         if (!success) {
             toast(error);
@@ -185,9 +188,7 @@ export default function ProfileSettings({
                                             <FieldLabel htmlFor="Bio">Bio</FieldLabel>
                                             <textarea
                                                 className="bg-white/7 rounded-lg p-3 text-sm h-25 focus:outline-0 resize-none overflow-hidden"
-                                                placeholder={
-                                                    userSession.user.bio ? userSession.user.bio : "bio (optional)"
-                                                }
+                                                placeholder="tell us something about yourself"
                                                 {...field}
                                                 maxLength={5000}
                                                 rows={1}
@@ -208,7 +209,7 @@ export default function ProfileSettings({
                                 />
 
                                 <Field>
-                                    <Button type="submit">Save Profile</Button>
+                                    <Button disabled={isSubmitting} type="submit">Save Profile</Button>
                                 </Field>
                             </FieldGroup>
                         </FieldSet>

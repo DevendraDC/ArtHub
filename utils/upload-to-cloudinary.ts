@@ -10,3 +10,12 @@ export async function uploadImage(image: File) {
 
   return result;
 }
+
+
+export async function uploadMultipleImages(images : File[]) {
+  const uploadedImages = images.map(image => {
+    return uploadImage(image);
+  })
+
+  return await Promise.all(uploadedImages);
+}

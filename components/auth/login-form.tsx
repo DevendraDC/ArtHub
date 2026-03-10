@@ -59,9 +59,9 @@ export function LoginForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="bg-transparent border-0">
         <CardHeader>
-          <CardTitle className="text-center text-2xl mb-3">Login</CardTitle>
-          <CardDescription className="text-center">
-            Enter your emai and password to login to your account
+          <CardTitle className="text-center text-2xl font-serif mb-3">Login</CardTitle>
+          <CardDescription className="text-center text-(--text-muted)">
+            Enter your email and password to login to your account
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -72,7 +72,7 @@ export function LoginForm({
                 control={control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="email">Email</FieldLabel>
+                    <FieldLabel htmlFor="email" className="text-(--text-light)">Email</FieldLabel>
                     <Input {...field} id="email" />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -86,15 +86,15 @@ export function LoginForm({
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
                     <div className="flex items-center">
-                      <FieldLabel htmlFor="password">Password</FieldLabel>
+                      <FieldLabel htmlFor="password" className="text-(--text-light)">Password</FieldLabel>
                       <a
                         href="#"
-                        className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                        className="ml-auto text-(--text-muted) inline-block text-sm underline-offset-4 hover:underline"
                       >
                         Forgot your password?
                       </a>
                     </div>
-                    <Input {...field} id="password" type="password" />
+                    <Input {...field} id="password" type="password"/>
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
@@ -103,7 +103,7 @@ export function LoginForm({
               />
 
               <Field>
-                <Button type="submit" disabled={isSubmitting}>
+                <Button type="submit" disabled={isSubmitting} className="bg-(--amber) hover:bg-amber-300 transition-all duration-300 hover:-translate-y-1">
                   Login
                 </Button>
                 <Button variant="outline" type="button" disabled={isSubmitting}>
