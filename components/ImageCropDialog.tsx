@@ -3,7 +3,7 @@
 import { Dispatch, SetStateAction, useState } from "react"
 import Cropper from "react-easy-crop"
 import { Button } from "./ui/button"
-import { croppedImage } from "@/utils/croppedImage"
+import { croppedImage } from "@/src/utils/croppedImage"
 import { toast } from "sonner"
 
 interface area {

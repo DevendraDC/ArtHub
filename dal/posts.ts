@@ -1,7 +1,7 @@
 "use server";
 
-import { PostMedium } from "@/lib/generated/prisma/enums";
-import { prisma } from "@/lib/prisma";
+import { PostMedium } from "@/src/lib/generated/prisma/enums";
+import { prisma } from "@/src/lib/prisma";
 
 export async function postUpload(formData: FormData) {
   try {
@@ -36,22 +36,30 @@ export async function postUpload(formData: FormData) {
   }
 }
 
-export async function getPosts() {
+export async function getPosts(userId : string) {
   try {
     const posts = await prisma.artPost.findMany({
       include: {
         comments: true,
         user: {
             select : {
-                userId : true,
-                
+                id : true,
+                name : true,
+                username : true,
+                image : true
             }
         },
         _count: {
           select: {
             likes: true,
+            comments : true
           },
         },
+        likes : {
+          where : {
+            ownerId : userId
+          }
+        }
       },
     });
     return posts;
@@ -59,3 +67,5 @@ export async function getPosts() {
     console.error(error);
   }
 }
+
+export type Posts = Awaited<ReturnType<typeof getPosts>>;

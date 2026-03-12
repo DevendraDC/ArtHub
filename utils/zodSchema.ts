@@ -1,6 +1,5 @@
-import { getUser } from "@/dal/user-queries";
-import { refine, z } from "zod";
-import { prisma } from "@/lib/prisma";
+import { getUser } from "@/src/dal/user-queries";
+import { z } from "zod";
 
 enum getUserBy {
   ID,

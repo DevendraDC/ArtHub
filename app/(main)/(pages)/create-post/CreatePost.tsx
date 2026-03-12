@@ -1,13 +1,13 @@
 "use client";
 
 import { Upload, X } from "lucide-react";
-import { sessionType } from "@/components/profile/Settings";
+import { sessionType } from "@/src/app/(main)/(pages)/edit-profile/editProfile";
 import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
-import { PostMedium } from "@/lib/generated/prisma/enums";
-import { uploadMultipleImages } from "@/utils/upload-to-cloudinary";
-import { postUpload } from "@/dal/posts";
+import { PostMedium } from "@/src/lib/generated/prisma/enums";
+import { uploadMultipleImages } from "@/src/utils/upload-to-cloudinary";
+import { postUpload } from "@/src/dal/posts";
 import { useRouter } from "next/navigation";
 
 export default function CreatePost({
@@ -59,7 +59,7 @@ export default function CreatePost({
         }
         setIsPublishing(true);
         const uploadedImages = await uploadMultipleImages(selectedImages)
-        if(!uploadedImages){
+        if (!uploadedImages) {
             toast("failed to upload images");
             setIsPublishing(false)
             return;
@@ -71,8 +71,8 @@ export default function CreatePost({
         tags.forEach(tag => formData.append("tags", tag));
         medium.forEach(med => formData.append("mediums", med));
         uploadedImages.forEach(img => formData.append("images", img.secure_url));
-        const {success, error} = await postUpload(formData);
-        if(!success){
+        const { success, error } = await postUpload(formData);
+        if (!success) {
             toast(error);
         }
         else {

@@ -9,16 +9,16 @@ import {
     Field,
     FieldLabel,
     FieldError,
-} from "../ui/field";
-import { Input } from "../ui/input";
+} from "@/src/components/ui/field";
+import { Input } from "@/src/components/ui/input";
 import { useRef, useState } from "react";
-import ImageCropDialog from "../ImageCropDialog";
-import { Button } from "../ui/button";
+import ImageCropDialog from "@/src/components/ImageCropDialog";
+import { Button } from "@/src/components/ui/button";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { profileSchema } from "@/utils/zodSchema";
+import { profileSchema } from "@/src/utils/zodSchema";
 import z from "zod";
-import { updateUser } from "@/dal/user-queries";
+import { updateUser } from "@/src/dal/user-queries";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -47,7 +47,7 @@ export interface sessionType {
 }
 
 
-export default function ProfileSettings({
+export default function EditProfile({
     userSession,
 }: {
     userSession: sessionType;
@@ -67,20 +67,20 @@ export default function ProfileSettings({
             artistName: userSession.user.name,
             username: userSession.user.username,
             bio: userSession.user.bio,
-            userId : userSession.user.id
+            userId: userSession.user.id
         },
     });
 
     const formSubmit = async (data: z.infer<typeof profileSchema>) => {
         const userData = {
-            id : userSession.user.id,
+            id: userSession.user.id,
             name: data.artistName,
             username: data.username,
             bio: data.bio ? data.bio : "",
             image: curAvatar,
             email: userSession.user.email
         }
-        
+
         const { success, error } = await updateUser(userData)
         if (!success) {
             toast(error);
@@ -93,8 +93,8 @@ export default function ProfileSettings({
     }
 
     return (
-        <div className="w-full flex justify-center p-9">
-            <div className="w-[30vw]">
+        <div className="w-full flex justify-center p-5 bg-(--bg)">
+            <div className="w-[55%] flex flex-col gap-7">
                 <form onSubmit={handleSubmit(formSubmit)}>
                     <FieldGroup>
                         <FieldSet>
@@ -202,8 +202,8 @@ export default function ProfileSettings({
                                                 write something about yourself
                                             </FieldDescription>
                                             {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
+                                                <FieldError errors={[fieldState.error]} />
+                                            )}
                                         </Field>
                                     )}
                                 />

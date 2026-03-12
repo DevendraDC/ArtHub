@@ -1,6 +1,6 @@
 "use server"
 
-import { getSession } from "@/utils/getSession";
+import { getSession } from "@/src/utils/getSession";
 import { redirect } from "next/navigation";
 import Profile from "./Profile";
 

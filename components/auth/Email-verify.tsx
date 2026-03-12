@@ -8,9 +8,9 @@ import {
     InputOTP,
     InputOTPGroup,
     InputOTPSlot,
-} from "@/components/ui/input-otp"
+} from "@/src/components/ui/input-otp"
 import { toast } from "sonner";
-import { verifyUser } from "@/dal/verify-user";
+import { verifyUser } from "@/src/dal/verify-user";
 import { useRouter } from "next/navigation";
 
 

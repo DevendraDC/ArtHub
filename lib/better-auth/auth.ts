@@ -1,8 +1,8 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/src/lib/prisma";
 import { Resend } from "resend";
-import EmailVerificationCode from "@/components/auth/EmailTemplate";
+import EmailVerificationCode from "@/src/components/auth/EmailTemplate";
 import crypto from "crypto";
 import { nextCookies } from "better-auth/next-js";
 

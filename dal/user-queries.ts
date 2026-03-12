@@ -1,7 +1,7 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
-import { uploadImage } from "@/utils/upload-to-cloudinary";
+import { prisma } from "@/src/lib/prisma";
+import { uploadImage } from "@/src/utils/upload-to-cloudinary";
 
 interface userDataType {
   id: string;
@@ -57,18 +57,6 @@ export const updateUser = async (userData: userDataType) => {
         bio: userData.bio,
       },
     });
-    const profile = await prisma.profile.findUnique({
-      where: {
-        userId: userData.id,
-      },
-    });
-    if (!profile) {
-      await prisma.profile.create({
-        data: {
-          userId: userData.id,
-        },
-      });
-    }
 
     return {
       success: true,

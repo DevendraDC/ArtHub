@@ -1,6 +1,6 @@
 "use server";
 
-import cloudinary from "@/lib/cloudinary";
+import cloudinary from "@/src/lib/cloudinary";
 
 export async function uploadImage(image: File) {
   const imageBuffer = await image.arrayBuffer();

@@ -1,28 +1,28 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { cn } from "@/src/lib/utils";
+import { Button } from "@/src/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/src/components/ui/card";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { authSchema } from "@/utils/zodSchema";
+} from "@/src/components/ui/field";
+import { Input } from "@/src/components/ui/input";
+import { authSchema } from "@/src/utils/zodSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import { loginUser } from "@/dal/user-auth";
+import { loginUser } from "@/src/dal/user-auth";
 import { useRouter } from "next/navigation";
 
 export function LoginForm({

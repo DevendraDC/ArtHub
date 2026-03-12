@@ -1,27 +1,27 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/src/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/src/components/ui/card"
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from "@/src/components/ui/field"
+import { Input } from "@/src/components/ui/input"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { authSchema } from "@/utils/zodSchema"
+import { authSchema } from "@/src/utils/zodSchema"
 import z from "zod"
 import { toast } from "sonner"
-import { signupUser } from "@/dal/user-auth"
+import { signupUser } from "@/src/dal/user-auth"
 import { useRouter } from "next/navigation"
 
 

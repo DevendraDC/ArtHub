@@ -1,6 +1,6 @@
 "use server"
 
-import EmailVerify from "@/components/auth/Email-verify";
+import EmailVerify from "@/src/components/auth/Email-verify";
 
 type Props = {
     searchParams: Promise<{ email?: string }>

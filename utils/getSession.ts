@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/lib/better-auth/auth";
+import { auth } from "@/src/lib/better-auth/auth";
 import { headers } from "next/headers";
 
 export const getSession = async () => {
@@ -10,3 +10,5 @@ export const getSession = async () => {
 
   return session;
 };
+
+export type Session = Awaited<ReturnType<typeof getSession>>;
