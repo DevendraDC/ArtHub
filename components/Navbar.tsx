@@ -25,7 +25,7 @@ export default async function Navbar() {
         }
     ]
     return (
-        <div className="sticky top-0 z-50 bg-(--bg2) backdrop-blur-2xl border-white/30 p-3 flex items-center gap-20">
+        <div className="sticky top-0 z-999 bg-(--bg2) backdrop-blur-2xl border-white/30 p-3 flex items-center gap-20">
             <div className="text-2xl font-serif ml-10">Art<span className="text-amber-500">hub</span></div>
             <div className="flex gap-40 items-center">
                 <ul className="flex gap-20">

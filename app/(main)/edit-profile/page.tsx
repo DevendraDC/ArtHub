@@ -1,6 +1,6 @@
 "use server";
 
-import ProfileSettings from "@/src/app/(main)/(pages)/edit-profile/editProfile";
+import ProfileSettings from "@/src/app/(main)/edit-profile/editProfile";
 import { getSession } from "@/src/utils/getSession";
 import { redirect } from "next/navigation";
 

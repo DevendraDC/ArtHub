@@ -1,7 +1,6 @@
 "use client";
 
 import { Upload, X } from "lucide-react";
-import { sessionType } from "@/src/app/(main)/(pages)/edit-profile/editProfile";
 import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
@@ -9,13 +8,11 @@ import { PostMedium } from "@/src/lib/generated/prisma/enums";
 import { uploadMultipleImages } from "@/src/utils/upload-to-cloudinary";
 import { postUpload } from "@/src/dal/posts";
 import { useRouter } from "next/navigation";
+import { useSession } from "../SessionProvider";
 
-export default function CreatePost({
-    userSession,
-}: {
-    userSession: sessionType;
-}) {
+export default function CreatePost() {
     const router = useRouter()
+    const session = useSession()
     const [tagInputVal, setTagInputVal] = useState("");
     const [tags, setTags] = useState<string[]>([]);
     const [selectedImages, setSelectedImages] = useState<File[]>([]);
@@ -65,7 +62,7 @@ export default function CreatePost({
             return;
         }
         const formData = new FormData();
-        formData.set("authorId", userSession.user.id)
+        formData.set("authorId", session.user.id)
         formData.set("title", title);
         formData.set("description", description);
         tags.forEach(tag => formData.append("tags", tag));

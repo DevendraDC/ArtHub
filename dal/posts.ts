@@ -2,6 +2,7 @@
 
 import { PostMedium } from "@/src/lib/generated/prisma/enums";
 import { prisma } from "@/src/lib/prisma";
+import { cache } from "react";
 
 export async function postUpload(formData: FormData) {
   try {
@@ -36,36 +37,79 @@ export async function postUpload(formData: FormData) {
   }
 }
 
-export async function getPosts(userId : string) {
+// export const getPosts = cache(async () => {
+//   try {
+//     const posts = await prisma.artPost.findMany({
+//       include: {
+//         user: {
+//           select: {
+//             id: true,
+//             name: true,
+//             username: true,
+//             image: true,
+//           },
+//         },
+//         _count: {
+//           select: {
+//             likes: true,
+//             comments: true,
+//           },
+//         },
+//       },
+//       orderBy: {
+//         createdAt: "desc",
+//       },
+//     });
+//     return posts;
+//   } catch (error) {
+//     console.error(error);
+//   }
+// });
+
+// export type Posts = Awaited<ReturnType<typeof getPosts>>;
+
+export const getPosts = cache(async (userId: string) => {
   try {
     const posts = await prisma.artPost.findMany({
       include: {
-        comments: true,
         user: {
-            select : {
-                id : true,
-                name : true,
-                username : true,
-                image : true
-            }
+          select: {
+            id: true,
+            name: true,
+            username: true,
+            image: true,
+            bio: true,
+            _count: {
+              select: {
+                followers: true,
+                following: true,
+                artPosts: true,
+              },
+            },
+          },
         },
         _count: {
           select: {
+            comments: true,
             likes: true,
-            comments : true
           },
         },
-        likes : {
-          where : {
-            ownerId : userId
-          }
-        }
+        likes: {
+          where: {
+            ownerId: userId,
+          },
+        },
       },
+      orderBy : {
+        createdAt : "desc"
+      }
     });
     return posts;
   } catch (error) {
     console.error(error);
   }
-}
+})
 
 export type Posts = Awaited<ReturnType<typeof getPosts>>;
+export type Post = NonNullable<Posts>[number];
+

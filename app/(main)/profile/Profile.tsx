@@ -1,6 +1,6 @@
 "use client"
 
-import { sessionType } from "@/src/app/(main)/(pages)/edit-profile/editProfile";
+import { sessionType } from "@/src/app/(main)/edit-profile/editProfile";
 import { Edit } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";

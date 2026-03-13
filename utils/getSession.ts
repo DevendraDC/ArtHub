@@ -2,13 +2,19 @@
 
 import { auth } from "@/src/lib/better-auth/auth";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { cache } from "react";
 
-export const getSession = async () => {
+export const getSession = cache(async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
+  if(!session){
+    redirect("/login")
+  }
+
   return session;
-};
+})
 
 export type Session = Awaited<ReturnType<typeof getSession>>;
