@@ -125,18 +125,31 @@ model ArtPost {
   authorId    String
   user        User         @relation(fields: [authorId], references: [id])
   title       String
-  artImages   String[]
+  artImages   ArtImages[]
   tags        String[]
   medium      PostMedium[]
   description String?
   likes       Like[]
   usersSaved  Collection[]
   comments    Comment[]
-  createdAt DateTime @default(now())
+  createdAt   DateTime     @default(now())
 
   @@unique([id])
   @@index([id])
   @@map("artPost")
+}
+
+model ArtImages {
+  id      String  @id @default(uuid())
+  postId  String
+  url     String
+  artPost ArtPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  order   Int
+
+  @@unique([postId, order])
+  @@index([id])
+  @@index([postId, order])
+  @@map("artImages")
 }
 
 model Collection {

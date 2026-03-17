@@ -134,7 +134,7 @@
     @apply hover:text-amber-300 transition-colors duration-300;
   }
   .box {
-    @apply bg-(--surface) border-border border rounded-xl
+    @apply bg-(--surface) border-border border rounded-lg
   }
   .button-1 {
     @apply border-border text-(--text-muted) rounded-sm hover:border-(--border-hover) hover:text-(--text) hover:bg-(--surface2) transition-colors duration-300

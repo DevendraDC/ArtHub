@@ -390,6 +390,7 @@ export const ModelName = {
   Verification: 'Verification',
   Follow: 'Follow',
   ArtPost: 'ArtPost',
+  ArtImages: 'ArtImages',
   Collection: 'Collection',
   Like: 'Like',
   Comment: 'Comment',
@@ -409,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "follow" | "artPost" | "collection" | "like" | "comment" | "verifiyUser"
+    modelProps: "user" | "session" | "account" | "verification" | "follow" | "artPost" | "artImages" | "collection" | "like" | "comment" | "verifiyUser"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -857,6 +858,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ArtImages: {
+      payload: Prisma.$ArtImagesPayload<ExtArgs>
+      fields: Prisma.ArtImagesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ArtImagesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArtImagesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ArtImagesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArtImagesPayload>
+        }
+        findFirst: {
+          args: Prisma.ArtImagesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArtImagesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ArtImagesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArtImagesPayload>
+        }
+        findMany: {
+          args: Prisma.ArtImagesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArtImagesPayload>[]
+        }
+        create: {
+          args: Prisma.ArtImagesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArtImagesPayload>
+        }
+        createMany: {
+          args: Prisma.ArtImagesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ArtImagesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArtImagesPayload>[]
+        }
+        delete: {
+          args: Prisma.ArtImagesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArtImagesPayload>
+        }
+        update: {
+          args: Prisma.ArtImagesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArtImagesPayload>
+        }
+        deleteMany: {
+          args: Prisma.ArtImagesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ArtImagesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ArtImagesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArtImagesPayload>[]
+        }
+        upsert: {
+          args: Prisma.ArtImagesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArtImagesPayload>
+        }
+        aggregate: {
+          args: Prisma.ArtImagesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateArtImages>
+        }
+        groupBy: {
+          args: Prisma.ArtImagesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ArtImagesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ArtImagesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ArtImagesCountAggregateOutputType> | number
+        }
+      }
+    }
     Collection: {
       payload: Prisma.$CollectionPayload<ExtArgs>
       fields: Prisma.CollectionFieldRefs
@@ -1265,7 +1340,6 @@ export const ArtPostScalarFieldEnum = {
   id: 'id',
   authorId: 'authorId',
   title: 'title',
-  artImages: 'artImages',
   tags: 'tags',
   medium: 'medium',
   description: 'description',
@@ -1273,6 +1347,16 @@ export const ArtPostScalarFieldEnum = {
 } as const
 
 export type ArtPostScalarFieldEnum = (typeof ArtPostScalarFieldEnum)[keyof typeof ArtPostScalarFieldEnum]
+
+
+export const ArtImagesScalarFieldEnum = {
+  id: 'id',
+  postId: 'postId',
+  url: 'url',
+  order: 'order'
+} as const
+
+export type ArtImagesScalarFieldEnum = (typeof ArtImagesScalarFieldEnum)[keyof typeof ArtImagesScalarFieldEnum]
 
 
 export const CollectionScalarFieldEnum = {
@@ -1403,6 +1487,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
+
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -1504,6 +1602,7 @@ export type GlobalOmitConfig = {
   verification?: Prisma.VerificationOmit
   follow?: Prisma.FollowOmit
   artPost?: Prisma.ArtPostOmit
+  artImages?: Prisma.ArtImagesOmit
   collection?: Prisma.CollectionOmit
   like?: Prisma.LikeOmit
   comment?: Prisma.CommentOmit

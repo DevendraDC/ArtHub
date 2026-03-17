@@ -1,14 +1,15 @@
 "use client";
 
 import { Upload, X } from "lucide-react";
-import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { PostMedium } from "@/src/lib/generated/prisma/enums";
-import { uploadMultipleImages } from "@/src/utils/upload-to-cloudinary";
+import { uploadMultipleImages } from "@/src/utils/cloudinary";
 import { postUpload } from "@/src/dal/posts";
 import { useRouter } from "next/navigation";
 import { useSession } from "../SessionProvider";
+import { Spinner } from "@/components/ui/spinner";
+import { motion } from "motion/react"
 
 export default function CreatePost() {
     const router = useRouter()
@@ -90,7 +91,10 @@ export default function CreatePost() {
     }
 
     return (
-        <div className="w-full flex justify-center p-5 bg-(--bg)">
+        <motion.div className="w-full flex justify-center p-5 bg-(--bg)"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}>
             <div className="w-[55%] flex flex-col gap-7">
                 <div>
                     <div className="text-sm flex gap-3">
@@ -288,11 +292,11 @@ export default function CreatePost() {
                     <button disabled={isPublishing} onClick={handleDiscard} className="py-2 px-4 border border-border text-(--text-muted) rounded-sm hover:border-(--border-hover) hover:text-(--text) hover:bg-(--surface2) transition-colors duration-300">
                         Discard
                     </button>
-                    <button onClick={handlePublish} disabled={isPublishing} className="py-2 px-4 border bg-amber-400 font-sans font-semibold text-black w-full rounded-lg hover:bg-amber-300 hover:shadow-[0px_0px_5px] hover:shadow-amber-300 hover:-translate-y-1 transition-all duration-300">
-                        Publish Post
+                    <button onClick={handlePublish} disabled={isPublishing} className="py-2 px-4 border text-center bg-amber-400 flex justify-center items-center font-sans font-semibold text-black w-full rounded-lg hover:bg-amber-300 hover:shadow-[0px_0px_5px] hover:shadow-amber-300 hover:-translate-y-1 transition-all duration-300">
+                        {isPublishing ? <Spinner /> : "Publish Post"}
                     </button>
                 </div>
             </div>
-        </div>
+        </motion.div>
     );
 }

@@ -57,6 +57,7 @@ export const ModelName = {
   Verification: 'Verification',
   Follow: 'Follow',
   ArtPost: 'ArtPost',
+  ArtImages: 'ArtImages',
   Collection: 'Collection',
   Like: 'Like',
   Comment: 'Comment',
@@ -152,7 +153,6 @@ export const ArtPostScalarFieldEnum = {
   id: 'id',
   authorId: 'authorId',
   title: 'title',
-  artImages: 'artImages',
   tags: 'tags',
   medium: 'medium',
   description: 'description',
@@ -160,6 +160,16 @@ export const ArtPostScalarFieldEnum = {
 } as const
 
 export type ArtPostScalarFieldEnum = (typeof ArtPostScalarFieldEnum)[keyof typeof ArtPostScalarFieldEnum]
+
+
+export const ArtImagesScalarFieldEnum = {
+  id: 'id',
+  postId: 'postId',
+  url: 'url',
+  order: 'order'
+} as const
+
+export type ArtImagesScalarFieldEnum = (typeof ArtImagesScalarFieldEnum)[keyof typeof ArtImagesScalarFieldEnum]
 
 
 export const CollectionScalarFieldEnum = {

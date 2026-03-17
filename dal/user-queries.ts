@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/src/lib/prisma";
-import { uploadImage } from "@/src/utils/upload-to-cloudinary";
+import { uploadImage } from "@/src/utils/cloudinary";
 
 interface userDataType {
   id: string;

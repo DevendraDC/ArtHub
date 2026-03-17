@@ -72,6 +72,11 @@ export type Follow = Prisma.FollowModel
  */
 export type ArtPost = Prisma.ArtPostModel
 /**
+ * Model ArtImages
+ * 
+ */
+export type ArtImages = Prisma.ArtImagesModel
+/**
  * Model Collection
  * 
  */

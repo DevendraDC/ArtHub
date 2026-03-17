@@ -1,22 +1,22 @@
 "use server"
 
 import Navbar from "@/src/components/Navbar";
-import { getSession } from "@/src/utils/getSession";
-import SessionProvider from "./SessionProvider";
+import { auth } from "@/src/lib/better-auth/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 export default async function MainLayout({
     children,
-    modal
 }: {
     children: React.ReactNode;
-    modal: React.ReactNode;
 }) {
-    const session = await getSession();
+    const session = await auth.api.getSession({ headers: await headers() });
+    
+    if (!session) redirect("/login");
     return (
-        <SessionProvider session={session}>
+        <>
             <Navbar />
-            {modal}
             {children}
-        </SessionProvider>
+        </>
     );
 }

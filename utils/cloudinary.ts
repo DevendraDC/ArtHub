@@ -19,3 +19,4 @@ export async function uploadMultipleImages(images : File[]) {
 
   return await Promise.all(uploadedImages);
 }
+
