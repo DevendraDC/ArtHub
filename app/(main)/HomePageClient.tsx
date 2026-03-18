@@ -18,7 +18,7 @@ export default function HomePageClient({ posts }: { posts: Posts }) {
                         <Link href={`/post/${post.id}`} key={post.id}>
                             <motion.div
                                 key={post.id}
-                                className="w-70 h-70 relative bg-(--surface2) overflow-hidden group"
+                                className="w-65 h-65 relative bg-(--surface2) overflow-hidden group"
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.3, ease: "easeOut" }}

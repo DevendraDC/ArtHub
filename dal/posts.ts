@@ -3,6 +3,7 @@
 import { PostMedium } from "@/src/lib/generated/prisma/enums";
 import { prisma } from "@/src/lib/prisma";
 import { cache } from "react";
+import { uploadMultipleImages } from "../utils/cloudinary";
 
 export async function postUpload(formData: FormData) {
   try {
@@ -10,12 +11,13 @@ export async function postUpload(formData: FormData) {
     const title = formData.get("title") as string;
     const description = formData.get("description") as string;
     const tags = formData.getAll("tags") as string[];
-    const artImages = formData.getAll("images") as string[];
+    const artImages = formData.getAll("images") as File[];
     const medium = formData.getAll("mediums") as PostMedium[];
 
     if (!authorId || !title || medium.length === 0 || artImages.length === 0) {
       throw new Error("please fill the required fields");
     }
+    const uploadedImages = await uploadMultipleImages(artImages);
     await prisma.artPost.create({
       data: {
         authorId,
@@ -24,8 +26,8 @@ export async function postUpload(formData: FormData) {
         medium,
         tags,
         artImages: {
-          create: artImages.map((url, i) => ({
-            url,
+          create: uploadedImages.map((img, i) => ({
+            url : img.secure_url,
             order: i,
           })),
         },

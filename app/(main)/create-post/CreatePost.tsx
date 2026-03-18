@@ -4,7 +4,6 @@ import { Upload, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { PostMedium } from "@/src/lib/generated/prisma/enums";
-import { uploadMultipleImages } from "@/src/utils/cloudinary";
 import { postUpload } from "@/src/dal/posts";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
@@ -57,19 +56,13 @@ export default function CreatePost() {
             return;
         }
         setIsPublishing(true);
-        const uploadedImages = await uploadMultipleImages(selectedImages)
-        if (!uploadedImages) {
-            toast("failed to upload images");
-            setIsPublishing(false)
-            return;
-        }
         const formData = new FormData();
         formData.set("authorId", session?.user.id)
         formData.set("title", title);
         formData.set("description", description);
         tags.forEach(tag => formData.append("tags", tag));
         medium.forEach(med => formData.append("mediums", med));
-        uploadedImages.forEach(img => formData.append("images", img.secure_url));
+        selectedImages.forEach(img => formData.append("images", img));
         const { success, error } = await postUpload(formData);
         if (!success) {
             toast(error);
@@ -105,7 +98,7 @@ export default function CreatePost() {
                     </div>
                 </div>
                 <div className="flex flex-col gap-2">
-                    <div className="font-serif text-4xl">Create a new Post</div>
+                    <div className="font-sans text-4xl">Create a new Post</div>
                     <div className="text-sm text-(--text-muted)">
                         share your artwork with the community
                     </div>
