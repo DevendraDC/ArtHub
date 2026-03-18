@@ -7,13 +7,13 @@ import { PostMedium } from "@/src/lib/generated/prisma/enums";
 import { uploadMultipleImages } from "@/src/utils/cloudinary";
 import { postUpload } from "@/src/dal/posts";
 import { useRouter } from "next/navigation";
-import { useSession } from "../SessionProvider";
 import { Spinner } from "@/components/ui/spinner";
 import { motion } from "motion/react"
+import { authClient } from "@/src/lib/better-auth/auth-client";
 
 export default function CreatePost() {
     const router = useRouter()
-    const session = useSession()
+    const { data: session, isPending } = authClient.useSession();
     const [tagInputVal, setTagInputVal] = useState("");
     const [tags, setTags] = useState<string[]>([]);
     const [selectedImages, setSelectedImages] = useState<File[]>([]);
@@ -42,6 +42,7 @@ export default function CreatePost() {
         { value: PostMedium.OTHER, label: "Other" },
     ];
     const handlePublish = async (e: any) => {
+        if(!session) return;
         e.preventDefault();
         if (selectedImages.length === 0) {
             toast("please selected atleast one image");
@@ -63,7 +64,7 @@ export default function CreatePost() {
             return;
         }
         const formData = new FormData();
-        formData.set("authorId", session.user.id)
+        formData.set("authorId", session?.user.id)
         formData.set("title", title);
         formData.set("description", description);
         tags.forEach(tag => formData.append("tags", tag));

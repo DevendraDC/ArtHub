@@ -1,17 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
 import { postTime } from "@/src/utils/postUtils";
-import { useRouter } from "next/navigation";
 import { Posts } from "@/src/dal/posts";
 import Link from "next/link";
 import { cloudinaryTransform } from "@/src/utils/image-transform";
 import { motion } from "motion/react"
 
 export default function HomePageClient({ posts }: { posts: Posts }) {
-    const router = useRouter();
-    const [loading, setLoading] = useState(true);
     return (
         <div>
             <div className="grid grid-cols-5 gap-4">
@@ -32,10 +28,10 @@ export default function HomePageClient({ posts }: { posts: Posts }) {
                                     src={preview}
                                     alt=""
                                     fill
-                                    className={`object-cover transition-opacity duration-500`}
+                                    className="object-cover"
                                 />
                                 <div
-                                    className="p-4 flex flex-col gap-3 absolute bottom-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out w-full z-9 bg-(--surface)"
+                                    className="p-4 flex flex-col gap-3 absolute bottom-0 justify-end opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out inset-0 backdrop-blur-2xl z-9 bg-(--bg) mask-t-from-10% to-transparent"
                                 >
                                     <div className="flex text-xs justify-between items-center">
                                         <div className="flex gap-3 items-center">

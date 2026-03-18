@@ -50,7 +50,7 @@ export default function PostOwnerDetailsClient({ postOwnerDetails }: { postOwner
                     ))
                 }
             </div> */}
-            {postOwnerDetails?.user.followers.length ? <button>Following</button> : <button className="bg-(--amber) p-2 text-black font-semibold font-sans rounded-lg">Follow</button>}
+            {postOwnerDetails?.user.followers.length ? <button>Following</button> : <button className="bg-(--amber) p-2 text-black font-semibold font-sans rounded-lg hover:-translate-y-1 transition-all duration-300">Follow</button>}
         </motion.div>
     )
 }

@@ -32,7 +32,7 @@ export default function ArtImagesClient({ images }: Props) {
                             alt=""
                             height={1000}
                             width={1000}
-                            className="object-contain h-135 w-auto max-w-full"
+                            className="object-contain h-135 w-auto max-w-full rounded-lg"
                         />
                     </motion.div>
                 </AnimatePresence>

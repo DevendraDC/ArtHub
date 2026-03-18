@@ -1,43 +1,50 @@
 
 
 import { getSession } from "@/src/utils/getSession"
-import { PlusIcon, Search } from "lucide-react"
+import { Bell, Bookmark, Compass, LayoutGrid, PlusIcon, Search } from "lucide-react"
 import Link from "next/link"
 
 export default async function Navbar() {
     const session = await getSession()
     const navOptions = [
         {
-            name: "Home",
+            icon : <LayoutGrid size={18}/>,
+            name: "Feed",
             link: "/"
         },
         {
+            icon : <Compass size={18}/>,
             name: "Explore",
             link: "/"
         },
         {
+            icon : <Bell size={18}/>,
             name: "Notifications",
             link: "/"
         },
         {
+            icon : <Bookmark size={18}/>,
             name: "Collections",
             link: "/"
         }
     ]
     return (
-        <div className="sticky top-0 z-999 bg-(--bg2) backdrop-blur-2xl border-white/30 p-3 flex items-center gap-20">
+        <div className="sticky top-0 z-999 w-full bg-(--bg2) backdrop-blur-2xl border-white/30 p-3 flex items-center gap-16 inset-0">
             <div className="text-2xl font-serif ml-10">Art<span className="text-amber-500">hub</span></div>
             <div className="flex gap-40 items-center">
                 <ul className="flex gap-20">
                     {
                         navOptions.map((op, index) => (
-                            <li key={index} className="hover-col">
-                                <Link className="active:text-amber-300" href={op.link}>{op.name}</Link>
+                            <li key={index} className="hover-col text-(--text-light)">
+                                <Link className="active:text-amber-300 flex gap-1 items-center" href={op.link}>
+                                    <div>{op.icon}</div>
+                                    <div>{op.name}</div>
+                                </Link>
                             </li>
                         ))
                     }
                 </ul>
-                <div className="relative w-80">
+                <div className="relative max-w-80">
                     <input className="w-full rounded-2xl p-2 px-4 pr-10 bg-white/6 focus:outline-0 text-sm" />
                     <Search className="absolute right-2 top-1/2 -translate-y-1/2 text-white/80 hover-col" />
                 </div>
