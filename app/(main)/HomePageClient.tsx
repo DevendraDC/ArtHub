@@ -4,7 +4,7 @@ import Image from "next/image";
 import { postTime } from "@/src/utils/postUtils";
 import { Posts } from "@/src/dal/posts";
 import Link from "next/link";
-import { cloudinaryTransform } from "@/src/utils/image-transform";
+import { cloudinaryTransform } from "@/src/utils/cloudinaryTransform";
 import { motion } from "motion/react"
 
 export default function HomePageClient({ posts }: { posts: Posts }) {

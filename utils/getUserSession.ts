@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 
-export const getSession = cache(async () => {
+export const getUserSession = cache(async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -17,4 +17,4 @@ export const getSession = cache(async () => {
   return session;
 })
 
-export type Session = Awaited<ReturnType<typeof getSession>>;
+export type UserSession = Awaited<ReturnType<typeof getUserSession>>;

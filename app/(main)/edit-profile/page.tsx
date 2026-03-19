@@ -1,7 +1,7 @@
 "use server";
 
 import ProfileSettings from "@/src/app/(main)/edit-profile/editProfile";
-import { getSession } from "@/src/utils/getSession";
+import { getSession } from "@/src/utils/getUserSession";
 import { redirect } from "next/navigation";
 
 export default async function Page() {

@@ -1,29 +1,29 @@
 
 
-import { getSession } from "@/src/utils/getSession"
+import { getUserSession } from "@/src/utils/getUserSession"
 import { Bell, Bookmark, Compass, LayoutGrid, PlusIcon, Search } from "lucide-react"
 import Link from "next/link"
 
 export default async function Navbar() {
-    const session = await getSession()
+    const session = await getUserSession()
     const navOptions = [
         {
-            icon : <LayoutGrid size={18}/>,
+            icon: <LayoutGrid size={18} />,
             name: "Feed",
             link: "/"
         },
         {
-            icon : <Compass size={18}/>,
+            icon: <Compass size={18} />,
             name: "Explore",
             link: "/"
         },
         {
-            icon : <Bell size={18}/>,
+            icon: <Bell size={18} />,
             name: "Notifications",
             link: "/"
         },
         {
-            icon : <Bookmark size={18}/>,
+            icon: <Bookmark size={18} />,
             name: "Collections",
             link: "/"
         }

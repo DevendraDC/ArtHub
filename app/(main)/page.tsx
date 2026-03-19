@@ -2,7 +2,6 @@
 
 import { Suspense } from "react";
 import HomePage from "./HomePage";
-import { getSession } from "@/src/utils/getSession";
 import { Spinner } from "@/components/ui/spinner";
 
 

@@ -45,82 +45,6 @@ export async function postUpload(formData: FormData) {
   }
 }
 
-// export const getPosts = cache(async () => {
-//   try {
-//     const posts = await prisma.artPost.findMany({
-//       include: {
-//         user: {
-//           select: {
-//             id: true,
-//             name: true,
-//             username: true,
-//             image: true,
-//           },
-//         },
-//         _count: {
-//           select: {
-//             likes: true,
-//             comments: true,
-//           },
-//         },
-//       },
-//       orderBy: {
-//         createdAt: "desc",
-//       },
-//     });
-//     return posts;
-//   } catch (error) {
-//     console.error(error);
-//   }
-// });
-
-// export type Posts = Awaited<ReturnType<typeof getPosts>>;
-
-// export const getPosts = cache(async (userId: string) => {
-//   try {
-//     const posts = await prisma.artPost.findMany({
-//       include: {
-//         user: {
-//           select: {
-//             id: true,
-//             name: true,
-//             username: true,
-//             image: true,
-//             bio: true,
-//             _count: {
-//               select: {
-//                 followers: true,
-//                 following: true,
-//                 artPosts: true,
-//               },
-//             },
-//           },
-//         },
-//         _count: {
-//           select: {
-//             comments: true,
-//             likes: true,
-//           },
-//         },
-//         likes: {
-//           where: {
-//             ownerId: userId,
-//           },
-//         },
-//       },
-//       orderBy: {
-//         createdAt: "desc",
-//       },
-//     });
-//     return posts;
-//   } catch (error) {
-//     console.error(error);
-//   }
-// });
-
-// export type Posts = Awaited<ReturnType<typeof getPosts>>;
-// export type Post = NonNullable<Posts>[number];
-
 export const getPosts = cache(async () => {
   try {
     const posts = await prisma.artPost.findMany({
@@ -160,53 +84,6 @@ export const getPosts = cache(async () => {
 
 export type Posts = Awaited<ReturnType<typeof getPosts>>;
 
-export const getPost = cache(async (postId: string, userId: string) => {
-  try {
-    const post = await prisma.artPost.findUnique({
-      where: {
-        id: postId,
-      },
-      include: {
-        artImages: true,
-        user: {
-          select: {
-            id: true,
-            name: true,
-            username: true,
-            image: true,
-            bio: true,
-            _count: {
-              select: {
-                followers: true,
-                following: true,
-                artPosts: true,
-              },
-            },
-          },
-        },
-        _count: {
-          select: {
-            comments: true,
-            likes: true,
-          },
-        },
-        likes: {
-          where: {
-            ownerId: userId,
-          },
-        },
-        comments: true,
-      },
-    });
-    return post;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-});
-
-export type Post = Awaited<ReturnType<typeof getPost>>;
-
 export const getArtImages = cache(async (postId: string) => {
   try {
     const images = await prisma.artImages.findMany({
@@ -227,47 +104,6 @@ export const getArtImages = cache(async (postId: string) => {
 
 export type ArtImages = Awaited<ReturnType<typeof getArtImages>>;
 
-export const getPostOwnerDetails = cache(
-  async (postId: string, userId: string) => {
-    try {
-      const postOwnerDetails = prisma.artPost.findUnique({
-        where: {
-          id: postId,
-        },
-        select: {
-          user: {
-            select: {
-              id: true,
-              name: true,
-              username: true,
-              image: true,
-              bio: true,
-              followers: {
-                where: {
-                  followerId: userId,
-                },
-              },
-              // _count: {
-              //   select: {
-              //     followers: true,
-              //     following: true,
-              //     artPosts: true,
-              //   },
-              // },
-            },
-          },
-        },
-      });
-      return postOwnerDetails;
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
-  },
-);
-
-export type PostOwnerDetails = Awaited<ReturnType<typeof getPostOwnerDetails>>;
-
 export const getPostDetails = cache(async (postId: string, userId: string) => {
   try {
     const postDetails = await prisma.artPost.findUnique({
@@ -282,27 +118,27 @@ export const getPostDetails = cache(async (postId: string, userId: string) => {
             usersSaved: true,
           },
         },
-        // user: {
-        //   select: {
-        //     id: true,
-        //     name: true,
-        //     username: true,
-        //     image: true,
-        //     bio: true,
-        //     followers: {
-        //       where: {
-        //         followerId: userId,
-        //       },
-        //     },
-        //     _count: {
-        //       select: {
-        //         followers: true,
-        //         following: true,
-        //         artPosts: true,
-        //       },
-        //     },
-        //   },
-        // },
+        user: {
+          select: {
+            id: true,
+            name: true,
+            username: true,
+            image: true,
+            bio: true,
+            followers: {
+              where: {
+                followerId: userId,
+              },
+            },
+            _count: {
+              select: {
+                followers: true,
+                following: true,
+                artPosts: true,
+              },
+            },
+          },
+        },
         id: true,
         medium: true,
         tags: true,

@@ -27,3 +27,4 @@ export async function uploadMultipleImages(images : File[]) {
   return Promise.all(images.map(image => uploadImage(image)));
 }
 
+
