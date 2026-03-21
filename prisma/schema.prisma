@@ -136,6 +136,8 @@ model ArtPost {
 
   @@unique([id])
   @@index([id])
+  @@index([authorId])
+  @@index([createdAt(sort: Desc)])
   @@map("artPost")
 }
 
@@ -186,6 +188,7 @@ model Comment {
 
   @@unique([id])
   @@index([id])
+  @@index([artPostId, ownerId])
   @@map("comment")
 }
 

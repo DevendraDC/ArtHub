@@ -1,11 +1,11 @@
 "use server"
 
-import { getSession } from "@/src/utils/getUserSession";
+import { getUserSession } from "@/src/utils/getUserSession";
 import { redirect } from "next/navigation";
 import Profile from "./Profile";
 
 export default async function Page() {
-  const userSession = await getSession();
+  const userSession = await getUserSession();
   if (!userSession) {
     redirect("/login")
   }

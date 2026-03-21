@@ -70,3 +70,32 @@ export const updateUser = async (userData: userDataType) => {
     };
   }
 };
+
+export const toggleFollow = async (followerId : string, followingId : string) => {
+  const isFollowing = await prisma.follow.findUnique({
+    where : {
+      followerId_followingId : {
+        followerId,
+        followingId
+      }
+    }
+  })
+  if(isFollowing){
+    await prisma.follow.delete({
+      where : {
+        followerId_followingId : {
+          followerId,
+          followingId
+        }
+      }
+    })
+  }
+  else {
+    await prisma.follow.create({
+      data : {
+        followerId,
+        followingId
+      }
+    })
+  }
+}

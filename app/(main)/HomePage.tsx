@@ -1,11 +1,10 @@
 "use server"
 
-import { getPosts } from "@/src/dal/posts"
-import HomePageClient from "./HomePageClient";
+import { getPosts, Posts } from "@/src/dal/posts"
+import HomePagePosts from "./HomePagePosts"
 
-export default async function HomePage() {
-    const posts = await getPosts();
+export default async function HomePage({posts} : {posts : Posts | null}) {
     return (
-        <HomePageClient posts={posts} />
+        <HomePagePosts posts={posts !== null ? posts : await getPosts(0)} />
     )
 }

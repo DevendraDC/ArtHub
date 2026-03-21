@@ -3,7 +3,6 @@
 import Navbar from "@/src/components/Navbar";
 import { getUserSession } from "@/src/utils/getUserSession";
 import { redirect } from "next/navigation";
-import SessionProvider from "./SessionProvider";
 
 export default async function MainLayout({
     children,
@@ -16,10 +15,7 @@ export default async function MainLayout({
     return (
         <>
             <Navbar />
-            <SessionProvider sessionPromise={session}>
-                {children}
-            </SessionProvider>
-
+            {children}
         </>
     );
 }

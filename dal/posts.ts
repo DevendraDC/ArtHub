@@ -4,6 +4,7 @@ import { PostMedium } from "@/src/lib/generated/prisma/enums";
 import { prisma } from "@/src/lib/prisma";
 import { cache } from "react";
 import { uploadMultipleImages } from "../utils/cloudinary";
+import { getUserSession } from "../utils/getUserSession";
 
 export async function postUpload(formData: FormData) {
   try {
@@ -27,7 +28,7 @@ export async function postUpload(formData: FormData) {
         tags,
         artImages: {
           create: uploadedImages.map((img, i) => ({
-            url : img.secure_url,
+            url: img.secure_url,
             order: i,
           })),
         },
@@ -45,9 +46,72 @@ export async function postUpload(formData: FormData) {
   }
 }
 
-export const getPosts = cache(async () => {
+export const getPosts = cache(async (filter: number) => {
   try {
-    const posts = await prisma.artPost.findMany({
+    const session = await getUserSession();
+    if (filter === 1) {
+      return await prisma.artPost.findMany({
+        where: {
+          user: {
+            followers: { some: { followerId: session.user.id } },
+          },
+        },
+        select: {
+          id: true,
+          createdAt: true,
+
+          user: {
+            select: {
+              id: true,
+              username: true,
+              name: true,
+              image: true,
+            },
+          },
+
+          artImages: {
+            orderBy: {
+              order: "asc",
+            },
+            take: 1,
+            select: {
+              url: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    } else if (filter === 2) {
+      return await prisma.artPost.findMany({
+        select: {
+          id: true,
+          createdAt: true,
+
+          user: {
+            select: {
+              id: true,
+              username: true,
+              name: true,
+              image: true,
+            },
+          },
+
+          artImages: {
+            orderBy: {
+              order: "asc",
+            },
+            take: 1,
+            select: {
+              url: true,
+            },
+          },
+        },
+        orderBy: { likes: { _count: "desc" } },
+      });
+    }
+    return await prisma.artPost.findMany({
       select: {
         id: true,
         createdAt: true,
@@ -75,7 +139,6 @@ export const getPosts = cache(async () => {
         createdAt: "desc",
       },
     });
-    return posts;
   } catch (error) {
     console.error(error);
     return [];
@@ -177,20 +240,30 @@ export const getPostComments = cache(async (postId: string) => {
 
 export type PostComments = Awaited<ReturnType<typeof getPostComments>>;
 
-export const toggleLike = async (
-  postId: string,
-  isLiked: boolean,
-  sessionUserId: string,
-) => {
+export const toggleLike = async (artPostId: string, ownerId: string) => {
+  const isLiked = await prisma.like.findUnique({
+    where: {
+      artPostId_ownerId: {
+        artPostId,
+        ownerId,
+      },
+    },
+  });
   if (isLiked) {
-        await prisma.like.deleteMany({
-            where: { artPostId: postId, ownerId: sessionUserId }
-        });
-    } else {
-        await prisma.like.upsert({
-            where: { artPostId_ownerId: { artPostId: postId, ownerId: sessionUserId } },
-            create: { artPostId: postId, ownerId: sessionUserId },
-            update: {}
-        });
-    }
+    await prisma.like.delete({
+      where: {
+        artPostId_ownerId: {
+          artPostId,
+          ownerId,
+        },
+      },
+    });
+  } else {
+    await prisma.like.create({
+      data: {
+        artPostId,
+        ownerId,
+      },
+    });
+  }
 };

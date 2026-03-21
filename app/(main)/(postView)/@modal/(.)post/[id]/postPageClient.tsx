@@ -3,7 +3,7 @@ import ArtImagesServer from "@/src/components/post/ArtImagesServer";
 import PostDetailsServer from "@/src/components/post/PostDetailsServer";
 import { Suspense } from "react";
 
-export default async function PostPageClient({ postId, sessionUserId }: { postId: string, sessionUserId: string }) {
+export default async function PostPageClient({ postId, sessionUserId }: { postId: Promise<string>, sessionUserId: Promise<string> }) {
     return (
         <div className="flex justify-between w-full gap-10 h-full min-h-0">
             <div className="postImages w-[70%] flex justify-center overflow-y-auto">

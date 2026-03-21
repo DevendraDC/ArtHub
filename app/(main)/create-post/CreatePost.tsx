@@ -89,14 +89,14 @@ export default function CreatePost() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}>
-            <div className="w-[55%] flex flex-col gap-7">
-                <div>
+            <div className="w-[55%] flex flex-col gap-7 py-2">
+                {/* <div>
                     <div className="text-sm flex gap-3">
                         <span className="text-amber-400">Home</span>
                         <span className="text-white/60">&gt;</span>
-                        <span className="text-(--text-subtle)">create a Post</span>
+                        <span className="text-(--text-subtle)">create-post</span>
                     </div>
-                </div>
+                </div> */}
                 <div className="flex flex-col gap-2">
                     <div className="font-sans text-4xl">Create a new Post</div>
                     <div className="text-sm text-(--text-muted)">
