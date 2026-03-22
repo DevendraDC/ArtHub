@@ -3,51 +3,33 @@
 import { Upload, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
-import { PostMedium } from "@/src/lib/generated/prisma/enums";
 import { postUpload } from "@/src/dal/posts";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
 import { motion } from "motion/react"
 import { authClient } from "@/src/lib/better-auth/auth-client";
+import { SelectMediums, SelectTags } from "@/src/components/PostComponents";
+import { PostMedium } from "@/src/lib/generated/prisma/enums";
 
 export default function CreatePost() {
     const router = useRouter()
     const { data: session, isPending } = authClient.useSession();
     const [tagInputVal, setTagInputVal] = useState("");
-    const [tags, setTags] = useState<string[]>([]);
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [selectedImages, setSelectedImages] = useState<File[]>([]);
     const imagesUploadRef = useRef<HTMLInputElement>(null);
     const [description, setDescription] = useState("");
-    const [medium, setMedium] = useState<string[]>([]);
+    const [selectedMediums, setSelectedMediums] = useState<PostMedium[]>([]);
     const [title, setTitle] = useState("");
     const [isPublishing, setIsPublishing] = useState(false);
-    const mediums = [
-        { value: PostMedium.DIGITAL, label: "Digital" },
-        { value: PostMedium.OIL_PAINT, label: "Oil Paint" },
-        { value: PostMedium.WATERCOLOR, label: "Watercolor" },
-        { value: PostMedium.PHOTOGRAPHY, label: "Photography" },
-        { value: PostMedium.ILLUSTRATION, label: "Illustration" },
-        { value: PostMedium.SCULPTURE, label: "Sculpture" },
-        { value: PostMedium.MIXED_MEDIA, label: "Mixed Media" },
-        { value: PostMedium.SKETCH, label: "Sketch" },
-        { value: PostMedium.THREE_D, label: "3D" },
-        { value: PostMedium.ANIMATION, label: "Animation" },
-        { value: PostMedium.LINEART, label: "Lineart" },
-        { value: PostMedium.CONCEPT_ART, label: "Concept Art" },
-        { value: PostMedium.ANIME_ART, label: "Anime Art" },
-        { value: PostMedium.MANGA_ART, label: "Manga Art" },
-        { value: PostMedium.PIXEL_ART, label: "Pixel Art" },
-        { value: PostMedium.TRADITIONAL_ART, label: "Traditional Art" },
-        { value: PostMedium.OTHER, label: "Other" },
-    ];
     const handlePublish = async (e: any) => {
-        if(!session) return;
+        if (!session) return;
         e.preventDefault();
         if (selectedImages.length === 0) {
             toast("please selected atleast one image");
             return;
         }
-        if (medium.length === 0) {
+        if (selectedMediums.length === 0) {
             toast("please select atleast one art medium");
             return;
         }
@@ -60,8 +42,8 @@ export default function CreatePost() {
         formData.set("authorId", session?.user.id)
         formData.set("title", title);
         formData.set("description", description);
-        tags.forEach(tag => formData.append("tags", tag));
-        medium.forEach(med => formData.append("mediums", med));
+        selectedTags.forEach(tag => formData.append("tags", tag));
+        selectedMediums.forEach(med => formData.append("mediums", med));
         selectedImages.forEach(img => formData.append("images", img));
         const { success, error } = await postUpload(formData);
         if (!success) {
@@ -79,8 +61,8 @@ export default function CreatePost() {
         setTitle("");
         setDescription("");
         setSelectedImages([]);
-        setMedium([]);
-        setTags([]);
+        setSelectedMediums([]);
+        setSelectedTags([]);
         setTagInputVal("")
     }
 
@@ -214,71 +196,13 @@ export default function CreatePost() {
                             <div className="text-(--text-light) text-sm font-sans">
                                 Medium
                             </div>
-                            <div className="flex flex-wrap gap-4">
-                                {mediums.map((med) => (
-                                    <div
-                                        key={med.value}
-                                        onClick={() => {
-                                            if (!medium.includes(med.value)) {
-                                                setMedium(prev => [...prev, med.value]);
-                                            }
-                                            else {
-                                                const newMedium = medium.filter(m => m !== med.value)
-                                                setMedium(newMedium);
-                                            }
-                                        }}
-                                        className={`p-2 px-3 border transition-colors duration-300 text-sm rounded-lg cursor-pointer 
-      ${medium.includes(med.value)
-                                                ? "bg-(--amber-light) text-(--amber) border-(--amber)"
-                                                : "text-(--text-muted) hover:text-white border-border"
-                                            }`}
-                                    >
-                                        {med.label}
-                                    </div>
-                                ))}
-                            </div>
+                            <SelectMediums selectedMediums={selectedMediums} setSelectedMediums={setSelectedMediums} />
                         </div>
                         <div className="flex flex-col gap-3">
                             <label htmlFor="tags" className="font-sans text-(--text-light)">
                                 Tags
                             </label>
-                            <input
-                                type="text"
-                                name="tags"
-                                id="tags"
-                                value={tagInputVal}
-                                onChange={(e) => {
-                                    const cur = e.target.value;
-                                    if (cur.endsWith(",")) {
-                                        const curTag = cur.slice(0, -1);
-                                        setTags((prev) => [...new Set([...prev, curTag])]);
-                                        setTagInputVal("");
-                                    } else setTagInputVal(cur);
-                                }}
-                                placeholder="Add the tags...."
-                                className="border placeholder:text-(--text-subtle) w-full rounded-sm p-4 pr-20 resize-none focus:outline-none border-border bg-(--surface2)"
-                            />
-                            <div className="text-xs text-(--text-subtle)">
-                                Enter comma to include a tag
-                            </div>
-                            {tags.length > 0 && (
-                                <div className="flex gap-5">
-                                    {tags.map((tag, idx) => (
-                                        <div
-                                            key={idx}
-                                            className="bg-(--amber-light) text-(--amber) border border-(--amber-mid) py-1 px-3 rounded-md relative"
-                                        >
-                                            {tag}{" "}
-                                            <X
-                                                onClick={() =>
-                                                    setTags((prev) => prev.filter((cur) => cur !== tag))
-                                                }
-                                                className="absolute w-5 h-5 p-1 font-bold text-black bg-white rounded-full -top-1 -left-2"
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
+                            <SelectTags setSelectedTags={setSelectedTags} selectedTags={selectedTags}/>    
                         </div>
                     </div>
                 </div>

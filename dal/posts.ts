@@ -267,3 +267,74 @@ export const toggleLike = async (artPostId: string, ownerId: string) => {
     });
   }
 };
+
+export const getSearchedPosts = cache(
+  async (
+    selectedTags: string[],
+    selectedMediums: PostMedium[],
+    sortBy: string,
+    keyword: string,
+  ) => {
+    try {
+      return await prisma.artPost.findMany({
+        where: {
+          ...(selectedTags.length > 0 && {
+            tags: {
+              hasSome: selectedTags,
+            },
+          }),
+          ...(keyword.trim() && {
+            OR: [
+              { title: { contains: keyword, mode: "insensitive" } },
+              { description: { contains: keyword, mode: "insensitive" } },
+            ],
+          }),
+          ...(selectedMediums.length > 0 && {
+            medium: {
+              hasSome: selectedMediums,
+            },
+          }),
+        },
+        select: {
+          id: true,
+          createdAt: true,
+
+          user: {
+            select: {
+              id: true,
+              username: true,
+              name: true,
+              image: true,
+            },
+          },
+
+          artImages: {
+            orderBy: {
+              order: "asc",
+            },
+            take: 1,
+            select: {
+              url: true,
+            },
+          },
+        },
+        orderBy: {
+          ...(sortBy === "latest"
+            ? {
+                createdAt: "desc",
+              }
+            : {
+                likes: {
+                  _count: "desc",
+                },
+              }),
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
+);
+
+export type SearchedPosts = Awaited<ReturnType<typeof getSearchedPosts>>;
