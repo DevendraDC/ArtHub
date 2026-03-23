@@ -46,6 +46,124 @@ export async function postUpload(formData: FormData) {
   }
 }
 
+export const getAllPosts = cache(async () => {
+  try {
+    return await prisma.artPost.findMany({
+      select: {
+        id: true,
+        createdAt: true,
+
+        user: {
+          select: {
+            id: true,
+            username: true,
+            name: true,
+            image: true,
+          },
+        },
+
+        artImages: {
+          orderBy: {
+            order: "asc",
+          },
+          take: 1,
+          select: {
+            url: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+});
+
+export type AllPosts = Awaited<ReturnType<typeof getAllPosts>>;
+
+export const getPopularPosts = cache(async () => {
+  try {
+    return await prisma.artPost.findMany({
+      select: {
+        id: true,
+        createdAt: true,
+
+        user: {
+          select: {
+            id: true,
+            username: true,
+            name: true,
+            image: true,
+          },
+        },
+
+        artImages: {
+          orderBy: {
+            order: "asc",
+          },
+          take: 1,
+          select: {
+            url: true,
+          },
+        },
+      },
+      orderBy: { likes: { _count: "desc" } },
+    });
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+});
+
+export type PopularPosts = Awaited<ReturnType<typeof getPopularPosts>>;
+
+export const getFollowingPosts = cache(async () => {
+  try {
+    const session = await getUserSession();
+    return await prisma.artPost.findMany({
+      where: {
+        user: {
+          followers: { some: { followerId: session.user.id } },
+        },
+      },
+      select: {
+        id: true,
+        createdAt: true,
+
+        user: {
+          select: {
+            id: true,
+            username: true,
+            name: true,
+            image: true,
+          },
+        },
+
+        artImages: {
+          orderBy: {
+            order: "asc",
+          },
+          take: 1,
+          select: {
+            url: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+});
+
+export type FollowingPosts = Awaited<ReturnType<typeof getFollowingPosts>>;
+
 export const getPosts = cache(async (filter: number) => {
   try {
     const session = await getUserSession();

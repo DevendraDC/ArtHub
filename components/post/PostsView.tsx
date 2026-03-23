@@ -7,7 +7,7 @@ import Link from "next/link";
 import { cloudinaryTransform } from "@/src/utils/cloudinaryTransform";
 import { motion } from "motion/react"
 
-export default function HomePagePosts({ posts }: { posts: Posts }) {
+export default function PostsView({ posts }: { posts: Posts}) {
     return (
         <div>
             <div className="grid grid-cols-6 gap-4">
