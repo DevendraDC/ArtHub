@@ -11,7 +11,7 @@ import {
 } from '@react-email/components';
 
 
-const EmailVerificationCode = (code: string) => {
+export default function EmailVerificationCode({code} : {code : string}){
   return (
     <Html lang="en" dir="ltr">
       <Head />
@@ -75,5 +75,3 @@ EmailVerificationCode.PreviewProps = {
   firstName: "John",
   verificationCode: "847291",
 };
-
-export default EmailVerificationCode;

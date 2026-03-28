@@ -3,48 +3,8 @@
 import { PostMedium } from "@/src/lib/generated/prisma/enums";
 import { prisma } from "@/src/lib/prisma";
 import { cache } from "react";
-import { uploadMultipleImages } from "../utils/cloudinary";
 import { getUserSession } from "../utils/getUserSession";
 
-export async function postUpload(formData: FormData) {
-  try {
-    const authorId = formData.get("authorId") as string;
-    const title = formData.get("title") as string;
-    const description = formData.get("description") as string;
-    const tags = formData.getAll("tags") as string[];
-    const artImages = formData.getAll("images") as File[];
-    const medium = formData.getAll("mediums") as PostMedium[];
-
-    if (!authorId || !title || medium.length === 0 || artImages.length === 0) {
-      throw new Error("please fill the required fields");
-    }
-    const uploadedImages = await uploadMultipleImages(artImages);
-    await prisma.artPost.create({
-      data: {
-        authorId,
-        title,
-        description,
-        medium,
-        tags,
-        artImages: {
-          create: uploadedImages.map((img, i) => ({
-            url: img.secure_url,
-            order: i,
-          })),
-        },
-      },
-    });
-    return {
-      success: true,
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : "failed to publish post",
-    };
-  }
-}
 
 export const getAllPosts = cache(async () => {
   try {
@@ -321,7 +281,7 @@ export const getPostDetails = cache(async (postId: string, userId: string) => {
           },
         },
         id: true,
-        medium: true,
+        mediums: true,
         tags: true,
         createdAt: true,
         title: true,
@@ -456,3 +416,31 @@ export const getSearchedPosts = cache(
 );
 
 export type SearchedPosts = Awaited<ReturnType<typeof getSearchedPosts>>;
+
+export const fetchPostsProfile = cache(async (userId: string) => {
+  return await prisma.artPost.findMany({
+    where: {
+      user: {
+        id: userId,
+      },
+    },
+    select: {
+      id: true,
+      createdAt: true,
+      artImages: {
+        orderBy: {
+          order: "asc",
+        },
+        take: 1,
+        select: {
+          url: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+});
+
+export type PostsProfile = Awaited<ReturnType<typeof fetchPostsProfile>>;

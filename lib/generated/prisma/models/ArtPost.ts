@@ -45,7 +45,7 @@ export type ArtPostCountAggregateOutputType = {
   authorId: number
   title: number
   tags: number
-  medium: number
+  mediums: number
   description: number
   createdAt: number
   _all: number
@@ -73,7 +73,7 @@ export type ArtPostCountAggregateInputType = {
   authorId?: true
   title?: true
   tags?: true
-  medium?: true
+  mediums?: true
   description?: true
   createdAt?: true
   _all?: true
@@ -156,7 +156,7 @@ export type ArtPostGroupByOutputType = {
   authorId: string
   title: string
   tags: string[]
-  medium: $Enums.PostMedium[]
+  mediums: $Enums.PostMedium[]
   description: string | null
   createdAt: Date
   _count: ArtPostCountAggregateOutputType | null
@@ -187,7 +187,7 @@ export type ArtPostWhereInput = {
   authorId?: Prisma.StringFilter<"ArtPost"> | string
   title?: Prisma.StringFilter<"ArtPost"> | string
   tags?: Prisma.StringNullableListFilter<"ArtPost">
-  medium?: Prisma.EnumPostMediumNullableListFilter<"ArtPost">
+  mediums?: Prisma.EnumPostMediumNullableListFilter<"ArtPost">
   description?: Prisma.StringNullableFilter<"ArtPost"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ArtPost"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -202,7 +202,7 @@ export type ArtPostOrderByWithRelationInput = {
   authorId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   tags?: Prisma.SortOrder
-  medium?: Prisma.SortOrder
+  mediums?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -220,7 +220,7 @@ export type ArtPostWhereUniqueInput = Prisma.AtLeast<{
   authorId?: Prisma.StringFilter<"ArtPost"> | string
   title?: Prisma.StringFilter<"ArtPost"> | string
   tags?: Prisma.StringNullableListFilter<"ArtPost">
-  medium?: Prisma.EnumPostMediumNullableListFilter<"ArtPost">
+  mediums?: Prisma.EnumPostMediumNullableListFilter<"ArtPost">
   description?: Prisma.StringNullableFilter<"ArtPost"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ArtPost"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -235,7 +235,7 @@ export type ArtPostOrderByWithAggregationInput = {
   authorId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   tags?: Prisma.SortOrder
-  medium?: Prisma.SortOrder
+  mediums?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.ArtPostCountOrderByAggregateInput
@@ -251,7 +251,7 @@ export type ArtPostScalarWhereWithAggregatesInput = {
   authorId?: Prisma.StringWithAggregatesFilter<"ArtPost"> | string
   title?: Prisma.StringWithAggregatesFilter<"ArtPost"> | string
   tags?: Prisma.StringNullableListFilter<"ArtPost">
-  medium?: Prisma.EnumPostMediumNullableListFilter<"ArtPost">
+  mediums?: Prisma.EnumPostMediumNullableListFilter<"ArtPost">
   description?: Prisma.StringNullableWithAggregatesFilter<"ArtPost"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ArtPost"> | Date | string
 }
@@ -260,7 +260,7 @@ export type ArtPostCreateInput = {
   id?: string
   title: string
   tags?: Prisma.ArtPostCreatetagsInput | string[]
-  medium?: Prisma.ArtPostCreatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutArtPostsInput
@@ -275,7 +275,7 @@ export type ArtPostUncheckedCreateInput = {
   authorId: string
   title: string
   tags?: Prisma.ArtPostCreatetagsInput | string[]
-  medium?: Prisma.ArtPostCreatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
   createdAt?: Date | string
   artImages?: Prisma.ArtImagesUncheckedCreateNestedManyWithoutArtPostInput
@@ -288,7 +288,7 @@ export type ArtPostUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.ArtPostUpdatetagsInput | string[]
-  medium?: Prisma.ArtPostUpdatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutArtPostsNestedInput
@@ -303,7 +303,7 @@ export type ArtPostUncheckedUpdateInput = {
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.ArtPostUpdatetagsInput | string[]
-  medium?: Prisma.ArtPostUpdatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   artImages?: Prisma.ArtImagesUncheckedUpdateManyWithoutArtPostNestedInput
@@ -317,7 +317,7 @@ export type ArtPostCreateManyInput = {
   authorId: string
   title: string
   tags?: Prisma.ArtPostCreatetagsInput | string[]
-  medium?: Prisma.ArtPostCreatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
   createdAt?: Date | string
 }
@@ -326,7 +326,7 @@ export type ArtPostUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.ArtPostUpdatetagsInput | string[]
-  medium?: Prisma.ArtPostUpdatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -336,7 +336,7 @@ export type ArtPostUncheckedUpdateManyInput = {
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.ArtPostUpdatetagsInput | string[]
-  medium?: Prisma.ArtPostUpdatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -372,7 +372,7 @@ export type ArtPostCountOrderByAggregateInput = {
   authorId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   tags?: Prisma.SortOrder
-  medium?: Prisma.SortOrder
+  mediums?: Prisma.SortOrder
   description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -444,7 +444,7 @@ export type ArtPostCreatetagsInput = {
   set: string[]
 }
 
-export type ArtPostCreatemediumInput = {
+export type ArtPostCreatemediumsInput = {
   set: $Enums.PostMedium[]
 }
 
@@ -453,7 +453,7 @@ export type ArtPostUpdatetagsInput = {
   push?: string | string[]
 }
 
-export type ArtPostUpdatemediumInput = {
+export type ArtPostUpdatemediumsInput = {
   set?: $Enums.PostMedium[]
   push?: $Enums.PostMedium | $Enums.PostMedium[]
 }
@@ -518,7 +518,7 @@ export type ArtPostCreateWithoutUserInput = {
   id?: string
   title: string
   tags?: Prisma.ArtPostCreatetagsInput | string[]
-  medium?: Prisma.ArtPostCreatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
   createdAt?: Date | string
   artImages?: Prisma.ArtImagesCreateNestedManyWithoutArtPostInput
@@ -531,7 +531,7 @@ export type ArtPostUncheckedCreateWithoutUserInput = {
   id?: string
   title: string
   tags?: Prisma.ArtPostCreatetagsInput | string[]
-  medium?: Prisma.ArtPostCreatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
   createdAt?: Date | string
   artImages?: Prisma.ArtImagesUncheckedCreateNestedManyWithoutArtPostInput
@@ -574,7 +574,7 @@ export type ArtPostScalarWhereInput = {
   authorId?: Prisma.StringFilter<"ArtPost"> | string
   title?: Prisma.StringFilter<"ArtPost"> | string
   tags?: Prisma.StringNullableListFilter<"ArtPost">
-  medium?: Prisma.EnumPostMediumNullableListFilter<"ArtPost">
+  mediums?: Prisma.EnumPostMediumNullableListFilter<"ArtPost">
   description?: Prisma.StringNullableFilter<"ArtPost"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ArtPost"> | Date | string
 }
@@ -583,7 +583,7 @@ export type ArtPostCreateWithoutArtImagesInput = {
   id?: string
   title: string
   tags?: Prisma.ArtPostCreatetagsInput | string[]
-  medium?: Prisma.ArtPostCreatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutArtPostsInput
@@ -597,7 +597,7 @@ export type ArtPostUncheckedCreateWithoutArtImagesInput = {
   authorId: string
   title: string
   tags?: Prisma.ArtPostCreatetagsInput | string[]
-  medium?: Prisma.ArtPostCreatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
   createdAt?: Date | string
   likes?: Prisma.LikeUncheckedCreateNestedManyWithoutArtPostInput
@@ -625,7 +625,7 @@ export type ArtPostUpdateWithoutArtImagesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.ArtPostUpdatetagsInput | string[]
-  medium?: Prisma.ArtPostUpdatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutArtPostsNestedInput
@@ -639,7 +639,7 @@ export type ArtPostUncheckedUpdateWithoutArtImagesInput = {
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.ArtPostUpdatetagsInput | string[]
-  medium?: Prisma.ArtPostUpdatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   likes?: Prisma.LikeUncheckedUpdateManyWithoutArtPostNestedInput
@@ -651,7 +651,7 @@ export type ArtPostCreateWithoutUsersSavedInput = {
   id?: string
   title: string
   tags?: Prisma.ArtPostCreatetagsInput | string[]
-  medium?: Prisma.ArtPostCreatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutArtPostsInput
@@ -665,7 +665,7 @@ export type ArtPostUncheckedCreateWithoutUsersSavedInput = {
   authorId: string
   title: string
   tags?: Prisma.ArtPostCreatetagsInput | string[]
-  medium?: Prisma.ArtPostCreatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
   createdAt?: Date | string
   artImages?: Prisma.ArtImagesUncheckedCreateNestedManyWithoutArtPostInput
@@ -693,7 +693,7 @@ export type ArtPostUpdateWithoutUsersSavedInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.ArtPostUpdatetagsInput | string[]
-  medium?: Prisma.ArtPostUpdatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutArtPostsNestedInput
@@ -707,7 +707,7 @@ export type ArtPostUncheckedUpdateWithoutUsersSavedInput = {
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.ArtPostUpdatetagsInput | string[]
-  medium?: Prisma.ArtPostUpdatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   artImages?: Prisma.ArtImagesUncheckedUpdateManyWithoutArtPostNestedInput
@@ -719,7 +719,7 @@ export type ArtPostCreateWithoutLikesInput = {
   id?: string
   title: string
   tags?: Prisma.ArtPostCreatetagsInput | string[]
-  medium?: Prisma.ArtPostCreatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutArtPostsInput
@@ -733,7 +733,7 @@ export type ArtPostUncheckedCreateWithoutLikesInput = {
   authorId: string
   title: string
   tags?: Prisma.ArtPostCreatetagsInput | string[]
-  medium?: Prisma.ArtPostCreatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
   createdAt?: Date | string
   artImages?: Prisma.ArtImagesUncheckedCreateNestedManyWithoutArtPostInput
@@ -761,7 +761,7 @@ export type ArtPostUpdateWithoutLikesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.ArtPostUpdatetagsInput | string[]
-  medium?: Prisma.ArtPostUpdatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutArtPostsNestedInput
@@ -775,7 +775,7 @@ export type ArtPostUncheckedUpdateWithoutLikesInput = {
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.ArtPostUpdatetagsInput | string[]
-  medium?: Prisma.ArtPostUpdatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   artImages?: Prisma.ArtImagesUncheckedUpdateManyWithoutArtPostNestedInput
@@ -787,7 +787,7 @@ export type ArtPostCreateWithoutCommentsInput = {
   id?: string
   title: string
   tags?: Prisma.ArtPostCreatetagsInput | string[]
-  medium?: Prisma.ArtPostCreatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutArtPostsInput
@@ -801,7 +801,7 @@ export type ArtPostUncheckedCreateWithoutCommentsInput = {
   authorId: string
   title: string
   tags?: Prisma.ArtPostCreatetagsInput | string[]
-  medium?: Prisma.ArtPostCreatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
   createdAt?: Date | string
   artImages?: Prisma.ArtImagesUncheckedCreateNestedManyWithoutArtPostInput
@@ -829,7 +829,7 @@ export type ArtPostUpdateWithoutCommentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.ArtPostUpdatetagsInput | string[]
-  medium?: Prisma.ArtPostUpdatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutArtPostsNestedInput
@@ -843,7 +843,7 @@ export type ArtPostUncheckedUpdateWithoutCommentsInput = {
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.ArtPostUpdatetagsInput | string[]
-  medium?: Prisma.ArtPostUpdatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   artImages?: Prisma.ArtImagesUncheckedUpdateManyWithoutArtPostNestedInput
@@ -855,7 +855,7 @@ export type ArtPostCreateManyUserInput = {
   id?: string
   title: string
   tags?: Prisma.ArtPostCreatetagsInput | string[]
-  medium?: Prisma.ArtPostCreatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
   createdAt?: Date | string
 }
@@ -864,7 +864,7 @@ export type ArtPostUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.ArtPostUpdatetagsInput | string[]
-  medium?: Prisma.ArtPostUpdatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   artImages?: Prisma.ArtImagesUpdateManyWithoutArtPostNestedInput
@@ -877,7 +877,7 @@ export type ArtPostUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.ArtPostUpdatetagsInput | string[]
-  medium?: Prisma.ArtPostUpdatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   artImages?: Prisma.ArtImagesUncheckedUpdateManyWithoutArtPostNestedInput
@@ -890,7 +890,7 @@ export type ArtPostUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.ArtPostUpdatetagsInput | string[]
-  medium?: Prisma.ArtPostUpdatemediumInput | $Enums.PostMedium[]
+  mediums?: Prisma.ArtPostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -958,7 +958,7 @@ export type ArtPostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   authorId?: boolean
   title?: boolean
   tags?: boolean
-  medium?: boolean
+  mediums?: boolean
   description?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -974,7 +974,7 @@ export type ArtPostSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   authorId?: boolean
   title?: boolean
   tags?: boolean
-  medium?: boolean
+  mediums?: boolean
   description?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -985,7 +985,7 @@ export type ArtPostSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   authorId?: boolean
   title?: boolean
   tags?: boolean
-  medium?: boolean
+  mediums?: boolean
   description?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -996,12 +996,12 @@ export type ArtPostSelectScalar = {
   authorId?: boolean
   title?: boolean
   tags?: boolean
-  medium?: boolean
+  mediums?: boolean
   description?: boolean
   createdAt?: boolean
 }
 
-export type ArtPostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "authorId" | "title" | "tags" | "medium" | "description" | "createdAt", ExtArgs["result"]["artPost"]>
+export type ArtPostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "authorId" | "title" | "tags" | "mediums" | "description" | "createdAt", ExtArgs["result"]["artPost"]>
 export type ArtPostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   artImages?: boolean | Prisma.ArtPost$artImagesArgs<ExtArgs>
@@ -1031,7 +1031,7 @@ export type $ArtPostPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     authorId: string
     title: string
     tags: string[]
-    medium: $Enums.PostMedium[]
+    mediums: $Enums.PostMedium[]
     description: string | null
     createdAt: Date
   }, ExtArgs["result"]["artPost"]>
@@ -1466,7 +1466,7 @@ export interface ArtPostFieldRefs {
   readonly authorId: Prisma.FieldRef<"ArtPost", 'String'>
   readonly title: Prisma.FieldRef<"ArtPost", 'String'>
   readonly tags: Prisma.FieldRef<"ArtPost", 'String[]'>
-  readonly medium: Prisma.FieldRef<"ArtPost", 'PostMedium[]'>
+  readonly mediums: Prisma.FieldRef<"ArtPost", 'PostMedium[]'>
   readonly description: Prisma.FieldRef<"ArtPost", 'String'>
   readonly createdAt: Prisma.FieldRef<"ArtPost", 'DateTime'>
 }

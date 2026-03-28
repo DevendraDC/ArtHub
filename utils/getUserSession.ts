@@ -13,7 +13,6 @@ export const getUserSession = cache(async () => {
   if(!session){
     redirect("/login")
   }
-
   return session;
 })
 

@@ -13,6 +13,11 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Role {
+  ADMIN
+  USER
+}
+
 enum PostMedium {
   DIGITAL
   OIL_PAINT
@@ -35,8 +40,9 @@ enum PostMedium {
 
 model User {
   id            String       @id
+  role          Role         @default(USER)
   name          String
-  username      String
+  username      String?
   bio           String       @default("")
   email         String
   emailVerified Boolean      @default(false)
@@ -51,12 +57,19 @@ model User {
   following     Follow[]     @relation("following")
   likes         Like[]
   comments      Comment[]
+  // profiles      Profile?
 
   @@unique([email])
   @@unique([username])
   @@index([id])
   @@map("user")
 }
+
+// model Profile {
+//   profileId String @id @unique
+//   user      User   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+// }
 
 model Session {
   id        String   @id
@@ -123,11 +136,11 @@ model Follow {
 model ArtPost {
   id          String       @id @default(uuid())
   authorId    String
-  user        User         @relation(fields: [authorId], references: [id])
+  user        User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
   title       String
   artImages   ArtImages[]
   tags        String[]
-  medium      PostMedium[]
+  mediums      PostMedium[]
   description String?
   likes       Like[]
   usersSaved  Collection[]
@@ -158,8 +171,8 @@ model Collection {
   artPostId     String
   savedByUserId String
 
-  user    User    @relation(fields: [savedByUserId], references: [id])
-  artPost ArtPost @relation(fields: [artPostId], references: [id])
+  user    User    @relation(fields: [savedByUserId], references: [id], onDelete: Cascade)
+  artPost ArtPost @relation(fields: [artPostId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
@@ -171,8 +184,8 @@ model Collection {
 model Like {
   artPostId String
   ownerId   String
-  artPost   ArtPost @relation(fields: [artPostId], references: [id])
-  user      User    @relation(fields: [ownerId], references: [id])
+  artPost   ArtPost @relation(fields: [artPostId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
   @@unique([artPostId, ownerId])
   @@index([artPostId, ownerId])
@@ -183,8 +196,8 @@ model Comment {
   id        String  @id @default(uuid())
   artPostId String
   ownerId   String
-  artPost   ArtPost @relation(fields: [artPostId], references: [id])
-  user      User    @relation(fields: [ownerId], references: [id])
+  artPost   ArtPost @relation(fields: [artPostId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
   @@unique([id])
   @@index([id])

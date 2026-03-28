@@ -1,60 +1,72 @@
 "use client";
 
-import { Upload, X } from "lucide-react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
-import { postUpload } from "@/src/dal/posts";
+import { postUpload } from "@/src/dal/Post/mutations";
 import { useRouter } from "next/navigation";
-import { Spinner } from "@/components/ui/spinner";
+import { Spinner } from "@/src/components/ui/spinner";
 import { motion } from "motion/react"
-import { authClient } from "@/src/lib/better-auth/auth-client";
-import { SelectMediums, SelectTags } from "@/src/components/PostComponents";
 import { PostMedium } from "@/src/lib/generated/prisma/enums";
+import { createPostSchemaClient, ZodTreeError } from "@/src/validators/post";
+import { uploadMultipleImages } from "@/src/lib/cloudinaryFunctions";
+import PostImagesUpload from "./_components/ImagesUpload";
+import PostOtherDetails from "./_components/OtherDetails";
+import z from "zod";
+
 
 export default function CreatePost() {
     const router = useRouter()
-    const { data: session, isPending } = authClient.useSession();
-    const [tagInputVal, setTagInputVal] = useState("");
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [selectedImages, setSelectedImages] = useState<File[]>([]);
-    const imagesUploadRef = useRef<HTMLInputElement>(null);
-    const [description, setDescription] = useState("");
     const [selectedMediums, setSelectedMediums] = useState<PostMedium[]>([]);
-    const [title, setTitle] = useState("");
     const [isPublishing, setIsPublishing] = useState(false);
-    const handlePublish = async (e: any) => {
-        if (!session) return;
-        e.preventDefault();
-        if (selectedImages.length === 0) {
-            toast("please selected atleast one image");
-            return;
-        }
-        if (selectedMediums.length === 0) {
-            toast("please select atleast one art medium");
-            return;
-        }
-        if (!title) {
-            toast("the post must have a title")
-            return;
-        }
+    const [errors, setErrors] = useState<ZodTreeError | null>(null)
+
+    const handlePublish = async () => {
         setIsPublishing(true);
+        console.log("hello")
+        const toValidate = {
+            title,
+            images: selectedImages,
+            mediums: selectedMediums,
+            description
+        }
+        const validatedData = createPostSchemaClient.safeParse(toValidate);
+        if (!validatedData.success) {
+            console.log("hello")
+            setErrors(z.treeifyError(validatedData.error));
+            setIsPublishing(false);
+            return;
+        }
+        
+        const { data, success } = await uploadMultipleImages(selectedImages);
+        if (!success || !data) {
+            toast("Failed to upload images to cloudinary");
+            setIsPublishing(false);
+            return;
+        }
+        console.log(data);
         const formData = new FormData();
-        formData.set("authorId", session?.user.id)
-        formData.set("title", title);
-        formData.set("description", description);
+        formData.append("title", title);
+        formData.append("description", description);
         selectedTags.forEach(tag => formData.append("tags", tag));
         selectedMediums.forEach(med => formData.append("mediums", med));
-        selectedImages.forEach(img => formData.append("images", img));
-        const { success, error } = await postUpload(formData);
-        if (!success) {
-            toast(error);
+        data.forEach(img => formData.append("images", img.secure_url));
+        const { isSuccess, error, formError } = await postUpload(formData);
+        if (!isSuccess) {
+            if (formError) {
+                setErrors(formError);
+                toast("form errors")
+            }
+            if (error) toast(error)
+            setIsPublishing(false);
+            return;
         }
-        else {
-            setIsPublishing(false)
-            toast("Post published successfully");
-            router.push("/")
-        }
-        setIsPublishing(false);
+        toast("Post published successfully");
+        setIsPublishing(false)
+        router.push("/")
     };
 
     const handleDiscard = () => {
@@ -63,154 +75,46 @@ export default function CreatePost() {
         setSelectedImages([]);
         setSelectedMediums([]);
         setSelectedTags([]);
-        setTagInputVal("")
     }
 
     return (
-        <motion.div className="w-full flex justify-center p-5 bg-(--bg)"
+        <motion.div className="w-full flex justify-center p-5"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}>
             <div className="w-[55%] flex flex-col gap-7 py-2">
-                {/* <div>
-                    <div className="text-sm flex gap-3">
-                        <span className="text-amber-400">Home</span>
-                        <span className="text-white/60">&gt;</span>
-                        <span className="text-(--text-subtle)">create-post</span>
-                    </div>
-                </div> */}
                 <div className="flex flex-col gap-2">
-                    <div className="font-sans text-4xl">Create a new Post</div>
-                    <div className="text-sm text-(--text-muted)">
+                    <div className="font-sans text-4xl">Create a new <span className="text-blue-400">Post</span></div>
+                    <div className="text-sm text-white/35">
                         share your artwork with the community
                     </div>
                 </div>
-                <div className="images flex bg-(--surface) flex-col gap-5 border border-border p-6 rounded-xl cursor-pointer">
-                    <div className="text-sm font-sans tracking-widest text-(--text-muted)">
-                        <span className="text-amber-400">&middot; </span>IMAGES
-                    </div>
-                    <div
-                        onClick={() => imagesUploadRef.current?.click()}
-                        className="flex flex-col items-center gap-1 bg-(--surface2) border-[1.5px] border-dashed border-(--border-hover) text-sm p-7 rounded-lg hover:bg-(--amber-glow) hover:border-(--amber) transition-all duration-300"
-                    >
-                        <input
-                            type="file"
-                            ref={imagesUploadRef}
-                            onChange={(e) => {
-                                if (selectedImages.length > 10) {
-                                    toast("Cannot add more than 10 images");
-                                    return;
-                                }
-                                const file = e.target.files?.[0];
-                                if (!file) return;
-                                setSelectedImages((prev) => [...new Set([...prev, file])]);
-                            }}
-                            name="uploadImages"
-                            className="absolute -translate-x-999"
-                            id=""
-                        />
-                        <Upload className="bg-(--amber-light) text-(--amber) border border-(--amber-mid) rounded-lg p-3 w-10 h-10" />
-                        <div>Upload your artworks</div>
-                        <div className="text-sm text-white/40">
-                            Drag & drop or{" "}
-                            <span className="text-(--amber)">click to browse</span> &middot;
-                            JPG, PNG, GIF up to 20MB
-                        </div>
-                    </div>
-                    <div className="text-xs text-(--text-subtle)">
-                        <span className="text-amber-500">{selectedImages.length} </span>/ 10
-                        images &middot; first image is the cover &middot; Click on an image
-                        to remove it
-                    </div>
-                    {selectedImages.length > 0 && (
-                        <div className="flex flex-wrap gap-3">
-                            {selectedImages.map((img, i) => (
-                                <motion.div
-                                    key={i}
-                                    className="relative cursor-pointer"
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0.8 }}
-                                    transition={{ duration: 0.3 }}
-                                    onClick={() => {
-                                        setSelectedImages((prev) =>
-                                            prev.filter((prevImg) => prevImg !== img),
-                                        );
-                                    }}
-                                >
-                                    <img
-                                        src={URL.createObjectURL(img)}
-                                        className="w-50 h-50 rounded-lg object-cover"
-                                    />
-                                    {i === 0 && (
-                                        <div className="bg-amber-600 rounded-sm p-1 px-2 font-bold text-xs absolute top-3 left-3">
-                                            Cover
-                                        </div>
-                                    )}
-                                </motion.div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-                <div className="details bg-(--surface) flex flex-col gap-8 border border-border p-8 rounded-xl">
-                    <div className="text-sm font-sans tracking-widest text-(--text-muted)">
-                        <span className="text-amber-400">&middot; </span>DETAILS
-                    </div>
-                    <div className="text-sm flex flex-col gap-8">
-                        <div className="flex flex-col gap-3">
-                            <label htmlFor="title">Title</label>
-                            <input
-                                type="text"
-                                placeholder="Name your artwork...."
-                                name="title"
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
-                                className="border placeholder:text-(--text-subtle) rounded-sm p-3 resize-none focus:outline-0 border-border bg-(--surface2)"
-                            />
-                        </div>
-                        <div className="flex flex-col gap-3">
-                            <label
-                                htmlFor="description"
-                                className="flex justify-between font-sans text-(--text-light)"
-                            >
-                                Description
-                                <span className="text-xs text-(--text-subtle)">
-                                    {description.length} / 500
-                                </span>
-                            </label>
-                            <textarea
-                                name="description"
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                onInput={(e) => {
-                                    const el = e.currentTarget;
-                                    el.style.height = "auto";
-                                    el.style.height = `${el.scrollHeight}px`;
-                                }}
-                                maxLength={500}
-                                placeholder="Tell the story behind this piece....."
-                                className="border placeholder:text-(--text-subtle) rounded-sm p-4 resize-none focus:outline-0 border-border bg-(--surface2)"
-                            />
-                        </div>
-                        <div className="flex flex-col gap-3">
-                            <div className="text-(--text-light) text-sm font-sans">
-                                Medium
-                            </div>
-                            <SelectMediums selectedMediums={selectedMediums} setSelectedMediums={setSelectedMediums} />
-                        </div>
-                        <div className="flex flex-col gap-3">
-                            <label htmlFor="tags" className="font-sans text-(--text-light)">
-                                Tags
-                            </label>
-                            <SelectTags setSelectedTags={setSelectedTags} selectedTags={selectedTags}/>    
-                        </div>
-                    </div>
-                </div>
+
+                <PostImagesUpload selectedImages={selectedImages} setSelectedImages={setSelectedImages} />
+
+                <PostOtherDetails
+                    titleController={{
+                        value: title,
+                        setValue: setTitle
+                    }}
+                    descriptionController={{
+                        value: description,
+                        setValue: setDescription
+                    }}
+                    tagsController={{
+                        value: selectedTags,
+                        setValue: setSelectedTags
+                    }}
+                    mediumsController={{
+                        value: selectedMediums,
+                        setValue: setSelectedMediums
+                    }}
+                />
                 <div className="flex gap-7 bg-(--surface) border border-border p-5 rounded-xl">
                     <button disabled={isPublishing} onClick={handleDiscard} className="py-2 px-4 border border-border text-(--text-muted) rounded-sm hover:border-(--border-hover) hover:text-(--text) hover:bg-(--surface2) transition-colors duration-300">
                         Discard
                     </button>
-                    <button onClick={handlePublish} disabled={isPublishing} className="py-2 px-4 border text-center bg-amber-400 flex justify-center items-center font-sans font-semibold text-black w-full rounded-lg hover:bg-amber-300 hover:shadow-[0px_0px_5px] hover:shadow-amber-300 hover:-translate-y-1 transition-all duration-300">
+                    <button disabled={isPublishing} onClick={handlePublish} className="py-2 px-4 border text-center bg-amber-400 flex justify-center items-center font-sans font-semibold text-black w-full rounded-lg hover:bg-amber-300 hover:shadow-[0px_0px_5px] hover:shadow-amber-300 hover:-translate-y-1 transition-all duration-300">
                         {isPublishing ? <Spinner /> : "Publish Post"}
                     </button>
                 </div>

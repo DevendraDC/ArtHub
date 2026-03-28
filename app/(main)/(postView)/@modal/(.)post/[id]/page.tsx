@@ -13,7 +13,6 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     return (
         <PostModal>
             <Suspense>
-                {/* <PostFetch params={params} /> */}
                 <PostPageClient postId={postId} sessionUserId={sessionUserId}/>
             </Suspense>
         </PostModal>

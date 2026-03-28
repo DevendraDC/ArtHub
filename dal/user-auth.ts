@@ -16,8 +16,7 @@ export const signupUser = async (data: z.infer<typeof authSchema>) => {
       body: {
         email,
         password,
-        username: email.split("@")[0],
-        name: "",
+        name: ""
       },
     });
 

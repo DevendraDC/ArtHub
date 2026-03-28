@@ -1,0 +1,51 @@
+import { ChangeEvent } from "react";
+import { X } from "lucide-react";
+import { Controller } from "@/src/utils/types/controller";
+
+
+export function SelectTags({tagsController} : {tagsController : Controller<string[]>}) {
+    const {value, setValue} = tagsController;
+    const onTagChange = (e: ChangeEvent<HTMLInputElement, HTMLInputElement>) => {
+        const cur = e.target.value;
+        if (cur.endsWith(",")) {
+          const curTag = cur.slice(0, -1);
+          setValue((prev) => [...new Set([...prev, curTag])]);
+          e.target.value = "";
+        }
+      };
+    
+      const addTags = (tag: string) => {
+        setValue((prev) => prev.filter((cur) => cur !== tag));
+      };
+    return (
+        <div className="flex flex-col gap-2">
+            <input
+                type="text"
+                name="tags"
+                id="tags"
+                onChange={(e) => onTagChange(e)}
+                placeholder="Add the tags...."
+                className="border placeholder:text-(--text-subtle) w-full rounded-sm py-3 text-(--text-light) text-sm px-5 resize-none focus:outline-none border-border bg-(--surface2)"
+            />
+            <div className="text-xs text-(--text-subtle)">
+                Enter comma to include a tag
+            </div>
+            {value.length > 0 && (
+                <div className="flex gap-5">
+                    {value.map((tag, idx) => (
+                        <div
+                            key={idx}
+                            className="bg-(--amber-light) text-(--amber) text-sm border border-(--amber-mid) py-1 px-3 rounded-md relative"
+                        >
+                            {tag}{" "}
+                            <X
+                                onClick={() => addTags(tag)}
+                                className="absolute w-5 h-5 p-1 font-bold text-black bg-white rounded-full -top-1 -left-2"
+                            />
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    )
+}

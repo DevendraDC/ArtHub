@@ -21,36 +21,12 @@ import z from "zod";
 import { updateUser } from "@/src/dal/user-queries";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { UserSession } from "@/src/utils/getUserSession";
 
-export interface sessionType {
-    session: {
-        id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        userId: string;
-        expiresAt: Date;
-        token: string;
-        ipAddress?: string | null | undefined;
-        userAgent?: string | null | undefined;
-    };
-    user: {
-        id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        email: string;
-        emailVerified: boolean;
-        name: string;
-        image?: string | null | undefined;
-        username: string;
-        bio: string;
-    };
-}
-
-
-export default function EditProfile({
+export default function Settings({
     userSession,
 }: {
-    userSession: sessionType;
+    userSession: UserSession;
 }) {
     const router = useRouter()
     const uploadFileRef = useRef<HTMLInputElement | null>(null);
@@ -65,7 +41,7 @@ export default function EditProfile({
         resolver: zodResolver(profileSchema),
         defaultValues: {
             artistName: userSession.user.name,
-            username: userSession.user.username,
+            username: userSession.user.username ?? "",
             bio: userSession.user.bio,
             userId: userSession.user.id
         },

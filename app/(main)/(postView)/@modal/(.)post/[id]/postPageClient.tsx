@@ -1,4 +1,4 @@
-import { Spinner } from "@/components/ui/spinner";
+import { Spinner } from "@/src/components/ui/spinner";
 import ArtImagesServer from "@/src/components/post/ArtImagesServer";
 import PostDetailsServer from "@/src/components/post/PostDetailsServer";
 import { Suspense } from "react";

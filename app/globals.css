@@ -79,7 +79,7 @@
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0); 
+  --sidebar-ring: oklch(0.708 0 0);
 }
 
 .dark {
@@ -95,8 +95,8 @@
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
   --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --accent: oklch(20.904% 0.00002 271.152 / 0.814);
+  --accent-foreground: oklch(65.856% 0.16927 262.801);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
@@ -114,8 +114,12 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --bl0: oklch(88.2% 0.059 254.128);
+  --bl1: oklch(88.2% 0.059 254.128);
+  --bl2: oklch(70.7% 0.165 254.624);
+  --bl3: oklch(62.3% 0.214 259.815);
+  --bl4: oklch(48.8% 0.243 264.376);
 }
-
 
 @layer base {
   * {
@@ -134,13 +138,13 @@
     @apply hover:text-amber-300 transition-colors duration-300;
   }
   .box {
-    @apply bg-(--surface) border-border border rounded-lg
+    @apply bg-(--surface) border-border border rounded-lg;
   }
   .button-1 {
-    @apply border-border text-(--text-muted) rounded-sm hover:border-(--border-hover) hover:text-(--text) hover:bg-(--surface2) transition-colors duration-300
+    @apply border-border text-(--text-muted) rounded-sm hover:border-(--border-hover) hover:text-(--text) hover:bg-(--surface2) transition-colors duration-300;
   }
   .inp {
-    @apply border placeholder:text-(--text-subtle) rounded-sm resize-none focus:outline-0 border-border bg-(--surface2)
+    @apply border placeholder:text-(--text-subtle) rounded-sm resize-none focus:outline-0 border-border bg-(--surface2);
   }
 }
 
