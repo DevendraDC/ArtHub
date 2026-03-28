@@ -5,11 +5,11 @@ import { motion } from "framer-motion";
 
 
 type props = {
-    selectedImages : File[];
-    setSelectedImages : Dispatch<SetStateAction<File[]>>;
+    selectedImages: File[];
+    setSelectedImages: Dispatch<SetStateAction<File[]>>;
 }
 
-export default function PostImagesUpload({selectedImages, setSelectedImages} : props ) {
+export default function PostImagesUpload({ selectedImages, setSelectedImages }: props) {
     const imagesUploadRef = useRef<HTMLInputElement>(null);
     return (
         <div className="images flex bg-(--surface) flex-col gap-5 border border-border p-6 rounded-xl cursor-pointer">
@@ -24,7 +24,7 @@ export default function PostImagesUpload({selectedImages, setSelectedImages} : p
                     type="file"
                     ref={imagesUploadRef}
                     onChange={(e) => {
-                        if (selectedImages.length > 10) {
+                        if (selectedImages.length >= 10) {
                             toast("Cannot add more than 10 images");
                             return;
                         }
@@ -78,6 +78,7 @@ export default function PostImagesUpload({selectedImages, setSelectedImages} : p
                     ))}
                 </div>
             )}
+            { }
         </div>
     )
 }

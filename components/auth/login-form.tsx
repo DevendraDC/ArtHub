@@ -17,7 +17,7 @@ import {
   FieldLabel,
 } from "@/src/components/ui/field";
 import { Input } from "@/src/components/ui/input";
-import { authSchema } from "@/src/utils/zodSchema";
+import { authSchema } from "@/src/validators/user"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";

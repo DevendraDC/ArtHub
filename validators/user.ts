@@ -1,12 +1,6 @@
 import { getUser } from "@/src/dal/user-queries";
 import { z } from "zod";
 
-enum getUserBy {
-  ID,
-  USERNAME,
-  EMAIL,
-}
-
 export const authSchema = z.object({
   email: z.email("invalid email address"),
   password: z

@@ -3,8 +3,7 @@
 import { PostMedium } from "@/src/lib/generated/prisma/enums";
 import { prisma } from "@/src/lib/prisma";
 import { cache } from "react";
-import { getUserSession } from "../utils/getUserSession";
-
+import { getUserSession } from "./getUserSession";
 
 export const getAllPosts = cache(async () => {
   try {
@@ -244,63 +243,6 @@ export const getArtImages = cache(async (postId: string) => {
 });
 
 export type ArtImages = Awaited<ReturnType<typeof getArtImages>>;
-
-export const getPostDetails = cache(async (postId: string, userId: string) => {
-  try {
-    const postDetails = await prisma.artPost.findUnique({
-      where: {
-        id: postId,
-      },
-      select: {
-        _count: {
-          select: {
-            comments: true,
-            likes: true,
-            usersSaved: true,
-          },
-        },
-        user: {
-          select: {
-            id: true,
-            name: true,
-            username: true,
-            image: true,
-            bio: true,
-            followers: {
-              where: {
-                followerId: userId,
-              },
-            },
-            _count: {
-              select: {
-                followers: true,
-                following: true,
-                artPosts: true,
-              },
-            },
-          },
-        },
-        id: true,
-        mediums: true,
-        tags: true,
-        createdAt: true,
-        title: true,
-        description: true,
-        likes: {
-          where: {
-            ownerId: userId,
-          },
-        },
-      },
-    });
-    return postDetails;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-});
-
-export type PostDetails = Awaited<ReturnType<typeof getPostDetails>>;
 
 export const getPostComments = cache(async (postId: string) => {
   try {

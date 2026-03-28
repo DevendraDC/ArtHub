@@ -1,23 +1,25 @@
 "use client"
 
-import { PostDetails, toggleLike } from "@/src/dal/posts";
+import { toggleLike } from "@/src/dal/posts";
+import { PostDetails } from "@/src/dal/Post/queries";
 import { mediumLabels } from "@/src/utils/postUtils";
 import { Bookmark, Heart, MessageSquare } from "lucide-react";
 import { useOptimistic, useState, useTransition } from "react";
 import { motion } from "motion/react"
 import Image from "next/image";
 import { toggleFollow } from "@/src/dal/user-queries";
+import { PostInfo } from "@/src/utils/types/postTypes";
 
-export default function PostDetailsClient({ postDetails, sessionUserId }: { postDetails: PostDetails, sessionUserId: string }) {
+export default function PostDetailsClient({ postInfo, sessionUserId }: { postInfo: PostInfo, sessionUserId: string }) {
     const [isPending, startTransition] = useTransition();
-    const date = new Date(postDetails?.createdAt ?? Date.now());
+    const date = new Date(postInfo?.createdAt ?? Date.now());
     const time = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }).toLowerCase();
     const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const [baseLikeState, setBaseLikeState] = useState({
-        isLiked: !!postDetails?.likes.length, likesCount: postDetails?._count.likes ?? 0
+        isLiked: !!postInfo?.likes.length, likesCount: postInfo?._count.likes ?? 0
     })
     const [baseFollowState, setBaseFollowState] = useState({
-        isFollowing: !!postDetails?.user.followers.length, followerCount: postDetails?.user._count.followers ?? 0
+        isFollowing: !!postInfo?.user.followers.length, followerCount: postInfo?.user._count.followers ?? 0
     })
     const [optimisticFollowState, updateOptimisticFollow] = useOptimistic(
         baseFollowState,
@@ -34,12 +36,12 @@ export default function PostDetailsClient({ postDetails, sessionUserId }: { post
         })
     )
     const handleLikeToggle = () => {
-        if (!postDetails?.id) return;
+        if (!postInfo?.id) return;
         const newLikedState = !optimisticLikeState.isLiked;
         startTransition(async () => {
             updateOptimisticLike(newLikedState);
             try {
-                await toggleLike(postDetails?.id, postDetails?.user.id);
+                await toggleLike(postInfo?.id, postInfo?.user.id);
                 setBaseLikeState((prev) => ({
                     isLiked: newLikedState,
                     likesCount:
@@ -51,7 +53,7 @@ export default function PostDetailsClient({ postDetails, sessionUserId }: { post
         })
     }
     const handleClick = () => {
-        if (!postDetails?.user.id) return;
+        if (!postInfo?.user.id) return;
         const newFollowState = !optimisticFollowState.isFollowing;
         startTransition(async () => {
             updateOptimisticFollow(newFollowState);
@@ -69,7 +71,7 @@ export default function PostDetailsClient({ postDetails, sessionUserId }: { post
     }
     const userDetails = [
         {
-            value: postDetails?.user._count.artPosts,
+            value: postInfo?.user._count.artPosts,
             label: "Posts"
         },
         {
@@ -77,33 +79,33 @@ export default function PostDetailsClient({ postDetails, sessionUserId }: { post
             label: "Followers"
         },
         {
-            value: postDetails?.user._count.following,
+            value: postInfo?.user._count.following,
             label: "Followings"
         }
     ]
 
 
     return (
-        <motion.div className="w-full flex flex-col gap-8 bg-(--surface) p-5 rounded-lg"
+        <motion.div className="w-full min-h-full flex flex-col gap-8 bg-black p-5 rounded-r-2xl"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}>
             <div className="flex flex-col gap-5">
                 <div className="flex gap-3">
                     <div>
-                        {postDetails?.user.image && <Image src={postDetails.user.image} alt="" width={60} height={60} className="rounded-full" />}
+                        {postInfo?.user.image && <Image src={postInfo.user.image} alt="" width={60} height={60} className="rounded-full" />}
                     </div>
                     <div>
                         <div className="font-serif">
-                            {postDetails?.user.name}
+                            {postInfo?.user.name}
                         </div>
                         <div className="text-sm text-(--text-subtle)">
-                            {postDetails?.user.username}
+                            {postInfo?.user.username}
                         </div>
                     </div>
                 </div>
-                {postDetails?.user.bio && <div className="text-(--text-muted) font-sans text-sm">
-                    {postDetails?.user.bio}
+                {postInfo?.user.bio && <div className="text-(--text-muted) font-sans text-sm">
+                    {postInfo?.user.bio}
                 </div>}
 
                 <div className="flex bg-(--surface2) rounded-lg">
@@ -122,10 +124,10 @@ export default function PostDetailsClient({ postDetails, sessionUserId }: { post
             </div>
             <div className="postDetails bg-(--surface) w-full flex flex-col gap-2 self-start">
                 <div className="text-xl font-serif">
-                    {postDetails?.title}
+                    {postInfo?.title}
                 </div>
-                {postDetails?.description && <div className="text-(--text-muted) font-sans break-words min-w-0">
-                    {postDetails?.description}
+                {postInfo?.description && <div className="text-(--text-muted) font-sans wrap-break-word min-w-0">
+                    {postInfo?.description}
                 </div>}
                 <div className="text-sm text-(--text-subtle) flex gap-2 items-center">
                     {time}
@@ -147,11 +149,11 @@ export default function PostDetailsClient({ postDetails, sessionUserId }: { post
                     </button>
                     <div className="flex gap-2 w-fit p-2">
                         <MessageSquare size={22} />
-                        <div className="text-(--text-muted)">{postDetails?._count.comments}</div>
+                        <div className="text-(--text-muted)">{postInfo?._count.comments}</div>
                     </div>
                     <div className="flex gap-2 w-fit p-2">
                         <Bookmark size={22} />
-                        <div className="text-(--text-muted)">{postDetails?._count.usersSaved}</div>
+                        <div className="text-(--text-muted)">{postInfo?._count.usersSaved}</div>
                     </div>
                 </div>
                 <div className="border border-(--text-muted)/30"></div>
@@ -161,7 +163,7 @@ export default function PostDetailsClient({ postDetails, sessionUserId }: { post
                     MEDIUMS
                 </div>
                 <div className="flex flex-wrap gap-3">
-                    {postDetails?.medium.map((med, i) => (
+                    {postInfo?.mediums.map((med, i) => (
                         <div key={i} className="p-2 rounded-lg border border-border text-(--text-muted) text-xs">
                             {mediumLabels[med]}
                         </div>
@@ -173,7 +175,7 @@ export default function PostDetailsClient({ postDetails, sessionUserId }: { post
                     TAGS
                 </div>
                 <div className="flex flex-wrap gap-3">
-                    {postDetails?.tags.map((tag, i) => (
+                    {postInfo?.tags.map((tag, i) => (
                         <div key={i} className="p-2 rounded-lg border border-border text-(--text-muted) text-xs">
                             {tag}
                         </div>

@@ -18,7 +18,7 @@ import {
 import { Input } from "@/src/components/ui/input"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { authSchema } from "@/src/utils/zodSchema"
+import { authSchema } from "@/src/validators/user"
 import z from "zod"
 import { toast } from "sonner"
 import { signupUser } from "@/src/dal/user-auth"

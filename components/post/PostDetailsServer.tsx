@@ -1,12 +1,15 @@
 "use server"
 
-import { getPostDetails } from "@/src/dal/posts";
+import { getPostDetails } from "@/src/dal/Post/queries";
 import PostDetailsClient from "./PostDetailsClient";
 
-export default async function PostDetailsServer({ postId, sessionUserId }: { postId: Promise<string>, sessionUserId: Promise<string> }){
-    const [id, userId] = await Promise.all([postId, sessionUserId])
-    const postDetails = await getPostDetails(id, userId)
+export default async function PostDetailsServer({ id }: { id: string }) {
+    const result = await getPostDetails(id)
+    if (!result) {
+        return null;
+    }
+    const { postInfo, sessionUserId } = result;
     return (
-        <PostDetailsClient postDetails={postDetails} sessionUserId={userId} />
+        <PostDetailsClient postInfo={postInfo} sessionUserId={sessionUserId} />
     )
 }

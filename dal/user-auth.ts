@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@/src/lib/better-auth/auth";
-import { authSchema } from "@/src/utils/zodSchema";
+import { authSchema } from "../validators/user";
 import { headers } from "next/headers";
 import z from "zod";
 

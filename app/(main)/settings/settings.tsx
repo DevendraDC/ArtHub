@@ -4,7 +4,6 @@ import { Upload } from "lucide-react";
 import {
     FieldGroup,
     FieldSet,
-    FieldLegend,
     FieldDescription,
     Field,
     FieldLabel,
@@ -16,12 +15,12 @@ import ImageCropDialog from "@/src/components/ImageCropDialog";
 import { Button } from "@/src/components/ui/button";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { profileSchema } from "@/src/utils/zodSchema";
+import { profileSchema } from "@/src/validators/user";
 import z from "zod";
 import { updateUser } from "@/src/dal/user-queries";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { UserSession } from "@/src/utils/getUserSession";
+import { UserSession } from "@/src/dal/getUserSession";
 
 export default function Settings({
     userSession,

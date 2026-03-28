@@ -1,6 +1,6 @@
 "use client"
 
-import { sessionType } from "@/src/app/(main)/settings/settings";
+import { UserSession } from "@/src/dal/getUserSession";
 import FollowList from "@/src/components/FollowList";
 import ProfilePostsGrid from "@/src/components/UIComponent";
 import { getProfileData, ProfileData } from "@/src/dal/user-queries";
@@ -17,7 +17,7 @@ function groupOptions(id: number, userId: string) {
     })
 }
 
-export default function Profile({ userSession }: { userSession: sessionType }) {
+export default function Profile({ userSession }: { userSession: UserSession }) {
     const [selectedTab, setSelectedTab] = useState(0)
     const { isPending, isError, data, error } = useQuery(groupOptions(selectedTab, userSession.user.id));
     return (

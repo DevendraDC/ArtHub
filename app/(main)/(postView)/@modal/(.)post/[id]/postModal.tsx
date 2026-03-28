@@ -1,21 +1,25 @@
 "use client"
 
+import { X } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { motion } from "framer-motion"
 
 export default function PostModal(
-    { children }: { children: React.ReactNode }
+    { images, details }: { images: React.ReactNode, details: React.ReactNode }
 ) {
     const router = useRouter()
     return (
-        <div className="bg-white/ backdrop-blur-lg flex p-5 px-10 flex-col gap-8 absolute z-999 inset-0 overflow-hidden">
-            <div className="flex gap-2 w-full text-(--text-light) cursor-pointer shrink-0" onClick={() => router.back()}>
-                &larr;
-                <div>Back to Feed</div>
+        <motion.div className="bg-white/10 border-2 border-(--bl0)/15 rounded-3xl backdrop-blur-lg flex gap-5 absolute z-999 top-1/2 left-1/2 -translate-1/2 w-[75vw] h-[90vh] overflow-hidden"
+            initial={{ opacity: 0, y: 10, }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}>
+            <div className="flex p-5 gap-10 flex-3 text-(--bl0)/90 cursor-pointer">
+                <X size={30} className="bg-white/10 p-1 rounded-full" onClick={() => router.back()} />
+                {images}
             </div>
-            <div className="flex-1 min-h-0 p-3">
-                {children}
+            <div className="flex-1 min-h-full">
+                {details}
             </div>
-        </div>
-
+        </motion.div>
     )
 }

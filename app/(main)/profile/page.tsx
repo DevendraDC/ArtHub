@@ -1,6 +1,6 @@
 "use server"
 
-import { getUserSession } from "@/src/utils/getUserSession";
+import { getUserSession } from "@/src/dal/getUserSession";
 import Profile from "./Profile";
 
 export default async function Page() {

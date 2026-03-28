@@ -6,19 +6,20 @@ import { Posts } from "@/src/dal/posts";
 import Link from "next/link";
 import { cloudinaryTransform } from "@/src/utils/cloudinaryTransform";
 import { motion } from "motion/react"
+import { memo } from "react";
 
-export default function PostsView({ posts }: { posts: Posts}) {
+const PostsView = memo(function PostsView({ posts }: { posts: Posts }) {
     return (
         <div>
             <div className="grid grid-cols-6 gap-4">
-                {posts?.map((post) => {
+                {posts.map((post) => {
                     const url = post.artImages[0].url;
                     const preview = cloudinaryTransform(url, "f_auto,q_auto,w_370,c_limit")
                     return (
                         <Link href={`/post/${post.id}`} key={post.id}>
                             <motion.div
                                 key={post.id}
-                                className="w-55 h-55 relative bg-(--surface2) overflow-hidden group"
+                                className="w-55 h-55 aspect-square relative bg-transparent rounded-lg group"
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.3, ease: "easeOut" }}
@@ -28,10 +29,10 @@ export default function PostsView({ posts }: { posts: Posts}) {
                                     src={preview}
                                     alt=""
                                     fill
-                                    className="object-cover"
+                                    className="object-cover rounded-lg"
                                 />
                                 <div
-                                    className="p-2 flex flex-col gap-3 absolute bottom-0 justify-end opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out inset-0 backdrop-blur-2xl z-9 bg-(--bg) mask-t-from-10% to-transparent"
+                                    className="p-2 flex flex-col gap-3 absolute bottom-0 justify-end opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out inset-0 z-9 bg-black mask-t-from-1% to-transparent"
                                 >
                                     <div className="flex text-xs justify-between items-center">
                                         <div className="flex gap-3 items-center">
@@ -46,12 +47,12 @@ export default function PostsView({ posts }: { posts: Posts}) {
                                             )}
                                             <div className="flex flex-col">
                                                 <div className="text-sm">{post.user.name}</div>
-                                                <div className="text-xs text-(--text-muted)">
+                                                <div className="text-xs text-blue-100/40">
                                                     {post.user.username}
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="text-(--text-muted) text-xs">
+                                        <div className="text-blue-100/40 text-xs">
                                             {postTime(post.createdAt)}
                                         </div>
                                     </div>
@@ -63,4 +64,6 @@ export default function PostsView({ posts }: { posts: Posts}) {
             </div>
         </div>
     );
-}
+})
+
+export default PostsView;

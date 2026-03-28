@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getPosts } from "@/src/dal/posts";
 import { Spinner } from "@/src/components/ui/spinner";
 import PostsView from "@/src/components/post/PostsView";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
+import { LoadingDots } from "@/src/components/animations";
 
 
 function groupOptions(id: number) {
@@ -14,13 +15,16 @@ function groupOptions(id: number) {
         queryKey: ['HomePagePosts', id],
         queryFn: async () => await getPosts(id),
         staleTime: 10 * 60 * 1000,
+        refetchOnWindowFocus: false,
+        refetchOnMount: false,
     })
 }
 
 export function HomePageClient() {
     const [curFilter, setCurFilter] = useState(0);
     const tabs = ["All Posts", "Following", "Popular Posts"];
-    const { isPending, isError, data, error } = useQuery(groupOptions(curFilter));
+    const { isLoading, isError, data, error } = useQuery(groupOptions(curFilter));
+    const posts = useMemo(() => data ?? [], [data]);
     useEffect(() => {
         if (error) toast(error?.message);
     }, [isError, error])
@@ -50,10 +54,11 @@ export function HomePageClient() {
                     ))}
                 </div>
 
-                {isPending ? (
-                    <Spinner className="scale-150 absolute left-1/2 top-1/2 -translate-1/2" />
+                {isLoading ? (
+                    // <Spinner className="scale-150 absolute left-1/2 top-1/2 -translate-1/2" />
+                    <div className="scale-110 absolute left-1/2 top-1/2 -translate-1/2"><LoadingDots /></div>
                 ) : (
-                    <PostsView posts={data ?? []} />
+                    <PostsView posts={posts} />
                 )}
             </div>
         </div>

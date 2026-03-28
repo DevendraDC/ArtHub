@@ -1,8 +1,8 @@
-"use server"
+"use server";
 
 import { PostMedium } from "@/src/lib/generated/prisma/enums";
 import { prisma } from "@/src/lib/prisma";
-import { getUserSession } from "@/src/utils/getUserSession";
+import { getUserSession } from "@/src/dal/getUserSession";
 import { createPostSchemaServer } from "@/src/validators/post";
 import z from "zod";
 
@@ -16,12 +16,17 @@ export async function postUpload(formData: FormData) {
     const artImages = formData.getAll("images") as string[];
     const mediums = formData.getAll("mediums") as PostMedium[];
 
-    const validatedData = createPostSchemaServer.safeParse({title, images : artImages, mediums, description});
-    if(!validatedData.success){
-        return {
-            isSuccess : false,
-            formError : z.treeifyError(validatedData.error)
-        }
+    const validatedData = createPostSchemaServer.safeParse({
+      title,
+      images: artImages,
+      mediums,
+      description,
+    });
+    if (!validatedData.success) {
+      return {
+        isSuccess: false,
+        formError: z.treeifyError(validatedData.error),
+      };
     }
 
     await prisma.artPost.create({
