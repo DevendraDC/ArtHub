@@ -8,8 +8,7 @@ export default async function PostDetailsServer({ id }: { id: string }) {
     if (!result) {
         return null;
     }
-    const { postInfo, sessionUserId } = result;
     return (
-        <PostDetailsClient postInfo={postInfo} sessionUserId={sessionUserId} />
+        <PostDetailsClient post={result} />
     )
 }

@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/src/lib/prisma";
-import { uploadImage } from "../lib/cloudinaryFunctions";
+import { uploadImage } from "@/src/lib/cloudinaryFunctions";
 import { cache } from "react";
 import { fetchPostsProfile } from "./posts";
 
@@ -177,9 +177,10 @@ export const getUsers = cache(async (keyword : string) => {
     return await prisma.user.findMany({
       where : {
         ...(keyword.trim() && {
-          OR : [
+          AND : [
             {name : {contains : keyword, mode : "insensitive"}},
-            {username : {contains : keyword, mode : "insensitive"}}
+            {username : {contains : keyword, mode : "insensitive"}},
+            {role : "USER"}
           ]
         })
       },

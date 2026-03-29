@@ -1,6 +1,5 @@
 "use server";
 
-import { PostMedium } from "@/src/lib/generated/prisma/enums";
 import { prisma } from "@/src/lib/prisma";
 import { cache } from "react";
 import { getUserSession } from "./getUserSession";
@@ -85,7 +84,7 @@ export const getFollowingPosts = cache(async () => {
     return await prisma.artPost.findMany({
       where: {
         user: {
-          followers: { some: { followerId: session.user.id } },
+          followers: { some: { followerId: session.userId } },
         },
       },
       select: {
@@ -123,106 +122,6 @@ export const getFollowingPosts = cache(async () => {
 
 export type FollowingPosts = Awaited<ReturnType<typeof getFollowingPosts>>;
 
-export const getPosts = cache(async (filter: number) => {
-  try {
-    const session = await getUserSession();
-    if (filter === 1) {
-      return await prisma.artPost.findMany({
-        where: {
-          user: {
-            followers: { some: { followerId: session.user.id } },
-          },
-        },
-        select: {
-          id: true,
-          createdAt: true,
-
-          user: {
-            select: {
-              id: true,
-              username: true,
-              name: true,
-              image: true,
-            },
-          },
-
-          artImages: {
-            orderBy: {
-              order: "asc",
-            },
-            take: 1,
-            select: {
-              url: true,
-            },
-          },
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
-    } else if (filter === 2) {
-      return await prisma.artPost.findMany({
-        select: {
-          id: true,
-          createdAt: true,
-
-          user: {
-            select: {
-              id: true,
-              username: true,
-              name: true,
-              image: true,
-            },
-          },
-
-          artImages: {
-            orderBy: {
-              order: "asc",
-            },
-            take: 1,
-            select: {
-              url: true,
-            },
-          },
-        },
-        orderBy: { likes: { _count: "desc" } },
-      });
-    }
-    return await prisma.artPost.findMany({
-      select: {
-        id: true,
-        createdAt: true,
-
-        user: {
-          select: {
-            id: true,
-            username: true,
-            name: true,
-            image: true,
-          },
-        },
-
-        artImages: {
-          orderBy: {
-            order: "asc",
-          },
-          take: 1,
-          select: {
-            url: true,
-          },
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
-});
-
-export type Posts = Awaited<ReturnType<typeof getPosts>>;
 
 export const getArtImages = cache(async (postId: string) => {
   try {
@@ -287,77 +186,6 @@ export const toggleLike = async (artPostId: string, ownerId: string) => {
     });
   }
 };
-
-export const getSearchedPosts = cache(
-  async (
-    selectedTags: string[],
-    selectedMediums: PostMedium[],
-    sortBy: string,
-    keyword: string,
-  ) => {
-    try {
-      return await prisma.artPost.findMany({
-        where: {
-          ...(selectedTags.length > 0 && {
-            tags: {
-              hasSome: selectedTags,
-            },
-          }),
-          ...(keyword.trim() && {
-            OR: [
-              { title: { contains: keyword, mode: "insensitive" } },
-              { description: { contains: keyword, mode: "insensitive" } },
-            ],
-          }),
-          ...(selectedMediums.length > 0 && {
-            medium: {
-              hasSome: selectedMediums,
-            },
-          }),
-        },
-        select: {
-          id: true,
-          createdAt: true,
-
-          user: {
-            select: {
-              id: true,
-              username: true,
-              name: true,
-              image: true,
-            },
-          },
-
-          artImages: {
-            orderBy: {
-              order: "asc",
-            },
-            take: 1,
-            select: {
-              url: true,
-            },
-          },
-        },
-        orderBy: {
-          ...(sortBy === "latest"
-            ? {
-                createdAt: "desc",
-              }
-            : {
-                likes: {
-                  _count: "desc",
-                },
-              }),
-        },
-      });
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
-  },
-);
-
-export type SearchedPosts = Awaited<ReturnType<typeof getSearchedPosts>>;
 
 export const fetchPostsProfile = cache(async (userId: string) => {
   return await prisma.artPost.findMany({

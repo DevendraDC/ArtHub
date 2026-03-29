@@ -2,8 +2,9 @@
 
 import { Suspense } from "react";
 import PostModal from "./postModal";
-import ArtImagesServer from "@/src/components/post/ArtImagesServer";
-import PostDetailsServer from "@/src/components/post/PostDetailsServer";
+import ArtImagesServer from "@/src/app/(main)/(postView)/@modal/(.)post/[id]/_components/ArtImagesServer";
+import PostDetailsServer from "@/src/app/(main)/(postView)/@modal/(.)post/[id]/_components/PostDetailsServer";
+import PostDetailsModal from "./_components/PostDetailsModal";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -16,9 +17,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 </Suspense>
             }
             details={
-                <Suspense>
-                    <PostDetailsServer id={id} />
-                </Suspense>
+                <PostDetailsModal>
+                    <Suspense>
+                        <PostDetailsServer id={id} />
+                    </Suspense>
+                </PostDetailsModal>
             }
         />
     )

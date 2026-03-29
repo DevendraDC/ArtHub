@@ -1,4 +1,4 @@
-import { getUserSession } from "@/src/dal/getUserSession"
+import { getUserSession } from "@/src/data/dal/getUserSession"
 import { Bell, Bookmark, Compass, PlusIcon } from "lucide-react"
 import Link from "next/link"
 import { ProfileDropdown, SearchBarDropdown } from "./UIComponent"

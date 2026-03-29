@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { getPosts } from "@/src/dal/posts";
-import { Spinner } from "@/src/components/ui/spinner";
+import { getPosts } from "@/src/dal/Post/queries";
 import PostsView from "@/src/components/post/PostsView";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -55,7 +54,6 @@ export function HomePageClient() {
                 </div>
 
                 {isLoading ? (
-                    // <Spinner className="scale-150 absolute left-1/2 top-1/2 -translate-1/2" />
                     <div className="scale-110 absolute left-1/2 top-1/2 -translate-1/2"><LoadingDots /></div>
                 ) : (
                     <PostsView posts={posts} />

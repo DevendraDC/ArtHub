@@ -2,21 +2,35 @@
 
 import Image from "next/image";
 import { postTime } from "@/src/utils/postUtils";
-import { Posts } from "@/src/dal/posts";
+import { Posts } from "@/src/dal/Post/queries";
 import Link from "next/link";
 import { cloudinaryTransform } from "@/src/utils/cloudinaryTransform";
 import { motion } from "motion/react"
 import { memo } from "react";
+import { usePostStore } from "@/src/store/usePostStore";
 
 const PostsView = memo(function PostsView({ posts }: { posts: Posts }) {
+    const setPreview = usePostStore((s) => s.setPreview)
     return (
         <div>
             <div className="grid grid-cols-6 gap-4">
                 {posts.map((post) => {
                     const url = post.artImages[0].url;
-                    const preview = cloudinaryTransform(url, "f_auto,q_auto,w_370,c_limit")
+                    const previewUrl = cloudinaryTransform(url, "f_auto,q_auto,w_370,c_limit")
+                    const previewData = {
+                        id : post.id,
+                        thumbnail : post.artImages[0].url,
+                        tags: post.tags,
+                        mediums: post.mediums,
+                        user: {
+                            id: post.user.id,
+                            name: post.user.name,
+                            image: post.user.image ?? "",
+                            username: post.user.username ?? ""
+                        }
+                    }
                     return (
-                        <Link href={`/post/${post.id}`} key={post.id}>
+                        <Link href={`/post/${post.id}`} key={post.id} onClick={() => setPreview(previewData)}>
                             <motion.div
                                 key={post.id}
                                 className="w-55 h-55 aspect-square relative bg-transparent rounded-lg group"
@@ -26,7 +40,7 @@ const PostsView = memo(function PostsView({ posts }: { posts: Posts }) {
                             >
                                 <Image
                                     loading="lazy"
-                                    src={preview}
+                                    src={previewUrl}
                                     alt=""
                                     fill
                                     className="object-cover rounded-lg"

@@ -1,12 +1,7 @@
 "use client"
 
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/src/components/ui/dropdown-menu";
-import { Bookmark, LogOut, Search, Settings, User } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { Dialog, DialogContent, DialogTrigger } from "@/src/components/ui/dialog";
-import { SearchArtists } from "./SearchArtists";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 type Post = {
     id: string;
@@ -18,7 +13,7 @@ type Props = {
     posts: Post[];
 };
 
-const queryClient = new QueryClient()
+
 
 
 export function UserBox({ image, username, name }: { image: string, username: string, name: string }) {
@@ -38,62 +33,10 @@ export function UserBox({ image, username, name }: { image: string, username: st
     )
 }
 
-export function ProfileDropdown({ children }: { children: React.ReactNode }) {
-    const options = [
-        { to: "/profile", icon: <User />, name: "Your Profile" },
-        { to: "/profile", icon: <Bookmark />, name: "Your Collections" },
-        { to: "/profile", icon: <Settings />, name: "Settings" },
-        { to: "/profile", icon: <LogOut />, name: "Logout" },
-    ]
-    return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                {children}
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="relative z-9999 text-blue-200/80 bg-black flex flex-col gap-2 p-2">
-                {options.map((op, i) => (
-                    <Link key={i} href={op.to}>
-                        <DropdownMenuItem>
-                            {op.icon}
-                            <div>{op.name}</div>
-                        </DropdownMenuItem>
-                    </Link>
-                ))}
-            </DropdownMenuContent>
-        </DropdownMenu>
-    )
-}
 
 
-export function SearchBarDropdown() {
-    return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <div className="relative max-w-80">
-                    <input placeholder="Search" disabled className="w-full rounded-2xl p-2 text-xs pl-12 pr-7 bg-white/7 placeholder:text-blue-100/50 focus:outline-0 text-sm" />
-                    <Search size={28} className="absolute rounded-full bg-black p-1 left-1 top-1/2 -translate-y-1/2 text-white/80" />
-                </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-full relative z-9999 bg-black text-blue-200/80">
-                <Link href={'/search/artworks'}>
-                    <DropdownMenuItem>Search for artworks</DropdownMenuItem>
-                </Link>
-                <Dialog>
-                    <DialogTrigger asChild>
-                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                            Search for artists
-                        </DropdownMenuItem>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <QueryClientProvider client={queryClient}>
-                            <SearchArtists />
-                        </QueryClientProvider>
-                    </DialogContent>
-                </Dialog>
-            </DropdownMenuContent>
-        </DropdownMenu>
-    )
-}
+
+
 
 
 

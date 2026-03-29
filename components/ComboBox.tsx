@@ -43,7 +43,7 @@ export function SortByBox({ sortBy, setSortBy }: { sortBy: string, setSortBy: Di
       <div>Sort posts by {sortBy}</div>
       <ChevronDownIcon />
       {clicked && (
-        <div className="absolute w-full left-0 top-[100%] bg-(--bg) p-2 flex flex-col text-(--text-light)/80 gap-2">
+        <div className="absolute w-full left-0 top-full bg-(--bg) p-2 flex flex-col text-(--text-light)/80 gap-2">
           {sort.map(s => (
             <div key={s} onClick={() => setSortBy(s)} className="hover:bg-(--surface2) p-1 rounded-sm">Sort posts by {s}</div>
           ))}

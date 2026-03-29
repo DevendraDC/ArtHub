@@ -46,7 +46,7 @@ model User {
   bio           String       @default("")
   email         String
   emailVerified Boolean      @default(false)
-  image         String?
+  image         String? @default("https://res.cloudinary.com/dailhnvvl/image/upload/v1771605999/pfpdefault_omrkpw.png")
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
   sessions      Session[]

@@ -2,14 +2,15 @@
 
 import { PostMedium } from "@/src/lib/generated/prisma/enums";
 import { prisma } from "@/src/lib/prisma";
-import { getUserSession } from "@/src/dal/getUserSession";
+import { getUserSession } from "../getUserSession";
 import { createPostSchemaServer } from "@/src/validators/post";
 import z from "zod";
 
 export async function postUpload(formData: FormData) {
   try {
     const session = await getUserSession();
-    const authorId = session.user.id;
+    if (!session || !session.userId) throw new Error("session not found");
+    const authorId = session.userId;
     const title = formData.get("title") as string;
     const description = formData.get("description") as string;
     const tags = formData.getAll("tags") as string[];

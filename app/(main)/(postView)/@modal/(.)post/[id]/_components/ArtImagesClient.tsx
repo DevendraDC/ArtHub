@@ -26,7 +26,7 @@ export default function ArtImagesClient({ images }: Props) {
                 className="flex justify-center items-center"
             >
                 <Image
-                    src={cloudinaryTransform(displayImage.url, "f_auto,q_auto,w_1500,c_limit")}
+                    src={cloudinaryTransform(displayImage.url, "f_auto,q_auto,w_1000,c_limit")}
                     alt=""
                     height={1000}
                     width={1000}
@@ -39,10 +39,10 @@ export default function ArtImagesClient({ images }: Props) {
                 {images.map(img => (
                     <div key={img.id} className="cursor-pointer" onClick={() => setDisplayImage(img)}>
                         <Image
-                            src={cloudinaryTransform(img.url, "f_auto,q_auto,w_1000,c_limit")}
+                            src={cloudinaryTransform(img.url, "f_auto,q_auto,w_250,c_limit")}
                             alt=""
-                            width={500}
-                            height={500}
+                            width={100}
+                            height={100}
                             loading="lazy"
                             className={`h-15 w-15 object-cover rounded-lg transition-all ${displayImage.id === img.id
                                 ? "border border-amber-400 opacity-100"

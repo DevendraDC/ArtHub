@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "@/src/lib/prisma";
-import EmailVerificationCode from "@/src/components/auth/EmailTemplate";
+import EmailVerificationCode from "@/src/components/EmailTemplate";
 import crypto from "crypto";
 import { nextCookies } from "better-auth/next-js";
 import { transporter } from "../nodeMailer";
@@ -24,7 +24,6 @@ export const auth = betterAuth({
     additionalFields: {
       role : {type : "string" , defaultValue : "USER"},
       username: { type: "string", unique: true, required : false},
-      bio: { type: "string", defaultValue: "" },
     },
   },
   emailVerification: {

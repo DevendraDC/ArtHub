@@ -21,7 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { authSchema } from "@/src/validators/user"
 import z from "zod"
 import { toast } from "sonner"
-import { signupUser } from "@/src/dal/user-auth"
+import { signupUser } from "@/src/data/dal/user-auth"
 import { useRouter } from "next/navigation"
 
 

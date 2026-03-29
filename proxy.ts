@@ -1,3 +1,5 @@
+"use server";
+
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { auth } from "./lib/better-auth/auth";
@@ -33,7 +35,19 @@ export default async function proxy(req: NextRequest) {
     return NextResponse.redirect(new URL("/settings", req.nextUrl));
   }
 
-  return NextResponse.next();
+  const requestHeaders = new Headers(req.headers);
+
+  if (session?.user) {
+    requestHeaders.set("x-user-id", session.user.id ?? "");
+    requestHeaders.set("x-user-name", session.user.name ?? "");
+    requestHeaders.set("x-user-username", session.user.username ?? "");
+    requestHeaders.set("x-user-image", session.user.image ?? "");
+    requestHeaders.set("x-user-bio", session.user.bio ?? "");
+  }
+
+  return NextResponse.next({
+    request: { headers: requestHeaders },
+  });
 }
 
 export const config = {

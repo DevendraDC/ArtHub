@@ -1,16 +1,16 @@
 "use client"
 
 import { useState } from "react";
-import { Button } from "../ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
-import { Field, FieldGroup } from "../ui/field";
+import { Button } from "../../../components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../components/ui/card";
+import { Field, FieldGroup } from "../../../components/ui/field";
 import {
     InputOTP,
     InputOTPGroup,
     InputOTPSlot,
 } from "@/src/components/ui/input-otp"
 import { toast } from "sonner";
-import { verifyUser } from "@/src/dal/verify-user";
+import { verifyUser } from "@/src/data/dal/verify-user";
 import { useRouter } from "next/navigation";
 
 

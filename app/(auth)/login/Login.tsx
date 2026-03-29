@@ -22,7 +22,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import { loginUser } from "@/src/dal/user-auth";
+import { loginUser } from "@/src/data/dal/user-auth";
 import { useRouter } from "next/navigation";
 
 export function LoginForm({

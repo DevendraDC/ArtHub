@@ -1,4 +1,3 @@
-// FollowList.tsx
 import Image from "next/image";
 import Link from "next/link";
 
@@ -28,7 +27,7 @@ function UserCard({ user }: { user: UserInfo }) {
                             className="rounded-full border border-(--amber)"
                         />
                     ) : (
-                        <div className="w-[42px] h-[42px] rounded-full bg-white/10 flex items-center justify-center text-white/50 text-sm font-serif">
+                        <div className="w-10.5 h-10.5 rounded-full bg-white/10 flex items-center justify-center text-white/50 text-sm font-serif">
                             {user.name?.[0] ?? "?"}
                         </div>
                     )}

@@ -1,13 +1,20 @@
 "use client"
 
-import { UserSession } from "@/src/dal/getUserSession";
 import FollowList from "@/src/components/FollowList";
-import ProfilePostsGrid from "@/src/components/UIComponent";
-import { getProfileData, ProfileData } from "@/src/dal/user-queries";
+import ProfilePostsGrid from "@/src/components/Navbar/UIComponent";
+import { getProfileData, ProfileData } from "@/src/data/dal/user-queries";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { Edit } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+
+type user = {
+    id: string | null;
+    name: string | null;
+    username: string | null;
+    image: string | null;
+    bio: string | null;
+}
 
 function groupOptions(id: number, userId: string) {
     return queryOptions({
@@ -17,15 +24,13 @@ function groupOptions(id: number, userId: string) {
     })
 }
 
-export default function Profile({ userSession }: { userSession: UserSession }) {
+export default function Profile({ user }: { user: user }) {
+    if (!user || !user.id) return <div>user not found</div>;
     const [selectedTab, setSelectedTab] = useState(0)
-    const { isPending, isError, data, error } = useQuery(groupOptions(selectedTab, userSession.user.id));
+    const { isPending, isError, data, error } = useQuery(groupOptions(selectedTab, user.id));
     return (
         <div className="w-full flex justify-center p-5">
             <div className="w-[55%] flex flex-col gap-7">
-                {/* <div>
-                    <div className="text-sm flex gap-3"><span className="text-amber-400">Home</span><span className="text-white/60">&gt;</span><span className="text-(--text-subtle)">profile</span></div>
-                </div> */}
                 <div className="flex flex-col gap-2">
                     <div className="font-serif text-4xl">Your Profile</div>
                     <div className="text-sm text-(--text-muted)">You can view and change your profile details from here</div>
@@ -39,10 +44,10 @@ export default function Profile({ userSession }: { userSession: UserSession }) {
                     </div>
                     <div className="profilePhoto flex justify-between">
                         <div className="flex gap-3 items-center">
-                            {userSession.user.image && <Image src={userSession.user.image} alt="" width={90} height={90} className="rounded-full border border-(--amber)" />}
+                            {user.image && <Image src={user.image} alt="" width={90} height={90} className="rounded-full border border-(--amber)" />}
                             <div className="">
-                                <div className="font-serif text-xl tracking-wide">{userSession.user.name}</div>
-                                <div className="text-sm text-(--text-subtle)">@{userSession.user.username}</div>
+                                <div className="font-serif text-xl tracking-wide">{user.name}</div>
+                                <div className="text-sm text-(--text-subtle)">@{user.username}</div>
                             </div>
                         </div>
                         <a href="/">
@@ -50,7 +55,7 @@ export default function Profile({ userSession }: { userSession: UserSession }) {
                         </a>
                     </div>
                     <div className="text-(--text-muted) text-sm font-sans font-semibold">
-                        {userSession.user.bio}
+                        {user.bio}
                     </div>
                     <div className="flex gap-8">
                         <div>0 <span className="text-sm text-(--text-subtle)">Posts</span></div>

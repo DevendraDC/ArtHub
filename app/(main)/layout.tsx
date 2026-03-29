@@ -1,6 +1,6 @@
 "use server"
 
-import Navbar from "@/src/components/Navbar";
+import Navbar from "@/src/components/Navbar/Navbar";
 import { QueryProviders } from "./Providers";
 
 

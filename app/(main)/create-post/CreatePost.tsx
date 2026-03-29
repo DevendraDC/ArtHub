@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { postUpload } from "@/src/dal/Post/mutations";
+import { postUpload } from "@/src/data/dal/Post/mutations";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@/src/components/ui/spinner";
 import { motion } from "motion/react"
