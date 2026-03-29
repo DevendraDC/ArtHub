@@ -17,6 +17,14 @@ export const Role = {
 export type Role = (typeof Role)[keyof typeof Role]
 
 
+export const CollectionView = {
+  PRIVATE: 'PRIVATE',
+  PUBLIC: 'PUBLIC'
+} as const
+
+export type CollectionView = (typeof CollectionView)[keyof typeof CollectionView]
+
+
 export const PostMedium = {
   DIGITAL: 'DIGITAL',
   OIL_PAINT: 'OIL_PAINT',

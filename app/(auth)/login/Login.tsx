@@ -22,7 +22,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import { loginUser } from "@/src/data/dal/user-auth";
+import { loginUser } from "@/src/data/dal/auth/queries";
 import { useRouter } from "next/navigation";
 
 export function LoginForm({
@@ -45,9 +45,9 @@ export function LoginForm({
   const onSubmit = async (data: z.infer<typeof authSchema>) => {
     const { success, error } = await loginUser(data);
     if (!success) {
-      toast(error);
+      toast(error?.toString);
       if (error === "Email not verified") {
-        router.push(`/verify-email?email=${data.email}`);
+        toast("email not verified!, email verification link is sent to your gmail, click it to verify your gmail")
       }
     }
     else {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { getPosts } from "@/src/dal/Post/queries";
+import { getPosts } from "@/src/data/dal/Post/queries";
 import PostsView from "@/src/components/post/PostsView";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";

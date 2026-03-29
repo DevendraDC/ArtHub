@@ -16,7 +16,8 @@ export const signupUser = async (data: z.infer<typeof authSchema>) => {
       body: {
         email,
         password,
-        name: ""
+        name: "",
+        username: email.split("@")[0]
       },
     });
 
@@ -24,16 +25,17 @@ export const signupUser = async (data: z.infer<typeof authSchema>) => {
       success: true,
     };
   } catch (error) {
-    console.error("error occured while creating user");
+    console.error("error occured while creating user, error:", error);
     return {
       success: false,
       error:
         error instanceof Error
-          ? error.message
-          : "error occured while creating user",
+          ? error
+          : "Something went wrong while creating user",
     };
   }
 };
+
 
 export const loginUser = async (data: z.infer<typeof authSchema>) => {
   try {
@@ -43,24 +45,20 @@ export const loginUser = async (data: z.infer<typeof authSchema>) => {
     }
 
     await auth.api.signInEmail({
-      body: {
-        email,
-        password,
-      },
+      body: { email, password },
       headers: await headers(),
     });
 
-    return {
-      success: true,
-    };
+    return { success: true };
+
   } catch (error) {
-    console.error("Some error occured while signing in user");
+    console.error("error occured while signing in, error:", error);
     return {
       success: false,
       error:
         error instanceof Error
-          ? error.message
-          : "Some error occured while signing in user",
+          ? error
+          : "Something went wrong while signing in",
     };
   }
 };

@@ -28,22 +28,11 @@ export default async function proxy(req: NextRequest) {
     return NextResponse.redirect(new URL("/login", req.nextUrl));
   }
 
-  if (
-    (!session?.user.name || !session?.user.username) &&
-    !req.nextUrl.pathname.startsWith("/settings")
-  ) {
+  if (!session?.user.profileCreated && !req.nextUrl.pathname.startsWith("/settings")) {
     return NextResponse.redirect(new URL("/settings", req.nextUrl));
   }
 
   const requestHeaders = new Headers(req.headers);
-
-  if (session?.user) {
-    requestHeaders.set("x-user-id", session.user.id ?? "");
-    requestHeaders.set("x-user-name", session.user.name ?? "");
-    requestHeaders.set("x-user-username", session.user.username ?? "");
-    requestHeaders.set("x-user-image", session.user.image ?? "");
-    requestHeaders.set("x-user-bio", session.user.bio ?? "");
-  }
 
   return NextResponse.next({
     request: { headers: requestHeaders },

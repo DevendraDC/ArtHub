@@ -7,7 +7,7 @@ export default async function Page() {
   const session = await getUserSession();
   return (
     <div>
-      <Profile user={user} />
+      <Profile user={session} />
     </div>
   )
 }

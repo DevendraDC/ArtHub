@@ -21,13 +21,9 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { authSchema } from "@/src/validators/user"
 import z from "zod"
 import { toast } from "sonner"
-import { signupUser } from "@/src/data/dal/user-auth"
-import { useRouter } from "next/navigation"
-
-
+import { signupUser } from "@/src/data/dal/auth/queries"
 
 export function SignupForm() {
-  const router = useRouter()
   const { handleSubmit, control, formState: { isSubmitting } } = useForm({
     resolver: zodResolver(authSchema),
     defaultValues: {
@@ -37,15 +33,13 @@ export function SignupForm() {
   })
 
   const onSubmit = async (data: z.infer<typeof authSchema>) => {
-    console.log("submit")
     const { success, error } = await signupUser(data)
     if (success) {
-      router.push(`/verify-email?email=${data.email}`)
+      toast("email verification link is sent to your gmail")
     }
     else {
-      toast(error)
+      toast(error?.toString)
     }
-
   }
 
   return (

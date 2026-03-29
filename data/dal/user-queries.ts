@@ -38,40 +38,7 @@ export const getUser = async (username: string, userId: string) => {
   return user;
 };
 
-export const updateUser = async (userData: userDataType) => {
-  try {
-    if (!userData.name || !userData.username) {
-      throw new Error("name and username are required");
-    }
-    let img: string | null = null;
-    if (userData.image) {
-      const res = await uploadImage(userData.image);
-      img = res.secure_url;
-    }
-    await prisma.user.update({
-      where: {
-        email: userData.email,
-      },
-      data: {
-        ...(img && { image: img }),
-        name: userData.name,
-        username: userData.username,
-        bio: userData.bio,
-      },
-    });
 
-    return {
-      success: true,
-    };
-  } catch (error) {
-    console.error("error while updating user", error);
-    return {
-      success: false,
-      error:
-        error instanceof Error ? error.message : "error while updating user",
-    };
-  }
-};
 
 export const toggleFollow = async (followerId: string, followingId: string) => {
   const isFollowing = await prisma.follow.findUnique({
@@ -130,10 +97,14 @@ const getFollowers = cache(async (userId: string) => {
     select: {
       follower: {
         select: {
-          id: true,
-          name: true,
-          username: true,
-          image: true,
+          profileId: true,
+          user: {
+              select: {
+                username: true,
+                name: true,
+                image: true,
+              },
+            },
         },
       },
     },
@@ -151,10 +122,14 @@ const getFollowing = cache(async (userId: string) => {
     select: {
       following: {
         select: {
-          id: true,
-          name: true,
-          username: true,
-          image: true,
+          profileId: true,
+          user: {
+              select: {
+                username: true,
+                name: true,
+                image: true,
+              },
+            },
         },
       },
     },
@@ -191,8 +166,10 @@ export const getUsers = cache(async (keyword : string) => {
         image : true
       },
       orderBy : {
-        followers : {
-          _count : "desc"
+        profile: {
+          followers: {
+            _count: "desc"
+          }
         }
       }
     })

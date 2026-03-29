@@ -30,7 +30,7 @@ export async function postUpload(formData: FormData) {
       };
     }
 
-    await prisma.artPost.create({
+    await prisma.post.create({
       data: {
         authorId,
         title,

@@ -1,3 +1,5 @@
+"use client"
+
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/src/components/ui/dropdown-menu";
 import { Search } from "lucide-react";
 import Link from "next/link";

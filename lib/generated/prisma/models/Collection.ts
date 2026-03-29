@@ -25,41 +25,59 @@ export type AggregateCollection = {
 }
 
 export type CollectionMinAggregateOutputType = {
-  artPostId: string | null
-  savedByUserId: string | null
+  id: string | null
+  name: string | null
+  ownerId: string | null
+  view: $Enums.CollectionView | null
   createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type CollectionMaxAggregateOutputType = {
-  artPostId: string | null
-  savedByUserId: string | null
+  id: string | null
+  name: string | null
+  ownerId: string | null
+  view: $Enums.CollectionView | null
   createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type CollectionCountAggregateOutputType = {
-  artPostId: number
-  savedByUserId: number
+  id: number
+  name: number
+  ownerId: number
+  view: number
   createdAt: number
+  updatedAt: number
   _all: number
 }
 
 
 export type CollectionMinAggregateInputType = {
-  artPostId?: true
-  savedByUserId?: true
+  id?: true
+  name?: true
+  ownerId?: true
+  view?: true
   createdAt?: true
+  updatedAt?: true
 }
 
 export type CollectionMaxAggregateInputType = {
-  artPostId?: true
-  savedByUserId?: true
+  id?: true
+  name?: true
+  ownerId?: true
+  view?: true
   createdAt?: true
+  updatedAt?: true
 }
 
 export type CollectionCountAggregateInputType = {
-  artPostId?: true
-  savedByUserId?: true
+  id?: true
+  name?: true
+  ownerId?: true
+  view?: true
   createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -136,9 +154,12 @@ export type CollectionGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 export type CollectionGroupByOutputType = {
-  artPostId: string
-  savedByUserId: string
+  id: string
+  name: string
+  ownerId: string
+  view: $Enums.CollectionView
   createdAt: Date
+  updatedAt: Date
   _count: CollectionCountAggregateOutputType | null
   _min: CollectionMinAggregateOutputType | null
   _max: CollectionMaxAggregateOutputType | null
@@ -163,37 +184,48 @@ export type CollectionWhereInput = {
   AND?: Prisma.CollectionWhereInput | Prisma.CollectionWhereInput[]
   OR?: Prisma.CollectionWhereInput[]
   NOT?: Prisma.CollectionWhereInput | Prisma.CollectionWhereInput[]
-  artPostId?: Prisma.StringFilter<"Collection"> | string
-  savedByUserId?: Prisma.StringFilter<"Collection"> | string
+  id?: Prisma.StringFilter<"Collection"> | string
+  name?: Prisma.StringFilter<"Collection"> | string
+  ownerId?: Prisma.StringFilter<"Collection"> | string
+  view?: Prisma.EnumCollectionViewFilter<"Collection"> | $Enums.CollectionView
   createdAt?: Prisma.DateTimeFilter<"Collection"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  artPost?: Prisma.XOR<Prisma.ArtPostScalarRelationFilter, Prisma.ArtPostWhereInput>
+  updatedAt?: Prisma.DateTimeFilter<"Collection"> | Date | string
+  user?: Prisma.XOR<Prisma.ProfileScalarRelationFilter, Prisma.ProfileWhereInput>
+  posts?: Prisma.PostListRelationFilter
 }
 
 export type CollectionOrderByWithRelationInput = {
-  artPostId?: Prisma.SortOrder
-  savedByUserId?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  ownerId?: Prisma.SortOrder
+  view?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  user?: Prisma.UserOrderByWithRelationInput
-  artPost?: Prisma.ArtPostOrderByWithRelationInput
+  updatedAt?: Prisma.SortOrder
+  user?: Prisma.ProfileOrderByWithRelationInput
+  posts?: Prisma.PostOrderByRelationAggregateInput
 }
 
 export type CollectionWhereUniqueInput = Prisma.AtLeast<{
-  artPostId_savedByUserId?: Prisma.CollectionArtPostIdSavedByUserIdCompoundUniqueInput
+  id?: string
   AND?: Prisma.CollectionWhereInput | Prisma.CollectionWhereInput[]
   OR?: Prisma.CollectionWhereInput[]
   NOT?: Prisma.CollectionWhereInput | Prisma.CollectionWhereInput[]
-  artPostId?: Prisma.StringFilter<"Collection"> | string
-  savedByUserId?: Prisma.StringFilter<"Collection"> | string
+  name?: Prisma.StringFilter<"Collection"> | string
+  ownerId?: Prisma.StringFilter<"Collection"> | string
+  view?: Prisma.EnumCollectionViewFilter<"Collection"> | $Enums.CollectionView
   createdAt?: Prisma.DateTimeFilter<"Collection"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  artPost?: Prisma.XOR<Prisma.ArtPostScalarRelationFilter, Prisma.ArtPostWhereInput>
-}, "artPostId_savedByUserId">
+  updatedAt?: Prisma.DateTimeFilter<"Collection"> | Date | string
+  user?: Prisma.XOR<Prisma.ProfileScalarRelationFilter, Prisma.ProfileWhereInput>
+  posts?: Prisma.PostListRelationFilter
+}, "id">
 
 export type CollectionOrderByWithAggregationInput = {
-  artPostId?: Prisma.SortOrder
-  savedByUserId?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  ownerId?: Prisma.SortOrder
+  view?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.CollectionCountOrderByAggregateInput
   _max?: Prisma.CollectionMaxOrderByAggregateInput
   _min?: Prisma.CollectionMinOrderByAggregateInput
@@ -203,49 +235,78 @@ export type CollectionScalarWhereWithAggregatesInput = {
   AND?: Prisma.CollectionScalarWhereWithAggregatesInput | Prisma.CollectionScalarWhereWithAggregatesInput[]
   OR?: Prisma.CollectionScalarWhereWithAggregatesInput[]
   NOT?: Prisma.CollectionScalarWhereWithAggregatesInput | Prisma.CollectionScalarWhereWithAggregatesInput[]
-  artPostId?: Prisma.StringWithAggregatesFilter<"Collection"> | string
-  savedByUserId?: Prisma.StringWithAggregatesFilter<"Collection"> | string
+  id?: Prisma.StringWithAggregatesFilter<"Collection"> | string
+  name?: Prisma.StringWithAggregatesFilter<"Collection"> | string
+  ownerId?: Prisma.StringWithAggregatesFilter<"Collection"> | string
+  view?: Prisma.EnumCollectionViewWithAggregatesFilter<"Collection"> | $Enums.CollectionView
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Collection"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Collection"> | Date | string
 }
 
 export type CollectionCreateInput = {
+  id?: string
+  name: string
+  view?: $Enums.CollectionView
   createdAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutCollectionsInput
-  artPost: Prisma.ArtPostCreateNestedOneWithoutUsersSavedInput
+  updatedAt?: Date | string
+  user: Prisma.ProfileCreateNestedOneWithoutCollectionsInput
+  posts?: Prisma.PostCreateNestedManyWithoutCollectionsInput
 }
 
 export type CollectionUncheckedCreateInput = {
-  artPostId: string
-  savedByUserId: string
+  id?: string
+  name: string
+  ownerId: string
+  view?: $Enums.CollectionView
   createdAt?: Date | string
+  updatedAt?: Date | string
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutCollectionsInput
 }
 
 export type CollectionUpdateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  view?: Prisma.EnumCollectionViewFieldUpdateOperationsInput | $Enums.CollectionView
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutCollectionsNestedInput
-  artPost?: Prisma.ArtPostUpdateOneRequiredWithoutUsersSavedNestedInput
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.ProfileUpdateOneRequiredWithoutCollectionsNestedInput
+  posts?: Prisma.PostUpdateManyWithoutCollectionsNestedInput
 }
 
 export type CollectionUncheckedUpdateInput = {
-  artPostId?: Prisma.StringFieldUpdateOperationsInput | string
-  savedByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  view?: Prisma.EnumCollectionViewFieldUpdateOperationsInput | $Enums.CollectionView
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  posts?: Prisma.PostUncheckedUpdateManyWithoutCollectionsNestedInput
 }
 
 export type CollectionCreateManyInput = {
-  artPostId: string
-  savedByUserId: string
+  id?: string
+  name: string
+  ownerId: string
+  view?: $Enums.CollectionView
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type CollectionUpdateManyMutationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  view?: Prisma.EnumCollectionViewFieldUpdateOperationsInput | $Enums.CollectionView
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CollectionUncheckedUpdateManyInput = {
-  artPostId?: Prisma.StringFieldUpdateOperationsInput | string
-  savedByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  view?: Prisma.EnumCollectionViewFieldUpdateOperationsInput | $Enums.CollectionView
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CollectionListRelationFilter = {
@@ -258,27 +319,31 @@ export type CollectionOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type CollectionArtPostIdSavedByUserIdCompoundUniqueInput = {
-  artPostId: string
-  savedByUserId: string
-}
-
 export type CollectionCountOrderByAggregateInput = {
-  artPostId?: Prisma.SortOrder
-  savedByUserId?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  ownerId?: Prisma.SortOrder
+  view?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type CollectionMaxOrderByAggregateInput = {
-  artPostId?: Prisma.SortOrder
-  savedByUserId?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  ownerId?: Prisma.SortOrder
+  view?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type CollectionMinOrderByAggregateInput = {
-  artPostId?: Prisma.SortOrder
-  savedByUserId?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  ownerId?: Prisma.SortOrder
+  view?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type CollectionCreateNestedManyWithoutUserInput = {
@@ -323,56 +388,64 @@ export type CollectionUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.CollectionScalarWhereInput | Prisma.CollectionScalarWhereInput[]
 }
 
-export type CollectionCreateNestedManyWithoutArtPostInput = {
-  create?: Prisma.XOR<Prisma.CollectionCreateWithoutArtPostInput, Prisma.CollectionUncheckedCreateWithoutArtPostInput> | Prisma.CollectionCreateWithoutArtPostInput[] | Prisma.CollectionUncheckedCreateWithoutArtPostInput[]
-  connectOrCreate?: Prisma.CollectionCreateOrConnectWithoutArtPostInput | Prisma.CollectionCreateOrConnectWithoutArtPostInput[]
-  createMany?: Prisma.CollectionCreateManyArtPostInputEnvelope
+export type CollectionCreateNestedManyWithoutPostsInput = {
+  create?: Prisma.XOR<Prisma.CollectionCreateWithoutPostsInput, Prisma.CollectionUncheckedCreateWithoutPostsInput> | Prisma.CollectionCreateWithoutPostsInput[] | Prisma.CollectionUncheckedCreateWithoutPostsInput[]
+  connectOrCreate?: Prisma.CollectionCreateOrConnectWithoutPostsInput | Prisma.CollectionCreateOrConnectWithoutPostsInput[]
   connect?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
 }
 
-export type CollectionUncheckedCreateNestedManyWithoutArtPostInput = {
-  create?: Prisma.XOR<Prisma.CollectionCreateWithoutArtPostInput, Prisma.CollectionUncheckedCreateWithoutArtPostInput> | Prisma.CollectionCreateWithoutArtPostInput[] | Prisma.CollectionUncheckedCreateWithoutArtPostInput[]
-  connectOrCreate?: Prisma.CollectionCreateOrConnectWithoutArtPostInput | Prisma.CollectionCreateOrConnectWithoutArtPostInput[]
-  createMany?: Prisma.CollectionCreateManyArtPostInputEnvelope
+export type CollectionUncheckedCreateNestedManyWithoutPostsInput = {
+  create?: Prisma.XOR<Prisma.CollectionCreateWithoutPostsInput, Prisma.CollectionUncheckedCreateWithoutPostsInput> | Prisma.CollectionCreateWithoutPostsInput[] | Prisma.CollectionUncheckedCreateWithoutPostsInput[]
+  connectOrCreate?: Prisma.CollectionCreateOrConnectWithoutPostsInput | Prisma.CollectionCreateOrConnectWithoutPostsInput[]
   connect?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
 }
 
-export type CollectionUpdateManyWithoutArtPostNestedInput = {
-  create?: Prisma.XOR<Prisma.CollectionCreateWithoutArtPostInput, Prisma.CollectionUncheckedCreateWithoutArtPostInput> | Prisma.CollectionCreateWithoutArtPostInput[] | Prisma.CollectionUncheckedCreateWithoutArtPostInput[]
-  connectOrCreate?: Prisma.CollectionCreateOrConnectWithoutArtPostInput | Prisma.CollectionCreateOrConnectWithoutArtPostInput[]
-  upsert?: Prisma.CollectionUpsertWithWhereUniqueWithoutArtPostInput | Prisma.CollectionUpsertWithWhereUniqueWithoutArtPostInput[]
-  createMany?: Prisma.CollectionCreateManyArtPostInputEnvelope
+export type CollectionUpdateManyWithoutPostsNestedInput = {
+  create?: Prisma.XOR<Prisma.CollectionCreateWithoutPostsInput, Prisma.CollectionUncheckedCreateWithoutPostsInput> | Prisma.CollectionCreateWithoutPostsInput[] | Prisma.CollectionUncheckedCreateWithoutPostsInput[]
+  connectOrCreate?: Prisma.CollectionCreateOrConnectWithoutPostsInput | Prisma.CollectionCreateOrConnectWithoutPostsInput[]
+  upsert?: Prisma.CollectionUpsertWithWhereUniqueWithoutPostsInput | Prisma.CollectionUpsertWithWhereUniqueWithoutPostsInput[]
   set?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
   disconnect?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
   delete?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
   connect?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
-  update?: Prisma.CollectionUpdateWithWhereUniqueWithoutArtPostInput | Prisma.CollectionUpdateWithWhereUniqueWithoutArtPostInput[]
-  updateMany?: Prisma.CollectionUpdateManyWithWhereWithoutArtPostInput | Prisma.CollectionUpdateManyWithWhereWithoutArtPostInput[]
+  update?: Prisma.CollectionUpdateWithWhereUniqueWithoutPostsInput | Prisma.CollectionUpdateWithWhereUniqueWithoutPostsInput[]
+  updateMany?: Prisma.CollectionUpdateManyWithWhereWithoutPostsInput | Prisma.CollectionUpdateManyWithWhereWithoutPostsInput[]
   deleteMany?: Prisma.CollectionScalarWhereInput | Prisma.CollectionScalarWhereInput[]
 }
 
-export type CollectionUncheckedUpdateManyWithoutArtPostNestedInput = {
-  create?: Prisma.XOR<Prisma.CollectionCreateWithoutArtPostInput, Prisma.CollectionUncheckedCreateWithoutArtPostInput> | Prisma.CollectionCreateWithoutArtPostInput[] | Prisma.CollectionUncheckedCreateWithoutArtPostInput[]
-  connectOrCreate?: Prisma.CollectionCreateOrConnectWithoutArtPostInput | Prisma.CollectionCreateOrConnectWithoutArtPostInput[]
-  upsert?: Prisma.CollectionUpsertWithWhereUniqueWithoutArtPostInput | Prisma.CollectionUpsertWithWhereUniqueWithoutArtPostInput[]
-  createMany?: Prisma.CollectionCreateManyArtPostInputEnvelope
+export type CollectionUncheckedUpdateManyWithoutPostsNestedInput = {
+  create?: Prisma.XOR<Prisma.CollectionCreateWithoutPostsInput, Prisma.CollectionUncheckedCreateWithoutPostsInput> | Prisma.CollectionCreateWithoutPostsInput[] | Prisma.CollectionUncheckedCreateWithoutPostsInput[]
+  connectOrCreate?: Prisma.CollectionCreateOrConnectWithoutPostsInput | Prisma.CollectionCreateOrConnectWithoutPostsInput[]
+  upsert?: Prisma.CollectionUpsertWithWhereUniqueWithoutPostsInput | Prisma.CollectionUpsertWithWhereUniqueWithoutPostsInput[]
   set?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
   disconnect?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
   delete?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
   connect?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
-  update?: Prisma.CollectionUpdateWithWhereUniqueWithoutArtPostInput | Prisma.CollectionUpdateWithWhereUniqueWithoutArtPostInput[]
-  updateMany?: Prisma.CollectionUpdateManyWithWhereWithoutArtPostInput | Prisma.CollectionUpdateManyWithWhereWithoutArtPostInput[]
+  update?: Prisma.CollectionUpdateWithWhereUniqueWithoutPostsInput | Prisma.CollectionUpdateWithWhereUniqueWithoutPostsInput[]
+  updateMany?: Prisma.CollectionUpdateManyWithWhereWithoutPostsInput | Prisma.CollectionUpdateManyWithWhereWithoutPostsInput[]
   deleteMany?: Prisma.CollectionScalarWhereInput | Prisma.CollectionScalarWhereInput[]
+}
+
+export type EnumCollectionViewFieldUpdateOperationsInput = {
+  set?: $Enums.CollectionView
 }
 
 export type CollectionCreateWithoutUserInput = {
+  id?: string
+  name: string
+  view?: $Enums.CollectionView
   createdAt?: Date | string
-  artPost: Prisma.ArtPostCreateNestedOneWithoutUsersSavedInput
+  updatedAt?: Date | string
+  posts?: Prisma.PostCreateNestedManyWithoutCollectionsInput
 }
 
 export type CollectionUncheckedCreateWithoutUserInput = {
-  artPostId: string
+  id?: string
+  name: string
+  view?: $Enums.CollectionView
   createdAt?: Date | string
+  updatedAt?: Date | string
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutCollectionsInput
 }
 
 export type CollectionCreateOrConnectWithoutUserInput = {
@@ -405,143 +478,212 @@ export type CollectionScalarWhereInput = {
   AND?: Prisma.CollectionScalarWhereInput | Prisma.CollectionScalarWhereInput[]
   OR?: Prisma.CollectionScalarWhereInput[]
   NOT?: Prisma.CollectionScalarWhereInput | Prisma.CollectionScalarWhereInput[]
-  artPostId?: Prisma.StringFilter<"Collection"> | string
-  savedByUserId?: Prisma.StringFilter<"Collection"> | string
+  id?: Prisma.StringFilter<"Collection"> | string
+  name?: Prisma.StringFilter<"Collection"> | string
+  ownerId?: Prisma.StringFilter<"Collection"> | string
+  view?: Prisma.EnumCollectionViewFilter<"Collection"> | $Enums.CollectionView
   createdAt?: Prisma.DateTimeFilter<"Collection"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Collection"> | Date | string
 }
 
-export type CollectionCreateWithoutArtPostInput = {
+export type CollectionCreateWithoutPostsInput = {
+  id?: string
+  name: string
+  view?: $Enums.CollectionView
   createdAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutCollectionsInput
+  updatedAt?: Date | string
+  user: Prisma.ProfileCreateNestedOneWithoutCollectionsInput
 }
 
-export type CollectionUncheckedCreateWithoutArtPostInput = {
-  savedByUserId: string
+export type CollectionUncheckedCreateWithoutPostsInput = {
+  id?: string
+  name: string
+  ownerId: string
+  view?: $Enums.CollectionView
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
-export type CollectionCreateOrConnectWithoutArtPostInput = {
+export type CollectionCreateOrConnectWithoutPostsInput = {
   where: Prisma.CollectionWhereUniqueInput
-  create: Prisma.XOR<Prisma.CollectionCreateWithoutArtPostInput, Prisma.CollectionUncheckedCreateWithoutArtPostInput>
+  create: Prisma.XOR<Prisma.CollectionCreateWithoutPostsInput, Prisma.CollectionUncheckedCreateWithoutPostsInput>
 }
 
-export type CollectionCreateManyArtPostInputEnvelope = {
-  data: Prisma.CollectionCreateManyArtPostInput | Prisma.CollectionCreateManyArtPostInput[]
-  skipDuplicates?: boolean
-}
-
-export type CollectionUpsertWithWhereUniqueWithoutArtPostInput = {
+export type CollectionUpsertWithWhereUniqueWithoutPostsInput = {
   where: Prisma.CollectionWhereUniqueInput
-  update: Prisma.XOR<Prisma.CollectionUpdateWithoutArtPostInput, Prisma.CollectionUncheckedUpdateWithoutArtPostInput>
-  create: Prisma.XOR<Prisma.CollectionCreateWithoutArtPostInput, Prisma.CollectionUncheckedCreateWithoutArtPostInput>
+  update: Prisma.XOR<Prisma.CollectionUpdateWithoutPostsInput, Prisma.CollectionUncheckedUpdateWithoutPostsInput>
+  create: Prisma.XOR<Prisma.CollectionCreateWithoutPostsInput, Prisma.CollectionUncheckedCreateWithoutPostsInput>
 }
 
-export type CollectionUpdateWithWhereUniqueWithoutArtPostInput = {
+export type CollectionUpdateWithWhereUniqueWithoutPostsInput = {
   where: Prisma.CollectionWhereUniqueInput
-  data: Prisma.XOR<Prisma.CollectionUpdateWithoutArtPostInput, Prisma.CollectionUncheckedUpdateWithoutArtPostInput>
+  data: Prisma.XOR<Prisma.CollectionUpdateWithoutPostsInput, Prisma.CollectionUncheckedUpdateWithoutPostsInput>
 }
 
-export type CollectionUpdateManyWithWhereWithoutArtPostInput = {
+export type CollectionUpdateManyWithWhereWithoutPostsInput = {
   where: Prisma.CollectionScalarWhereInput
-  data: Prisma.XOR<Prisma.CollectionUpdateManyMutationInput, Prisma.CollectionUncheckedUpdateManyWithoutArtPostInput>
+  data: Prisma.XOR<Prisma.CollectionUpdateManyMutationInput, Prisma.CollectionUncheckedUpdateManyWithoutPostsInput>
 }
 
 export type CollectionCreateManyUserInput = {
-  artPostId: string
+  id?: string
+  name: string
+  view?: $Enums.CollectionView
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type CollectionUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  view?: Prisma.EnumCollectionViewFieldUpdateOperationsInput | $Enums.CollectionView
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  artPost?: Prisma.ArtPostUpdateOneRequiredWithoutUsersSavedNestedInput
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  posts?: Prisma.PostUpdateManyWithoutCollectionsNestedInput
 }
 
 export type CollectionUncheckedUpdateWithoutUserInput = {
-  artPostId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  view?: Prisma.EnumCollectionViewFieldUpdateOperationsInput | $Enums.CollectionView
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  posts?: Prisma.PostUncheckedUpdateManyWithoutCollectionsNestedInput
 }
 
 export type CollectionUncheckedUpdateManyWithoutUserInput = {
-  artPostId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  view?: Prisma.EnumCollectionViewFieldUpdateOperationsInput | $Enums.CollectionView
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type CollectionCreateManyArtPostInput = {
-  savedByUserId: string
-  createdAt?: Date | string
-}
-
-export type CollectionUpdateWithoutArtPostInput = {
+export type CollectionUpdateWithoutPostsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  view?: Prisma.EnumCollectionViewFieldUpdateOperationsInput | $Enums.CollectionView
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutCollectionsNestedInput
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.ProfileUpdateOneRequiredWithoutCollectionsNestedInput
 }
 
-export type CollectionUncheckedUpdateWithoutArtPostInput = {
-  savedByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+export type CollectionUncheckedUpdateWithoutPostsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  view?: Prisma.EnumCollectionViewFieldUpdateOperationsInput | $Enums.CollectionView
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type CollectionUncheckedUpdateManyWithoutArtPostInput = {
-  savedByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+export type CollectionUncheckedUpdateManyWithoutPostsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  view?: Prisma.EnumCollectionViewFieldUpdateOperationsInput | $Enums.CollectionView
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type CollectionCountOutputType
+ */
+
+export type CollectionCountOutputType = {
+  posts: number
+}
+
+export type CollectionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  posts?: boolean | CollectionCountOutputTypeCountPostsArgs
+}
+
+/**
+ * CollectionCountOutputType without action
+ */
+export type CollectionCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CollectionCountOutputType
+   */
+  select?: Prisma.CollectionCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * CollectionCountOutputType without action
+ */
+export type CollectionCountOutputTypeCountPostsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PostWhereInput
+}
 
 
 export type CollectionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  artPostId?: boolean
-  savedByUserId?: boolean
+  id?: boolean
+  name?: boolean
+  ownerId?: boolean
+  view?: boolean
   createdAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  artPost?: boolean | Prisma.ArtPostDefaultArgs<ExtArgs>
+  updatedAt?: boolean
+  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
+  posts?: boolean | Prisma.Collection$postsArgs<ExtArgs>
+  _count?: boolean | Prisma.CollectionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["collection"]>
 
 export type CollectionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  artPostId?: boolean
-  savedByUserId?: boolean
+  id?: boolean
+  name?: boolean
+  ownerId?: boolean
+  view?: boolean
   createdAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  artPost?: boolean | Prisma.ArtPostDefaultArgs<ExtArgs>
+  updatedAt?: boolean
+  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["collection"]>
 
 export type CollectionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  artPostId?: boolean
-  savedByUserId?: boolean
+  id?: boolean
+  name?: boolean
+  ownerId?: boolean
+  view?: boolean
   createdAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  artPost?: boolean | Prisma.ArtPostDefaultArgs<ExtArgs>
+  updatedAt?: boolean
+  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["collection"]>
 
 export type CollectionSelectScalar = {
-  artPostId?: boolean
-  savedByUserId?: boolean
+  id?: boolean
+  name?: boolean
+  ownerId?: boolean
+  view?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type CollectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"artPostId" | "savedByUserId" | "createdAt", ExtArgs["result"]["collection"]>
+export type CollectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "ownerId" | "view" | "createdAt" | "updatedAt", ExtArgs["result"]["collection"]>
 export type CollectionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  artPost?: boolean | Prisma.ArtPostDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
+  posts?: boolean | Prisma.Collection$postsArgs<ExtArgs>
+  _count?: boolean | Prisma.CollectionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CollectionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  artPost?: boolean | Prisma.ArtPostDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
 }
 export type CollectionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  artPost?: boolean | Prisma.ArtPostDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
 }
 
 export type $CollectionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Collection"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs>
-    artPost: Prisma.$ArtPostPayload<ExtArgs>
+    user: Prisma.$ProfilePayload<ExtArgs>
+    posts: Prisma.$PostPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    artPostId: string
-    savedByUserId: string
+    id: string
+    name: string
+    ownerId: string
+    view: $Enums.CollectionView
     createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["collection"]>
   composites: {}
 }
@@ -625,8 +767,8 @@ export interface CollectionDelegate<ExtArgs extends runtime.Types.Extensions.Int
    * // Get first 10 Collections
    * const collections = await prisma.collection.findMany({ take: 10 })
    * 
-   * // Only select the `artPostId`
-   * const collectionWithArtPostIdOnly = await prisma.collection.findMany({ select: { artPostId: true } })
+   * // Only select the `id`
+   * const collectionWithIdOnly = await prisma.collection.findMany({ select: { id: true } })
    * 
    */
   findMany<T extends CollectionFindManyArgs>(args?: Prisma.SelectSubset<T, CollectionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CollectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -670,9 +812,9 @@ export interface CollectionDelegate<ExtArgs extends runtime.Types.Extensions.Int
    *   ]
    * })
    * 
-   * // Create many Collections and only return the `artPostId`
-   * const collectionWithArtPostIdOnly = await prisma.collection.createManyAndReturn({
-   *   select: { artPostId: true },
+   * // Create many Collections and only return the `id`
+   * const collectionWithIdOnly = await prisma.collection.createManyAndReturn({
+   *   select: { id: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -761,9 +903,9 @@ export interface CollectionDelegate<ExtArgs extends runtime.Types.Extensions.Int
    *   ]
    * })
    * 
-   * // Update zero or more Collections and only return the `artPostId`
-   * const collectionWithArtPostIdOnly = await prisma.collection.updateManyAndReturn({
-   *   select: { artPostId: true },
+   * // Update zero or more Collections and only return the `id`
+   * const collectionWithIdOnly = await prisma.collection.updateManyAndReturn({
+   *   select: { id: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -936,8 +1078,8 @@ readonly fields: CollectionFieldRefs;
  */
 export interface Prisma__CollectionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  artPost<T extends Prisma.ArtPostDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ArtPostDefaultArgs<ExtArgs>>): Prisma.Prisma__ArtPostClient<runtime.Types.Result.GetResult<Prisma.$ArtPostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.ProfileDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfileDefaultArgs<ExtArgs>>): Prisma.Prisma__ProfileClient<runtime.Types.Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  posts<T extends Prisma.Collection$postsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Collection$postsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -967,9 +1109,12 @@ export interface Prisma__CollectionClient<T, Null = never, ExtArgs extends runti
  * Fields of the Collection model
  */
 export interface CollectionFieldRefs {
-  readonly artPostId: Prisma.FieldRef<"Collection", 'String'>
-  readonly savedByUserId: Prisma.FieldRef<"Collection", 'String'>
+  readonly id: Prisma.FieldRef<"Collection", 'String'>
+  readonly name: Prisma.FieldRef<"Collection", 'String'>
+  readonly ownerId: Prisma.FieldRef<"Collection", 'String'>
+  readonly view: Prisma.FieldRef<"Collection", 'CollectionView'>
   readonly createdAt: Prisma.FieldRef<"Collection", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Collection", 'DateTime'>
 }
     
 
@@ -1363,6 +1508,30 @@ export type CollectionDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Limit how many Collections to delete.
    */
   limit?: number
+}
+
+/**
+ * Collection.posts
+ */
+export type Collection$postsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Post
+   */
+  select?: Prisma.PostSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Post
+   */
+  omit?: Prisma.PostOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PostInclude<ExtArgs> | null
+  where?: Prisma.PostWhereInput
+  orderBy?: Prisma.PostOrderByWithRelationInput | Prisma.PostOrderByWithRelationInput[]
+  cursor?: Prisma.PostWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PostScalarFieldEnum | Prisma.PostScalarFieldEnum[]
 }
 
 /**

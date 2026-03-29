@@ -1,7 +1,11 @@
+"use server"
+
 import { getUserSession } from "@/src/data/dal/getUserSession"
 import { Bell, Bookmark, Compass, PlusIcon } from "lucide-react"
 import Link from "next/link"
-import { ProfileDropdown, SearchBarDropdown } from "./UIComponent"
+import { ProfileDropdown } from "./ProfileDropdown"
+import { SearchBarDropdown } from "./SearchBarDropdown"
+import Image from "next/image"
 
 export default async function Navbar() {
     const session = await getUserSession()
@@ -54,18 +58,13 @@ export default async function Navbar() {
                 <div className="flex items-center gap-10 mr-5">
                     <Link href={"/create-post"} className="hover-col cursor-pointer"><button className="bg-blue-700 py-1 px-2 text-sm text-blue-200 hover:shadow-[0px_0px_40px] transition-all duration-300 hover:shadow-blue-400/40 flex items-center rounded-sm"><PlusIcon className="inline w-4 h-4" /> Post</button></Link>
                     <ProfileDropdown>
-                        <div className="flex gap-3 items-center text-sm hover:bg-white/5 p-2 rounded-lg cursor-pointer transition-all duration-300">
-                            {session?.user.image ? <img src={session?.user.image} className="w-10 h-10 object-cover rounded-full" alt="" /> : <svg viewBox="0 0 128 128" className="w-10 h-10">
-                                <circle cx="64" cy="64" r="64" fill="#E5E7EB" />
-                                <circle cx="64" cy="48" r="20" fill="#9CA3AF" />
-                                <path d="M32 104c0-18 14-30 32-30s32 12 32 30" fill="#9CA3AF" />
-                            </svg>}
-                            <div>
-                                <div className="font-serif">{session?.user.name}</div>
-                                <div className="text-xs text-blue-200/42">{session?.user.username}</div>
-                            </div>
-
-                        </div>
+                        <button className="flex gap-3 items-center text-sm hover:bg-white/5 p-2 rounded-lg cursor-pointer transition-all duration-300">
+                            {session.image && <Image src={session.image} width={35} height={35} className="object-cover rounded-full" alt="" />}
+                            {session.profileCreated && <div>
+                                <div className="font-serif">{session.name}</div>
+                                <div className="text-xs text-blue-200/42">{session.username}</div>
+                            </div>}
+                        </button>
                     </ProfileDropdown>
                 </div>
             </div>

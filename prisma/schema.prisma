@@ -18,6 +18,11 @@ enum Role {
   USER
 }
 
+enum CollectionView {
+  PRIVATE
+  PUBLIC
+}
+
 enum PostMedium {
   DIGITAL
   OIL_PAINT
@@ -39,37 +44,44 @@ enum PostMedium {
 }
 
 model User {
-  id            String       @id
-  role          Role         @default(USER)
-  name          String
-  username      String?
-  bio           String       @default("")
-  email         String
-  emailVerified Boolean      @default(false)
-  image         String? @default("https://res.cloudinary.com/dailhnvvl/image/upload/v1771605999/pfpdefault_omrkpw.png")
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  sessions      Session[]
-  accounts      Account[]
-  artPosts      ArtPost[]
-  collections   Collection[]
-  followers     Follow[]     @relation("followers")
-  following     Follow[]     @relation("following")
-  likes         Like[]
-  comments      Comment[]
-  // profiles      Profile?
+  id             String    @id
+  role           Role      @default(USER)
+  name           String
+  username       String    @unique
+  email          String    @unique
+  profileCreated Boolean   @default(false)
+  emailVerified  Boolean   @default(false)
+  image          String?   @default("https://res.cloudinary.com/dailhnvvl/image/upload/v1771605999/pfpdefault_omrkpw.png")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  sessions       Session[]
+  accounts       Account[]
+  profile       Profile?
 
-  @@unique([email])
-  @@unique([username])
   @@index([id])
+  @@index([email])
+  @@index([username])
   @@map("user")
 }
 
-// model Profile {
-//   profileId String @id @unique
-//   user      User   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+model Profile {
+  profileId   String       @id @unique
+  user        User         @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  bio         String?
+  portfolio   String?
+  location    String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @default(now())
+  followers   Follow[]     @relation("followers")
+  following   Follow[]     @relation("following")
+  artPosts    Post[]
+  collections Collection[]
+  likes       Like[]
+  comments    Comment[]
 
-// }
+  @@index([profileId])
+  @@map("profile")
+}
 
 model Session {
   id        String   @id
@@ -123,69 +135,76 @@ model Follow {
   followerId  String
   followingId String
 
-  follower  User @relation("following", fields: [followerId], references: [id], onDelete: Cascade)
-  following User @relation("followers", fields: [followingId], references: [id], onDelete: Cascade)
+  follower  Profile @relation("following", fields: [followerId], references: [profileId], onDelete: Cascade)
+  following Profile @relation("followers", fields: [followingId], references: [profileId], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
   @@unique([followerId, followingId])
-  @@index([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
   @@map("follow")
 }
 
-model ArtPost {
+model Post {
   id          String       @id @default(uuid())
   authorId    String
-  user        User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  user        Profile      @relation(fields: [authorId], references: [profileId], onDelete: Cascade)
   title       String
-  artImages   ArtImages[]
+  artImages   PostImages[]
   tags        String[]
-  mediums      PostMedium[]
+  inPortfolio Boolean      @default(false)
+  mediums     PostMedium[]
   description String?
   likes       Like[]
-  usersSaved  Collection[]
+  Collections Collection[]
   comments    Comment[]
   createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @default(now())
 
-  @@unique([id])
   @@index([id])
   @@index([authorId])
   @@index([createdAt(sort: Desc)])
-  @@map("artPost")
+  @@map("post")
 }
 
-model ArtImages {
-  id      String  @id @default(uuid())
-  postId  String
-  url     String
-  artPost ArtPost @relation(fields: [postId], references: [id], onDelete: Cascade)
-  order   Int
+model PostImages {
+  id            String   @id @default(uuid())
+  postId        String
+  url           String
+  isAIGenerated Boolean  @default(false)
+  artPost       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  order         Int
+  createdAt     DateTime @default(now())
 
   @@unique([postId, order])
   @@index([id])
   @@index([postId, order])
-  @@map("artImages")
+  @@map("post_images")
 }
 
 model Collection {
-  artPostId     String
-  savedByUserId String
-
-  user    User    @relation(fields: [savedByUserId], references: [id], onDelete: Cascade)
-  artPost ArtPost @relation(fields: [artPostId], references: [id], onDelete: Cascade)
+  id      String         @id @default(uuid())
+  name    String
+  ownerId String
+  view    CollectionView @default(PUBLIC)
+  user    Profile        @relation(fields: [ownerId], references: [profileId], onDelete: Cascade)
+  posts   Post[]
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 
-  @@unique([artPostId, savedByUserId])
-  @@index([artPostId, savedByUserId])
+  @@index([id])
+  @@index([ownerId])
   @@map("collection")
 }
 
 model Like {
   artPostId String
   ownerId   String
-  artPost   ArtPost @relation(fields: [artPostId], references: [id], onDelete: Cascade)
-  user      User    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  artPost   Post     @relation(fields: [artPostId], references: [id], onDelete: Cascade)
+  user      Profile  @relation(fields: [ownerId], references: [profileId], onDelete: Cascade)
+  createdAt DateTime @default(now())
 
   @@unique([artPostId, ownerId])
   @@index([artPostId, ownerId])
@@ -193,27 +212,19 @@ model Like {
 }
 
 model Comment {
-  id        String  @id @default(uuid())
+  id        String    @id @default(uuid())
   artPostId String
   ownerId   String
-  artPost   ArtPost @relation(fields: [artPostId], references: [id], onDelete: Cascade)
-  user      User    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  likes     Int       @default(0)
+  replies   Comment[] @relation("replies")
+  artPost   Post      @relation(fields: [artPostId], references: [id], onDelete: Cascade)
+  user      Profile   @relation(fields: [ownerId], references: [profileId], onDelete: Cascade)
+  comment   Comment?  @relation("replies", fields: [commentId], references: [id])
+  commentId String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
 
-  @@unique([id])
   @@index([id])
   @@index([artPostId, ownerId])
   @@map("comment")
-}
-
-model VerifiyUser {
-  email            String
-  verificationCode String
-
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-
-  @@id([email, verificationCode])
-  @@unique([email, verificationCode])
-  @@index([email, verificationCode])
-  @@map("verify-user")
 }

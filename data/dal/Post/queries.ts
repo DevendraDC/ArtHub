@@ -9,7 +9,7 @@ export const getPosts = cache(async (filter: number) => {
   try {
     const session = await getUserSession();
     if (!session || !session.userId) throw new Error("session not found");
-    return await prisma.artPost.findMany({
+    return await prisma.post.findMany({
       where:
         filter === 1
           ? {
@@ -26,10 +26,14 @@ export const getPosts = cache(async (filter: number) => {
         tags: true,
         user: {
           select: {
-            id: true,
-            username: true,
-            name: true,
-            image: true,
+            profileId: true,
+            user: {
+              select: {
+                name: true,
+                username: true,
+                image: true,
+              },
+            },
           },
         },
         artImages: {
@@ -54,7 +58,7 @@ export const getPostDetails = cache(async (postId: string) => {
   try {
     const session = await getUserSession();
     const userId = session.userId;
-    const postDetails = await prisma.artPost.findUnique({
+    const postDetails = await prisma.post.findUnique({
       where: {
         id: postId,
       },
@@ -64,12 +68,12 @@ export const getPostDetails = cache(async (postId: string) => {
           select: {
             comments: true,
             likes: true,
-            usersSaved: true,
+            Collections: true,
           },
         },
         user: {
           select: {
-            id: true,
+            profileId: true,
             followers: {
               where: {
                 followerId: userId,
@@ -120,7 +124,7 @@ export const getSearchedPosts = cache(
     keyword: string,
   ) => {
     try {
-      return await prisma.artPost.findMany({
+      return await prisma.post.findMany({
         where: {
           ...(selectedTags.length > 0 && {
             tags: {
@@ -146,10 +150,14 @@ export const getSearchedPosts = cache(
           tags: true,
           user: {
             select: {
-              id: true,
-              username: true,
-              name: true,
-              image: true,
+              profileId: true,
+              user: {
+                select: {
+                  name: true,
+                  username: true,
+                  image: true,
+                },
+              },
             },
           },
 

@@ -9,11 +9,12 @@ import Image from "next/image";
 import { useState } from "react";
 
 type user = {
-    id: string | null;
-    name: string | null;
-    username: string | null;
-    image: string | null;
-    bio: string | null;
+    userId: string | undefined;
+    name: string | undefined;
+    username: string | null | undefined;
+    image: string | null | undefined;
+    profileCreated: boolean | undefined;
+    email: string | undefined;
 }
 
 function groupOptions(id: number, userId: string) {
@@ -25,9 +26,9 @@ function groupOptions(id: number, userId: string) {
 }
 
 export default function Profile({ user }: { user: user }) {
-    if (!user || !user.id) return <div>user not found</div>;
+    if (!user || !user.userId) return <div>user not found</div>;
     const [selectedTab, setSelectedTab] = useState(0)
-    const { isPending, isError, data, error } = useQuery(groupOptions(selectedTab, user.id));
+    const { isPending, isError, data, error } = useQuery(groupOptions(selectedTab, user.userId));
     return (
         <div className="w-full flex justify-center p-5">
             <div className="w-[55%] flex flex-col gap-7">
@@ -55,7 +56,7 @@ export default function Profile({ user }: { user: user }) {
                         </a>
                     </div>
                     <div className="text-(--text-muted) text-sm font-sans font-semibold">
-                        {user.bio}
+                        {/* {user.bio} */}
                     </div>
                     <div className="flex gap-8">
                         <div>0 <span className="text-sm text-(--text-subtle)">Posts</span></div>
@@ -75,34 +76,34 @@ export default function Profile({ user }: { user: user }) {
                         </div>
                     ))}
                 </div>
-                <div className="box p-5">
+                {/* <div className="box p-5">
                     {data && <ProfileTabContent data={data} />}
-                </div>
+                </div> */}
             </div>
         </div>
     )
 }
 
-function ProfileTabContent({ data }: { data: ProfileData }) {
-    if (!data) return null;
-    switch (data.type) {
-        case "posts":
-        case "saved":
-            if (!data.data) return null;
-            return <ProfilePostsGrid posts={data.data} />
-        case "followers":
-            return (
-                <FollowList
-                    users={data.data.map((f) => f.follower)}
-                    emptyMessage="No followers yet"
-                />
-            );
-        case "following":
-            return (
-                <FollowList
-                    users={data.data.map((f) => f.following)}
-                    emptyMessage="Not following anyone yet"
-                />
-            );
-    }
-}
+// function ProfileTabContent({ data }: { data: ProfileData }) {
+//     if (!data) return null;
+//     switch (data.type) {
+//         case "posts":
+//         case "saved":
+//             if (!data.data) return null;
+//             return <ProfilePostsGrid posts={data.data} />
+//         case "followers":
+//             return (
+//                 <FollowList
+//                     users={data.data.map((f) => f.follower)}
+//                     emptyMessage="No followers yet"
+//                 />
+//             );
+//         case "following":
+//             return (
+//                 <FollowList
+//                     users={data.data.map((f) => f.following)}
+//                     emptyMessage="Not following anyone yet"
+//                 />
+//             );
+//     }
+// }

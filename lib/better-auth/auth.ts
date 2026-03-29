@@ -6,6 +6,7 @@ import crypto from "crypto";
 import { nextCookies } from "better-auth/next-js";
 import { transporter } from "../nodeMailer";
 import { render } from "@react-email/render";  
+import VerifyEmailTemplate from "@/src/components/EmailTemplate";
 
 enum Role {
   USER,
@@ -24,25 +25,16 @@ export const auth = betterAuth({
     additionalFields: {
       role : {type : "string" , defaultValue : "USER"},
       username: { type: "string", unique: true, required : false},
+      profileCreated: {type: "boolean", defaultValue: false}
     },
   },
   emailVerification: {
-    sendVerificationEmail: async ({ user }, request) => {
-      const code = crypto.randomInt(100000, 1000000);
-      const vCode = code.toString();
-      await prisma.verifiyUser.create({
-        data: {
-          email: user.email,
-          verificationCode: vCode,
-          expiresAt: new Date(Date.now() + 1000 * 60 * 10),
-        },
-      });
-      console.log("send")
+    sendVerificationEmail: async ({ user, url }, request) => {
       await transporter.sendMail({
         from: "ArtHub <devendradhundhwal766@gmail.com>",
         to: user.email,
         subject: "email verification",
-        html: await render(EmailVerificationCode({ code: vCode })),
+        html: await render(VerifyEmailTemplate(url)),
       });
     },
     sendOnSignIn: true,

@@ -27,16 +27,19 @@ export type AggregateLike = {
 export type LikeMinAggregateOutputType = {
   artPostId: string | null
   ownerId: string | null
+  createdAt: Date | null
 }
 
 export type LikeMaxAggregateOutputType = {
   artPostId: string | null
   ownerId: string | null
+  createdAt: Date | null
 }
 
 export type LikeCountAggregateOutputType = {
   artPostId: number
   ownerId: number
+  createdAt: number
   _all: number
 }
 
@@ -44,16 +47,19 @@ export type LikeCountAggregateOutputType = {
 export type LikeMinAggregateInputType = {
   artPostId?: true
   ownerId?: true
+  createdAt?: true
 }
 
 export type LikeMaxAggregateInputType = {
   artPostId?: true
   ownerId?: true
+  createdAt?: true
 }
 
 export type LikeCountAggregateInputType = {
   artPostId?: true
   ownerId?: true
+  createdAt?: true
   _all?: true
 }
 
@@ -132,6 +138,7 @@ export type LikeGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type LikeGroupByOutputType = {
   artPostId: string
   ownerId: string
+  createdAt: Date
   _count: LikeCountAggregateOutputType | null
   _min: LikeMinAggregateOutputType | null
   _max: LikeMaxAggregateOutputType | null
@@ -158,15 +165,17 @@ export type LikeWhereInput = {
   NOT?: Prisma.LikeWhereInput | Prisma.LikeWhereInput[]
   artPostId?: Prisma.StringFilter<"Like"> | string
   ownerId?: Prisma.StringFilter<"Like"> | string
-  artPost?: Prisma.XOR<Prisma.ArtPostScalarRelationFilter, Prisma.ArtPostWhereInput>
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  createdAt?: Prisma.DateTimeFilter<"Like"> | Date | string
+  artPost?: Prisma.XOR<Prisma.PostScalarRelationFilter, Prisma.PostWhereInput>
+  user?: Prisma.XOR<Prisma.ProfileScalarRelationFilter, Prisma.ProfileWhereInput>
 }
 
 export type LikeOrderByWithRelationInput = {
   artPostId?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
-  artPost?: Prisma.ArtPostOrderByWithRelationInput
-  user?: Prisma.UserOrderByWithRelationInput
+  createdAt?: Prisma.SortOrder
+  artPost?: Prisma.PostOrderByWithRelationInput
+  user?: Prisma.ProfileOrderByWithRelationInput
 }
 
 export type LikeWhereUniqueInput = Prisma.AtLeast<{
@@ -176,13 +185,15 @@ export type LikeWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.LikeWhereInput | Prisma.LikeWhereInput[]
   artPostId?: Prisma.StringFilter<"Like"> | string
   ownerId?: Prisma.StringFilter<"Like"> | string
-  artPost?: Prisma.XOR<Prisma.ArtPostScalarRelationFilter, Prisma.ArtPostWhereInput>
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  createdAt?: Prisma.DateTimeFilter<"Like"> | Date | string
+  artPost?: Prisma.XOR<Prisma.PostScalarRelationFilter, Prisma.PostWhereInput>
+  user?: Prisma.XOR<Prisma.ProfileScalarRelationFilter, Prisma.ProfileWhereInput>
 }, "artPostId_ownerId">
 
 export type LikeOrderByWithAggregationInput = {
   artPostId?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   _count?: Prisma.LikeCountOrderByAggregateInput
   _max?: Prisma.LikeMaxOrderByAggregateInput
   _min?: Prisma.LikeMinOrderByAggregateInput
@@ -194,40 +205,47 @@ export type LikeScalarWhereWithAggregatesInput = {
   NOT?: Prisma.LikeScalarWhereWithAggregatesInput | Prisma.LikeScalarWhereWithAggregatesInput[]
   artPostId?: Prisma.StringWithAggregatesFilter<"Like"> | string
   ownerId?: Prisma.StringWithAggregatesFilter<"Like"> | string
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Like"> | Date | string
 }
 
 export type LikeCreateInput = {
-  artPost: Prisma.ArtPostCreateNestedOneWithoutLikesInput
-  user: Prisma.UserCreateNestedOneWithoutLikesInput
+  createdAt?: Date | string
+  artPost: Prisma.PostCreateNestedOneWithoutLikesInput
+  user: Prisma.ProfileCreateNestedOneWithoutLikesInput
 }
 
 export type LikeUncheckedCreateInput = {
   artPostId: string
   ownerId: string
+  createdAt?: Date | string
 }
 
 export type LikeUpdateInput = {
-  artPost?: Prisma.ArtPostUpdateOneRequiredWithoutLikesNestedInput
-  user?: Prisma.UserUpdateOneRequiredWithoutLikesNestedInput
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  artPost?: Prisma.PostUpdateOneRequiredWithoutLikesNestedInput
+  user?: Prisma.ProfileUpdateOneRequiredWithoutLikesNestedInput
 }
 
 export type LikeUncheckedUpdateInput = {
   artPostId?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LikeCreateManyInput = {
   artPostId: string
   ownerId: string
+  createdAt?: Date | string
 }
 
 export type LikeUpdateManyMutationInput = {
-
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LikeUncheckedUpdateManyInput = {
   artPostId?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LikeListRelationFilter = {
@@ -248,16 +266,19 @@ export type LikeArtPostIdOwnerIdCompoundUniqueInput = {
 export type LikeCountOrderByAggregateInput = {
   artPostId?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
 }
 
 export type LikeMaxOrderByAggregateInput = {
   artPostId?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
 }
 
 export type LikeMinOrderByAggregateInput = {
   artPostId?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
 }
 
 export type LikeCreateNestedManyWithoutUserInput = {
@@ -345,11 +366,13 @@ export type LikeUncheckedUpdateManyWithoutArtPostNestedInput = {
 }
 
 export type LikeCreateWithoutUserInput = {
-  artPost: Prisma.ArtPostCreateNestedOneWithoutLikesInput
+  createdAt?: Date | string
+  artPost: Prisma.PostCreateNestedOneWithoutLikesInput
 }
 
 export type LikeUncheckedCreateWithoutUserInput = {
   artPostId: string
+  createdAt?: Date | string
 }
 
 export type LikeCreateOrConnectWithoutUserInput = {
@@ -384,14 +407,17 @@ export type LikeScalarWhereInput = {
   NOT?: Prisma.LikeScalarWhereInput | Prisma.LikeScalarWhereInput[]
   artPostId?: Prisma.StringFilter<"Like"> | string
   ownerId?: Prisma.StringFilter<"Like"> | string
+  createdAt?: Prisma.DateTimeFilter<"Like"> | Date | string
 }
 
 export type LikeCreateWithoutArtPostInput = {
-  user: Prisma.UserCreateNestedOneWithoutLikesInput
+  createdAt?: Date | string
+  user: Prisma.ProfileCreateNestedOneWithoutLikesInput
 }
 
 export type LikeUncheckedCreateWithoutArtPostInput = {
   ownerId: string
+  createdAt?: Date | string
 }
 
 export type LikeCreateOrConnectWithoutArtPostInput = {
@@ -422,34 +448,42 @@ export type LikeUpdateManyWithWhereWithoutArtPostInput = {
 
 export type LikeCreateManyUserInput = {
   artPostId: string
+  createdAt?: Date | string
 }
 
 export type LikeUpdateWithoutUserInput = {
-  artPost?: Prisma.ArtPostUpdateOneRequiredWithoutLikesNestedInput
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  artPost?: Prisma.PostUpdateOneRequiredWithoutLikesNestedInput
 }
 
 export type LikeUncheckedUpdateWithoutUserInput = {
   artPostId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LikeUncheckedUpdateManyWithoutUserInput = {
   artPostId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LikeCreateManyArtPostInput = {
   ownerId: string
+  createdAt?: Date | string
 }
 
 export type LikeUpdateWithoutArtPostInput = {
-  user?: Prisma.UserUpdateOneRequiredWithoutLikesNestedInput
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.ProfileUpdateOneRequiredWithoutLikesNestedInput
 }
 
 export type LikeUncheckedUpdateWithoutArtPostInput = {
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LikeUncheckedUpdateManyWithoutArtPostInput = {
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -457,52 +491,57 @@ export type LikeUncheckedUpdateManyWithoutArtPostInput = {
 export type LikeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   artPostId?: boolean
   ownerId?: boolean
-  artPost?: boolean | Prisma.ArtPostDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  createdAt?: boolean
+  artPost?: boolean | Prisma.PostDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["like"]>
 
 export type LikeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   artPostId?: boolean
   ownerId?: boolean
-  artPost?: boolean | Prisma.ArtPostDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  createdAt?: boolean
+  artPost?: boolean | Prisma.PostDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["like"]>
 
 export type LikeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   artPostId?: boolean
   ownerId?: boolean
-  artPost?: boolean | Prisma.ArtPostDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  createdAt?: boolean
+  artPost?: boolean | Prisma.PostDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["like"]>
 
 export type LikeSelectScalar = {
   artPostId?: boolean
   ownerId?: boolean
+  createdAt?: boolean
 }
 
-export type LikeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"artPostId" | "ownerId", ExtArgs["result"]["like"]>
+export type LikeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"artPostId" | "ownerId" | "createdAt", ExtArgs["result"]["like"]>
 export type LikeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  artPost?: boolean | Prisma.ArtPostDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  artPost?: boolean | Prisma.PostDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
 }
 export type LikeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  artPost?: boolean | Prisma.ArtPostDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  artPost?: boolean | Prisma.PostDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
 }
 export type LikeIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  artPost?: boolean | Prisma.ArtPostDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  artPost?: boolean | Prisma.PostDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
 }
 
 export type $LikePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Like"
   objects: {
-    artPost: Prisma.$ArtPostPayload<ExtArgs>
-    user: Prisma.$UserPayload<ExtArgs>
+    artPost: Prisma.$PostPayload<ExtArgs>
+    user: Prisma.$ProfilePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     artPostId: string
     ownerId: string
+    createdAt: Date
   }, ExtArgs["result"]["like"]>
   composites: {}
 }
@@ -897,8 +936,8 @@ readonly fields: LikeFieldRefs;
  */
 export interface Prisma__LikeClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  artPost<T extends Prisma.ArtPostDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ArtPostDefaultArgs<ExtArgs>>): Prisma.Prisma__ArtPostClient<runtime.Types.Result.GetResult<Prisma.$ArtPostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  artPost<T extends Prisma.PostDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PostDefaultArgs<ExtArgs>>): Prisma.Prisma__PostClient<runtime.Types.Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.ProfileDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfileDefaultArgs<ExtArgs>>): Prisma.Prisma__ProfileClient<runtime.Types.Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -930,6 +969,7 @@ export interface Prisma__LikeClient<T, Null = never, ExtArgs extends runtime.Typ
 export interface LikeFieldRefs {
   readonly artPostId: Prisma.FieldRef<"Like", 'String'>
   readonly ownerId: Prisma.FieldRef<"Like", 'String'>
+  readonly createdAt: Prisma.FieldRef<"Like", 'DateTime'>
 }
     
 

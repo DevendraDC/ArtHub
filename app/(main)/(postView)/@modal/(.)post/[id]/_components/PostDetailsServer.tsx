@@ -1,6 +1,6 @@
 "use server"
 
-import { getPostDetails } from "@/src/dal/Post/queries";
+import { getPostDetails } from "@/src/data/dal/Post/queries";
 import PostDetailsClient from "./PostDetailsClient";
 
 export default async function PostDetailsServer({ id }: { id: string }) {

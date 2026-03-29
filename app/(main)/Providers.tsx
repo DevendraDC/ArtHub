@@ -2,7 +2,7 @@
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React, { createContext, useState } from "react"
-import { UserSession } from "@/src/dal/getUserSession"
+import { UserSession } from "@/src/data/dto/userdto";
 
 export function QueryProviders({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient({

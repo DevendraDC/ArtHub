@@ -1,4 +1,4 @@
-import { getUser } from "@/src/dal/user-queries";
+import { getUser } from "../data/dal/user-queries";
 import { z } from "zod";
 
 export const authSchema = z.object({
@@ -29,6 +29,8 @@ export const profileSchema = z
         "Only letters, numbers, and underscores allowed",
       )
       .transform((val) => val.toLowerCase()),
+    portfolio: z.string().url().optional().or(z.literal("")),
+    location: z.string(),
   })
   .superRefine(async (data, ctx) => {
     const existingUser = await getUser(data.userId, data.username);

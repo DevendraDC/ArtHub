@@ -6,17 +6,21 @@ import { getUserSession } from "./getUserSession";
 
 export const getAllPosts = cache(async () => {
   try {
-    return await prisma.artPost.findMany({
+    return await prisma.post.findMany({
       select: {
         id: true,
         createdAt: true,
 
         user: {
           select: {
-            id: true,
-            username: true,
-            name: true,
-            image: true,
+            profileId: true,
+            user: {
+              select: {
+                username: true,
+                name: true,
+                image: true,
+              },
+            },
           },
         },
 
@@ -44,17 +48,21 @@ export type AllPosts = Awaited<ReturnType<typeof getAllPosts>>;
 
 export const getPopularPosts = cache(async () => {
   try {
-    return await prisma.artPost.findMany({
+    return await prisma.post.findMany({
       select: {
         id: true,
         createdAt: true,
 
         user: {
           select: {
-            id: true,
-            username: true,
-            name: true,
-            image: true,
+            profileId: true,
+            user: {
+              select: {
+                username: true,
+                name: true,
+                image: true,
+              },
+            },
           },
         },
 
@@ -81,7 +89,7 @@ export type PopularPosts = Awaited<ReturnType<typeof getPopularPosts>>;
 export const getFollowingPosts = cache(async () => {
   try {
     const session = await getUserSession();
-    return await prisma.artPost.findMany({
+    return await prisma.post.findMany({
       where: {
         user: {
           followers: { some: { followerId: session.userId } },
@@ -93,10 +101,14 @@ export const getFollowingPosts = cache(async () => {
 
         user: {
           select: {
-            id: true,
-            username: true,
-            name: true,
-            image: true,
+            profileId: true,
+            user: {
+              select: {
+                name: true,
+                username: true,
+                image: true,
+              },
+            },
           },
         },
 
@@ -122,10 +134,9 @@ export const getFollowingPosts = cache(async () => {
 
 export type FollowingPosts = Awaited<ReturnType<typeof getFollowingPosts>>;
 
-
 export const getArtImages = cache(async (postId: string) => {
   try {
-    const images = await prisma.artImages.findMany({
+    const images = await prisma.postImages.findMany({
       where: {
         postId,
       },
@@ -188,10 +199,10 @@ export const toggleLike = async (artPostId: string, ownerId: string) => {
 };
 
 export const fetchPostsProfile = cache(async (userId: string) => {
-  return await prisma.artPost.findMany({
+  return await prisma.post.findMany({
     where: {
       user: {
-        id: userId,
+        profileId: userId,
       },
     },
     select: {

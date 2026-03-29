@@ -4,7 +4,7 @@ import { Bookmark, MessageSquare } from "lucide-react";
 import { motion } from "motion/react"
 import OptimisticFollow from "@/src/components/User/OptimisticFollow";
 import OptimisticLike from "@/src/components/User/OptimisticLike";
-import { PostDetails } from "@/src/dal/Post/queries";
+import { PostDetails } from "@/src/data/dal/Post/queries";
 
 export default function PostDetailsClient({ post }: { post: PostDetails }) {
     if (!post || !post.postInfo || !post.sessionUserId) return null;
@@ -24,7 +24,7 @@ export default function PostDetailsClient({ post }: { post: PostDetails }) {
                     isFollowing: !!postInfo.user.followers.length,
                     followers: postInfo.user._count.followers,
                     postOwnerId: sessionUserId,
-                    userId: postInfo.user.id
+                    userId: postInfo.user.profileId
                 }} />
             </div>
 
@@ -54,7 +54,7 @@ export default function PostDetailsClient({ post }: { post: PostDetails }) {
                     </div>
                     <div className="flex gap-2 w-fit p-2">
                         <Bookmark size={22} />
-                        <div className="text-white/45">{postInfo?._count.usersSaved}</div>
+                        <div className="text-white/45">{postInfo?._count.Collections}</div>
                     </div>
                 </div>
                 <div className="border border-white/20"></div>

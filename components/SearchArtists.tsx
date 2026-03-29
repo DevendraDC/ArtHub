@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
-import { getUsers } from "../dal/user-queries";
+import { getUsers } from "../data/dal/user-queries";
 import { UserBox } from "./Navbar/UIComponent";
 import { toast } from "sonner";
 import { DialogTitle } from "@/src/components/ui/dialog";

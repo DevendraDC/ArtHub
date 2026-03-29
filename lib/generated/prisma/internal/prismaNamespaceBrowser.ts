@@ -52,16 +52,16 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  Profile: 'Profile',
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
   Follow: 'Follow',
-  ArtPost: 'ArtPost',
-  ArtImages: 'ArtImages',
+  Post: 'Post',
+  PostImages: 'PostImages',
   Collection: 'Collection',
   Like: 'Like',
-  Comment: 'Comment',
-  VerifiyUser: 'VerifiyUser'
+  Comment: 'Comment'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -85,8 +85,8 @@ export const UserScalarFieldEnum = {
   role: 'role',
   name: 'name',
   username: 'username',
-  bio: 'bio',
   email: 'email',
+  profileCreated: 'profileCreated',
   emailVerified: 'emailVerified',
   image: 'image',
   createdAt: 'createdAt',
@@ -94,6 +94,18 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const ProfileScalarFieldEnum = {
+  profileId: 'profileId',
+  bio: 'bio',
+  portfolio: 'portfolio',
+  location: 'location',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProfileScalarFieldEnum = (typeof ProfileScalarFieldEnum)[keyof typeof ProfileScalarFieldEnum]
 
 
 export const SessionScalarFieldEnum = {
@@ -150,33 +162,40 @@ export const FollowScalarFieldEnum = {
 export type FollowScalarFieldEnum = (typeof FollowScalarFieldEnum)[keyof typeof FollowScalarFieldEnum]
 
 
-export const ArtPostScalarFieldEnum = {
+export const PostScalarFieldEnum = {
   id: 'id',
   authorId: 'authorId',
   title: 'title',
   tags: 'tags',
+  inPortfolio: 'inPortfolio',
   mediums: 'mediums',
   description: 'description',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
-export type ArtPostScalarFieldEnum = (typeof ArtPostScalarFieldEnum)[keyof typeof ArtPostScalarFieldEnum]
+export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
 
 
-export const ArtImagesScalarFieldEnum = {
+export const PostImagesScalarFieldEnum = {
   id: 'id',
   postId: 'postId',
   url: 'url',
-  order: 'order'
+  isAIGenerated: 'isAIGenerated',
+  order: 'order',
+  createdAt: 'createdAt'
 } as const
 
-export type ArtImagesScalarFieldEnum = (typeof ArtImagesScalarFieldEnum)[keyof typeof ArtImagesScalarFieldEnum]
+export type PostImagesScalarFieldEnum = (typeof PostImagesScalarFieldEnum)[keyof typeof PostImagesScalarFieldEnum]
 
 
 export const CollectionScalarFieldEnum = {
-  artPostId: 'artPostId',
-  savedByUserId: 'savedByUserId',
-  createdAt: 'createdAt'
+  id: 'id',
+  name: 'name',
+  ownerId: 'ownerId',
+  view: 'view',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type CollectionScalarFieldEnum = (typeof CollectionScalarFieldEnum)[keyof typeof CollectionScalarFieldEnum]
@@ -184,7 +203,8 @@ export type CollectionScalarFieldEnum = (typeof CollectionScalarFieldEnum)[keyof
 
 export const LikeScalarFieldEnum = {
   artPostId: 'artPostId',
-  ownerId: 'ownerId'
+  ownerId: 'ownerId',
+  createdAt: 'createdAt'
 } as const
 
 export type LikeScalarFieldEnum = (typeof LikeScalarFieldEnum)[keyof typeof LikeScalarFieldEnum]
@@ -193,20 +213,14 @@ export type LikeScalarFieldEnum = (typeof LikeScalarFieldEnum)[keyof typeof Like
 export const CommentScalarFieldEnum = {
   id: 'id',
   artPostId: 'artPostId',
-  ownerId: 'ownerId'
+  ownerId: 'ownerId',
+  likes: 'likes',
+  commentId: 'commentId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type CommentScalarFieldEnum = (typeof CommentScalarFieldEnum)[keyof typeof CommentScalarFieldEnum]
-
-
-export const VerifiyUserScalarFieldEnum = {
-  email: 'email',
-  verificationCode: 'verificationCode',
-  expiresAt: 'expiresAt',
-  createdAt: 'createdAt'
-} as const
-
-export type VerifiyUserScalarFieldEnum = (typeof VerifiyUserScalarFieldEnum)[keyof typeof VerifiyUserScalarFieldEnum]
 
 
 export const SortOrder = {

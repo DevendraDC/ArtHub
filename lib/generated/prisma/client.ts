@@ -47,6 +47,11 @@ export { Prisma }
  */
 export type User = Prisma.UserModel
 /**
+ * Model Profile
+ * 
+ */
+export type Profile = Prisma.ProfileModel
+/**
  * Model Session
  * 
  */
@@ -67,15 +72,15 @@ export type Verification = Prisma.VerificationModel
  */
 export type Follow = Prisma.FollowModel
 /**
- * Model ArtPost
+ * Model Post
  * 
  */
-export type ArtPost = Prisma.ArtPostModel
+export type Post = Prisma.PostModel
 /**
- * Model ArtImages
+ * Model PostImages
  * 
  */
-export type ArtImages = Prisma.ArtImagesModel
+export type PostImages = Prisma.PostImagesModel
 /**
  * Model Collection
  * 
@@ -91,8 +96,3 @@ export type Like = Prisma.LikeModel
  * 
  */
 export type Comment = Prisma.CommentModel
-/**
- * Model VerifiyUser
- * 
- */
-export type VerifiyUser = Prisma.VerifiyUserModel

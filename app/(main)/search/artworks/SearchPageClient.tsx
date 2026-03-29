@@ -2,7 +2,7 @@
 
 import { useQueryState, parseAsArrayOf, parseAsString } from "nuqs";
 import { useQuery } from "@tanstack/react-query";
-import { getSearchedPosts } from "@/src/dal/Post/queries";
+import { getSearchedPosts } from "@/src/data/dal/Post/queries";
 import { SortByBox } from "@/src/components/ComboBox";
 import { SelectMediums } from "@/src/components/post/Mediums";
 import { SelectTags } from "@/src/components/post/Tags";

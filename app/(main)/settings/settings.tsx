@@ -17,20 +17,23 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { profileSchema } from "@/src/validators/user";
 import z from "zod";
-import { updateUser } from "@/src/dal/user-queries";
+import { updateUser } from "@/src/data/dal/User/mutations";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { UserSession } from "@/src/dal/getUserSession";
+import { UserSession } from "@/src/data/dto/userdto";
+import { ProfileSettingsData } from "@/src/data/dal/User/queries";
 
-export default function Settings({
-    userSession,
-}: {
+type data = {
     userSession: UserSession;
-}) {
+    details: ProfileSettingsData;
+}
+
+export default function Settings({data} : {data: data}) {
+    const {userSession, details} = data;
     const router = useRouter()
     const uploadFileRef = useRef<HTMLInputElement | null>(null);
     const [avatar, setAvatar] = useState<string | null>(null);
-    const [preview, setPreview] = useState<string | null>(userSession.user.image ? userSession.user.image : null);
+    const [preview, setPreview] = useState<string | null>(userSession.image ?? null);
     const [curAvatar, setCurAvatar] = useState<File | null>(null);
     const {
         handleSubmit,
@@ -39,21 +42,25 @@ export default function Settings({
     } = useForm({
         resolver: zodResolver(profileSchema),
         defaultValues: {
-            artistName: userSession.user.name,
-            username: userSession.user.username ?? "",
-            bio: userSession.user.bio,
-            userId: userSession.user.id
+            artistName: userSession.name,
+            username: userSession.profileCreated ? userSession.username ?? "" : "",
+            bio: details.data?.bio ?? "",
+            userId: userSession.userId,
+            portfolio: details.data?.portfolio?? "",
+            location: details.data?.location?? ""
         },
     });
 
     const formSubmit = async (data: z.infer<typeof profileSchema>) => {
         const userData = {
-            id: userSession.user.id,
+            id: userSession.userId,
             name: data.artistName,
-            username: data.username,
-            bio: data.bio ? data.bio : "",
+            username:  data.username,
+            bio: data.bio ?? "",
             image: curAvatar,
-            email: userSession.user.email
+            email: userSession.email,
+            portfolio: data.portfolio,
+            location: data.location
         }
 
         const { success, error } = await updateUser(userData)
@@ -68,8 +75,8 @@ export default function Settings({
     }
 
     return (
-        <div className="w-full flex justify-center p-5 bg-(--bg)">
-            <div className="w-[55%] flex flex-col gap-7">
+        <div className="w-full flex justify-center p-5 bg-black">
+            <div className="w-[45%] flex flex-col gap-7">
                 <form onSubmit={handleSubmit(formSubmit)}>
                     <FieldGroup>
                         <FieldSet>
@@ -148,11 +155,7 @@ export default function Settings({
 
                                 <Field>
                                     <FieldLabel htmlFor="email">Email</FieldLabel>
-                                    <Input
-                                        id="email"
-                                        placeholder={userSession.user.email}
-                                        disabled
-                                    />
+                                    <Input value={userSession.email} disabled />
                                     <FieldDescription>user email cannot be changed</FieldDescription>
                                 </Field>
                                 <Controller
@@ -176,6 +179,34 @@ export default function Settings({
                                             <FieldDescription>
                                                 write something about yourself
                                             </FieldDescription>
+                                            {fieldState.invalid && (
+                                                <FieldError errors={[fieldState.error]} />
+                                            )}
+                                        </Field>
+                                    )}
+                                />
+
+                                <Controller
+                                    name="portfolio"
+                                    control={control}
+                                    render={({ field, fieldState }) => (
+                                        <Field data-invalid={fieldState.invalid}>
+                                            <FieldLabel htmlFor="portfolio">Portfolio website</FieldLabel>
+                                            <Input id="portfolio" {...field} />
+                                            {fieldState.invalid && (
+                                                <FieldError errors={[fieldState.error]} />
+                                            )}
+                                        </Field>
+                                    )}
+                                />
+
+                                <Controller
+                                    name="location"
+                                    control={control}
+                                    render={({ field, fieldState }) => (
+                                        <Field data-invalid={fieldState.invalid}>
+                                            <FieldLabel htmlFor="location">Location</FieldLabel>
+                                            <Input id="location" {...field} />
                                             {fieldState.invalid && (
                                                 <FieldError errors={[fieldState.error]} />
                                             )}

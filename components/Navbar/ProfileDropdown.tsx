@@ -1,3 +1,5 @@
+"use client"
+
 import { Bookmark, LogOut, Settings, User } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import Link from "next/link"
