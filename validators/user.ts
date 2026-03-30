@@ -1,4 +1,3 @@
-import { getUser } from "../data/dal/user-queries";
 import { z } from "zod";
 
 export const authSchema = z.object({
@@ -14,16 +13,16 @@ export const profileSchema = z
     userId: z.string(),
     artistName: z
       .string()
-      .min(6, "artist name must be atleast 6 characters long")
-      .max(20, "artist name cannot be more than 20 characters long"),
+      .min(6, "Name must be atleast 6 characters long")
+      .max(12, "Name cannot be more than 12 characters long"),
     bio: z
       .string()
-      .max(3000, "bio should not be more than 3000 characters")
+      .max(300, "Bio should not be more than 300 characters")
       .optional(),
     username: z
       .string()
       .min(5, "Username must be at least 5 characters")
-      .max(20, "Too long")
+      .max(10, "Username cannot be more than 10 characters")
       .regex(
         /^[a-zA-Z0-9_]+$/,
         "Only letters, numbers, and underscores allowed",
@@ -32,14 +31,3 @@ export const profileSchema = z
     portfolio: z.string().url().optional().or(z.literal("")),
     location: z.string(),
   })
-  .superRefine(async (data, ctx) => {
-    const existingUser = await getUser(data.userId, data.username);
-
-    if (existingUser) {
-      ctx.addIssue({
-        path: ["username"],
-        code: "custom",
-        message: "This username is already taken",
-      });
-    }
-  });

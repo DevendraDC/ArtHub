@@ -25,9 +25,9 @@ export function SelectTags({tagsController} : {tagsController : Controller<strin
                 id="tags"
                 onChange={(e) => onTagChange(e)}
                 placeholder="Add the tags...."
-                className="border placeholder:text-(--text-subtle) w-full rounded-sm py-3 text-(--text-light) text-sm px-5 resize-none focus:outline-none border-border bg-(--surface2)"
+                className="border placeholder:text-white/30 w-full rounded-sm py-3 text-(--text-light) text-sm px-5 resize-none focus:outline-none border-border bg-(--surface2)"
             />
-            <div className="text-xs text-(--text-subtle)">
+            <div className="text-xs text-blue-100/40">
                 Enter comma to include a tag
             </div>
             {value.length > 0 && (
@@ -35,12 +35,12 @@ export function SelectTags({tagsController} : {tagsController : Controller<strin
                     {value.map((tag, idx) => (
                         <div
                             key={idx}
-                            className="bg-(--amber-light) text-(--amber) text-sm border border-(--amber-mid) py-1 px-3 rounded-md relative"
+                            className="bg-blue-800 text-sm py-2 px-4 rounded-md relative"
                         >
                             {tag}{" "}
                             <X
                                 onClick={() => addTags(tag)}
-                                className="absolute w-5 h-5 p-1 font-bold text-black bg-white rounded-full -top-1 -left-2"
+                                className="absolute w-5 h-5 p-0 font-bold text-black bg-white/50 rounded-full -top-1 -left-2"
                             />
                         </div>
                     ))}

@@ -12,13 +12,13 @@ type props = {
 export default function PostImagesUpload({ selectedImages, setSelectedImages }: props) {
     const imagesUploadRef = useRef<HTMLInputElement>(null);
     return (
-        <div className="images flex bg-(--surface) flex-col gap-5 border border-border p-6 rounded-xl cursor-pointer">
-            <div className="text-sm font-sans tracking-widest text-(--text-muted)">
-                <span className="text-amber-400">&middot; </span>IMAGES
+        <div className="images flex flex-col gap-5 border border-border p-6 rounded-xl cursor-pointer">
+            <div className="text-sm font-sans tracking-widest text-blue-200">
+                <span className="text-blue-500">&middot; </span>IMAGES
             </div>
             <div
                 onClick={() => imagesUploadRef.current?.click()}
-                className="flex flex-col items-center gap-1 bg-(--surface2) border-[1.5px] border-dashed border-(--border-hover) text-sm p-7 rounded-lg hover:bg-(--amber-glow) hover:border-(--amber) transition-all duration-300"
+                className="flex flex-col items-center gap-1 border text-sm p-7 rounded-lg hover:bg-blue-400/10 hover:border-(--bl2) transition-all duration-300"
             >
                 <input
                     type="file"
@@ -36,16 +36,16 @@ export default function PostImagesUpload({ selectedImages, setSelectedImages }: 
                     className="absolute -translate-x-999"
                     id=""
                 />
-                <Upload className="bg-(--amber-light) text-(--amber) border border-(--amber-mid) rounded-lg p-3 w-10 h-10" />
+                <Upload className="bg-blue-700 text-(--amber) rounded-lg p-3 w-10 h-10" />
                 <div>Upload your artworks</div>
-                <div className="text-sm text-white/40">
+                <div className="text-sm text-blue-200/60">
                     Drag & drop or{" "}
                     <span className="text-(--amber)">click to browse</span> &middot;
                     JPG, PNG, GIF up to 20MB
                 </div>
             </div>
-            <div className="text-xs text-(--text-subtle)">
-                <span className="text-amber-500">{selectedImages.length} </span>/ 10
+            <div className="text-xs text-blue-100/40">
+                <span className="text-blue-500">{selectedImages.length} </span>/ 10
                 images &middot; first image is the cover &middot; Click on an image
                 to remove it
             </div>

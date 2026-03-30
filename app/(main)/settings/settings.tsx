@@ -10,7 +10,7 @@ import {
     FieldError,
 } from "@/src/components/ui/field";
 import { Input } from "@/src/components/ui/input";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import ImageCropDialog from "@/src/components/ImageCropDialog";
 import { Button } from "@/src/components/ui/button";
 import { Controller, useForm } from "react-hook-form";
@@ -20,47 +20,56 @@ import z from "zod";
 import { updateUser } from "@/src/data/dal/User/mutations";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { UserSession } from "@/src/data/dto/userdto";
-import { ProfileSettingsData } from "@/src/data/dal/User/queries";
+import { ProfileSettingsData, usernameExist } from "@/src/data/dal/User/queries";
+import { cloudinaryTransform } from "@/src/utils/cloudinaryTransform";
+import { uploadImage } from "@/src/lib/cloudinaryFunctions";
+import { Spinner } from "@/src/components/ui/spinner";
 
-type data = {
-    userSession: UserSession;
-    details: ProfileSettingsData;
-}
 
-export default function Settings({data} : {data: data}) {
-    const {userSession, details} = data;
+export default function Settings({ profileData }: { profileData: ProfileSettingsData }) {
     const router = useRouter()
+    const { data } = profileData;
     const uploadFileRef = useRef<HTMLInputElement | null>(null);
-    const [avatar, setAvatar] = useState<string | null>(null);
-    const [preview, setPreview] = useState<string | null>(userSession.image ?? null);
-    const [curAvatar, setCurAvatar] = useState<File | null>(null);
+    const [avatar, setAvatar] = useState<File | null>(null);
+    const avatarPreview = data?.image;
+    const [openImageCrop, setOpenImageCrop] = useState(false);
+    const avatarBlobUrl = useMemo(() => avatar ? URL.createObjectURL(avatar) : null, [avatar]);
     const {
         handleSubmit,
         control,
         formState: { isSubmitting },
     } = useForm({
         resolver: zodResolver(profileSchema),
+        mode: "onChange",
         defaultValues: {
-            artistName: userSession.name,
-            username: userSession.profileCreated ? userSession.username ?? "" : "",
-            bio: details.data?.bio ?? "",
-            userId: userSession.userId,
-            portfolio: details.data?.portfolio?? "",
-            location: details.data?.location?? ""
+            artistName: data?.name,
+            username: data?.profileCreated ? data.username : "",
+            bio: data?.profile?.bio ?? "",
+            portfolio: data?.profile?.portfolio ?? "",
+            location: data?.profile?.location ?? ""
         },
     });
 
-    const formSubmit = async (data: z.infer<typeof profileSchema>) => {
+    const formSubmit = async (resolvedData: z.infer<typeof profileSchema>) => {
         const userData = {
-            id: userSession.userId,
-            name: data.artistName,
-            username:  data.username,
-            bio: data.bio ?? "",
-            image: curAvatar,
-            email: userSession.email,
-            portfolio: data.portfolio,
-            location: data.location
+            id: resolvedData.userId,
+            name: resolvedData.artistName,
+            username: resolvedData.username,
+            bio: resolvedData.bio ?? "",
+            image: null,
+            portfolio: resolvedData.portfolio,
+            location: resolvedData.location
+        }
+        if (!data?.profileCreated || data.username !== userData.username) {
+            const res = await usernameExist(userData.username);
+            if (res) {
+                toast("username already exist!");
+                return;
+            }
+        }
+        if (avatar) {
+            const profileImage = await uploadImage(avatar);
+            userData.image = profileImage;
         }
 
         const { success, error } = await updateUser(userData)
@@ -75,61 +84,58 @@ export default function Settings({data} : {data: data}) {
     }
 
     return (
-        <div className="w-full flex justify-center p-5 bg-black">
+        <div className="w-full flex justify-center p-5 bg-transparent">
             <div className="w-[45%] flex flex-col gap-7">
+                <div className="ProfilePictureUpload flex flex-col justify-center gap-5">
+                    <div className="text-3xl mb-10 font-sans">Change <span className="text-(--bl2)">Profile</span></div>
+                    {avatarPreview && (
+                        <div className="flex flex-col items-center gap-8">
+                            <img
+                                src={avatarBlobUrl ?? cloudinaryTransform(avatarPreview, "f_auto,q_auto,w_100,c_limit")}
+                                alt="Profile"
+                                className="rounded-[50%] w-32 h-32 object-cover"
+                            />
+                        </div>
+                    )}
+                    <Input
+                        type="file"
+                        ref={uploadFileRef}
+                        className="absolute -translate-x-999"
+                        accept="image/*"
+                        onChange={(e) => {
+                            const file = e.target.files?.[0]
+                            if (!file) return;
+                            setAvatar(file);
+                            setOpenImageCrop(true);
+                        }}
+                    />
+                    <button
+                        type="button"
+                        className="text-center mx-auto w-fit p-1 px-2 bg-(--bl4) rounded-lg flex items-center gap-2 cursor-pointer"
+                        onClick={() => {
+                            uploadFileRef.current?.click();
+                        }}
+                    >
+                        <Upload size={16} className="inline" /> upload
+                    </button>
+                    {openImageCrop ? <ImageCropDialog {...{
+                        avatar,
+                        setAvatar,
+                        setOpenImageCrop
+                    }} /> : null}
+                </div>
                 <form onSubmit={handleSubmit(formSubmit)}>
                     <FieldGroup>
                         <FieldSet>
-                            <div className="text-center text-2xl mb-5">Profile</div>
                             <FieldGroup>
-                                <Field>
-                                    {preview ? <div className="flex flex-col items-center gap-8">
-                                        <img
-                                            src={preview}
-                                            alt="Profile"
-                                            className="w-32 h-32 rounded-[50%] object-cover"
-                                        />
-
-                                    </div> : (
-                                        <svg viewBox="0 0 128 128" className="w-22 h-22">
-                                            <circle cx="64" cy="64" r="64" fill="#E5E7EB" />
-                                            <circle cx="64" cy="48" r="20" fill="#9CA3AF" />
-                                            <path d="M32 104c0-18 14-30 32-30s32 12 32 30" fill="#9CA3AF" />
-                                        </svg>
-                                    )}
-
-                                    <Input
-                                        type="file"
-                                        ref={uploadFileRef}
-                                        className="absolute -translate-x-999"
-                                        accept="image/*"
-                                        onChange={(e) => {
-                                            const file = e.target.files?.[0]
-                                            if (!file) return;
-                                            const image = URL.createObjectURL(file)
-                                            setAvatar(image)
-                                        }}
-                                    />
-                                </Field>
-                                <div
-                                    className="text-center hover-col cursor-default"
-                                    onClick={() => {
-                                        uploadFileRef.current?.click();
-                                    }}
-                                >
-                                    <Upload className="inline w-5 h-5" /> upload
-                                </div>
-
-                                {avatar ? <ImageCropDialog avatar={avatar} setPreview={setPreview} setAvatar={setAvatar} setCurAvatar={setCurAvatar} /> : null}
-
                                 <Controller
                                     name="artistName"
                                     control={control}
                                     render={({ field, fieldState }) => (
                                         <Field data-invalid={fieldState.invalid}>
-                                            <FieldLabel htmlFor="artist-name">Artist Name</FieldLabel>
-                                            <Input id="artist-name" placeholder="john doe" {...field} />
-                                            <FieldDescription>Your artist name must be atleast 6 characters long</FieldDescription>
+                                            <FieldLabel htmlFor="artist-name">Name</FieldLabel>
+                                            <Input id="artist-name" {...field} />
+                                            <FieldDescription>Your name must be atleast 6 characters long</FieldDescription>
                                             {fieldState.invalid && (
                                                 <FieldError errors={[fieldState.error]} />
                                             )}
@@ -142,9 +148,9 @@ export default function Settings({data} : {data: data}) {
                                     render={({ field, fieldState }) => (
                                         <Field data-invalid={fieldState.invalid}>
                                             <FieldLabel htmlFor="username">Username</FieldLabel>
-                                            <Input id="username" placeholder="john@doe" {...field} />
+                                            <Input id="username" {...field} />
                                             <FieldDescription>
-                                                username must be atleast 8 characters long and must be unique
+                                                Username must be atleast 8 characters long and must be unique
                                             </FieldDescription>
                                             {fieldState.invalid && (
                                                 <FieldError errors={[fieldState.error]} />
@@ -155,8 +161,8 @@ export default function Settings({data} : {data: data}) {
 
                                 <Field>
                                     <FieldLabel htmlFor="email">Email</FieldLabel>
-                                    <Input value={userSession.email} disabled />
-                                    <FieldDescription>user email cannot be changed</FieldDescription>
+                                    <Input value={data?.email} disabled />
+                                    <FieldDescription>User email cannot be changed</FieldDescription>
                                 </Field>
                                 <Controller
                                     name="bio"
@@ -165,19 +171,13 @@ export default function Settings({data} : {data: data}) {
                                         <Field data-invalid={fieldState.invalid}>
                                             <FieldLabel htmlFor="Bio">Bio</FieldLabel>
                                             <textarea
-                                                className="bg-white/7 rounded-lg p-3 text-sm h-25 focus:outline-0 resize-none overflow-hidden"
-                                                placeholder="tell us something about yourself"
+                                                className="bg-white/7 rounded-lg p-3 text-sm h-40 focus:outline-0 resize-none overflow-hidden"
                                                 {...field}
-                                                maxLength={5000}
+                                                maxLength={300}
                                                 rows={1}
-                                                onInput={(e) => {
-                                                    const el = e.currentTarget;
-                                                    el.style.height = "auto";
-                                                    el.style.height = `${el.scrollHeight}px`;
-                                                }}
                                             />
-                                            <FieldDescription>
-                                                write something about yourself
+                                            <FieldDescription className="flex justify-between">
+                                                Tell us about yourself (optional) <span>({field.value?.length} / 300)</span>
                                             </FieldDescription>
                                             {fieldState.invalid && (
                                                 <FieldError errors={[fieldState.error]} />
@@ -193,6 +193,9 @@ export default function Settings({data} : {data: data}) {
                                         <Field data-invalid={fieldState.invalid}>
                                             <FieldLabel htmlFor="portfolio">Portfolio website</FieldLabel>
                                             <Input id="portfolio" {...field} />
+                                            <FieldDescription>
+                                                Your portfolio website url (optional)
+                                            </FieldDescription>
                                             {fieldState.invalid && (
                                                 <FieldError errors={[fieldState.error]} />
                                             )}
@@ -207,6 +210,9 @@ export default function Settings({data} : {data: data}) {
                                         <Field data-invalid={fieldState.invalid}>
                                             <FieldLabel htmlFor="location">Location</FieldLabel>
                                             <Input id="location" {...field} />
+                                            <FieldDescription>
+                                                Your location/address (optional)
+                                            </FieldDescription>
                                             {fieldState.invalid && (
                                                 <FieldError errors={[fieldState.error]} />
                                             )}
@@ -215,7 +221,7 @@ export default function Settings({data} : {data: data}) {
                                 />
 
                                 <Field>
-                                    <Button disabled={isSubmitting} type="submit">Save Profile</Button>
+                                    <Button disabled={isSubmitting} type="submit">{isSubmitting ? <Spinner fontSize={20} /> : "Save Profile"}</Button>
                                 </Field>
                             </FieldGroup>
                         </FieldSet>

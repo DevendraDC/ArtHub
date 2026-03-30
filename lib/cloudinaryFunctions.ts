@@ -1,3 +1,5 @@
+"use server"
+
 const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 const presetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
 
@@ -9,29 +11,24 @@ async function getFileHash(file: File): Promise<string> {
 }
 
 export const uploadImage = async (image: File) => {
+  const hash = await getFileHash(image);
+  const formData = new FormData();
+  formData.append("file", image);
+  formData.append("upload_preset", `${presetName}`);
+  formData.append("public_id", hash);
+
   return fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
     method: "POST",
-    body: image,
-  }).then((res) => res.json());
+    body: formData,
+  }).then((res) => {
+    if (!res.ok) throw new Error(`Upload failed: ${res.status}`);
+    return res.json();
+  });
 };
 
 export async function uploadMultipleImages(files: File[]) {
   try {
-    const uploads = files.map(async (file) => {
-      const hash = await getFileHash(file);
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", `${presetName}`);
-      formData.append("public_id", hash);
-
-      return fetch(`https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`, {
-        method: "POST",
-        body: formData,
-      }).then((res) => {
-        if (!res.ok) throw new Error(`Upload failed: ${res.status}`);
-        return res.json();
-      });
-    });
+    const uploads = files.map((file) => uploadImage(file));
 
     const results = await Promise.all(uploads);
 

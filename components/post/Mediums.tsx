@@ -40,8 +40,8 @@ export function SelectMediums({ mediumsController }: { mediumsController : Contr
                     onClick={() => addMediums(med)}
                     className={`p-2 px-3 border transition-colors duration-300 text-sm rounded-lg cursor-pointer 
       ${value.includes(med.value)
-                            ? "bg-(--amber-light) text-(--amber) border-(--amber)"
-                            : "text-(--text-muted) hover:text-white border-border"
+                            ? "bg-blue-500/10 text-blue-400 border-blue-400"
+                            : "text-blue-200/40 hover:text-blue-200/80 border-blue-100/13"
                         }`}
                 >
                     {med.label}

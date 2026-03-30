@@ -58,13 +58,13 @@ export default async function Navbar() {
                 <div className="flex items-center gap-10 mr-5">
                     <Link href={"/create-post"} className="hover-col cursor-pointer"><button className="bg-blue-700 py-1 px-2 text-sm text-blue-200 hover:shadow-[0px_0px_40px] transition-all duration-300 hover:shadow-blue-400/40 flex items-center rounded-sm"><PlusIcon className="inline w-4 h-4" /> Post</button></Link>
                     <ProfileDropdown>
-                        <button className="flex gap-3 items-center text-sm hover:bg-white/5 p-2 rounded-lg cursor-pointer transition-all duration-300">
-                            {session.image && <Image src={session.image} width={35} height={35} className="object-cover rounded-full" alt="" />}
+                        <div className="flex gap-2 p-2 items-center hover:bg-white/5">
+                            {session.image && <Image src={session.image} width={40} height={40} className="object-cover rounded-full" alt="" />}
                             {session.profileCreated && <div>
-                                <div className="font-serif">{session.name}</div>
+                                <div className="font-serif text-sm">{session.name}</div>
                                 <div className="text-xs text-blue-200/42">{session.username}</div>
                             </div>}
-                        </button>
+                        </div>
                     </ProfileDropdown>
                 </div>
             </div>

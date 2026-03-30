@@ -1,35 +1,26 @@
-"use server"
+"use server";
 
-import { uploadImage } from "@/src/lib/cloudinaryFunctions";
 import { prisma } from "@/src/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 type userData = {
-  id: string | undefined;
+  id: string;
   name: string;
   username: string;
   bio: string;
-  image: File | null;
-  email: string | undefined;
+  image: string | null;
   portfolio: string | undefined;
   location: string;
 };
 
 export const updateUser = async (userData: userData) => {
   try {
-    if (!userData.name || !userData.username) {
-      throw new Error("name and username are required");
-    }
-    let img: string | null = null;
-    if (userData.image) {
-      const res = await uploadImage(userData.image);
-      img = res.secure_url;
-    }
     await prisma.user.update({
       where: {
-        email: userData.email,
+        id: userData.id,
       },
       data: {
-        ...(img && { image: img }),
+        ...(userData.image && { image: userData.image }),
         profileCreated: true,
         name: userData.name,
         username: userData.username,
@@ -49,6 +40,8 @@ export const updateUser = async (userData: userData) => {
         },
       },
     });
+
+    revalidatePath("/", "layout");
 
     return {
       success: true,

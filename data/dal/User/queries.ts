@@ -1,31 +1,47 @@
+"use server";
+
 import { prisma } from "@/src/lib/prisma";
 import { getUserSession } from "../getUserSession";
+import { unstable_cache } from "next/cache";
 
-export const getProfileSettingsData = async (userId: string) => {
+export const getProfileSettingsData = unstable_cache(async () => {
   try {
-    const data = await prisma.profile.findUnique({
+    const userSession = await getUserSession();
+    const data = await prisma.user.findUnique({
       where: {
-        profileId: userId,
+        id: userSession.userId,
       },
       select: {
-        bio: true,
-        location: true,
-        portfolio: true,
+        id: true,
+        name: true,
+        image: true,
+        email: true,
+        username: true,
+        profileCreated: true,
+        profile: {
+          select: {
+            bio: true,
+            portfolio: true,
+            location: true,
+          },
+        },
       },
     });
     return {
-        success: true,
-        data: data
-    }
+      success: true,
+      data: data,
+    };
   } catch (error) {
     console.error(error);
     return {
-        success: false
-    }
+      success: false,
+    };
   }
-};
+});
 
-export type ProfileSettingsData = Awaited<ReturnType<typeof getProfileSettingsData>>
+export type ProfileSettingsData = Awaited<
+  ReturnType<typeof getProfileSettingsData>
+>;
 
 export const getUserData2 = async () => {
   try {
@@ -58,6 +74,10 @@ export const getUserData2 = async () => {
   }
 };
 
-
-
-
+export const usernameExist = async (username: string) => {
+  const user = await prisma.user.findUnique({
+    where: { username },
+    select: { id: true },
+  });
+  return !!user;
+};

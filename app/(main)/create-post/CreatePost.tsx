@@ -122,10 +122,10 @@ export default function CreatePost() {
                             }}
                         />
                         <div className="flex gap-7 bg-(--surface) border border-border p-5 rounded-xl">
-                            <button disabled={isPublishing} onClick={handleDiscard} className="py-2 px-4 border border-border text-(--text-muted) rounded-sm hover:border-(--border-hover) hover:text-(--text) hover:bg-(--surface2) transition-colors duration-300">
+                            <button disabled={isPublishing} onClick={handleDiscard} className="py-2 px-4 border border-border text-white/60 rounded-sm hover:border-red-700 hover:text-red-700 hover:bg-red-500/10 transition-colors duration-300">
                                 Discard
                             </button>
-                            <button disabled={isPublishing} onClick={handlePublish} className="py-2 px-4 border text-center bg-amber-400 flex justify-center items-center font-sans font-semibold text-black w-full rounded-lg hover:bg-amber-300 hover:shadow-[0px_0px_5px] hover:shadow-amber-300 hover:-translate-y-1 transition-all duration-300">
+                            <button disabled={isPublishing} onClick={handlePublish} className="py-2 px-4 border text-center bg-blue-400 flex justify-center items-center font-sans font-semibold text-black w-full rounded-lg hover:shadow-[0_0_30px] hover:shadow-blue-400/50 hover:-translate-y-1 transition-all duration-300">
                                 {isPublishing ? <Spinner /> : "Publish Post"}
                             </button>
                         </div>

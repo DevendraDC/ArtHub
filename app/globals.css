@@ -147,23 +147,3 @@
     @apply border placeholder:text-(--text-subtle) rounded-sm resize-none focus:outline-0 border-border bg-(--surface2);
   }
 }
-
-@theme {
-  --bg: #0f0e0c;
-  --bg2: #141210;
-  --surface: #1a1814;
-  --surface2: #211f1a;
-  --surface3: #2a2720;
-  --border: #2e2b24;
-  --border-hover: #3d3a30;
-  --amber: #f59e0b;
-  --amber-hover: #d97706;
-  --amber-light: rgba(245, 158, 11, 0.1);
-  --amber-mid: rgba(245, 158, 11, 0.2);
-  --amber-glow: rgba(245, 158, 11, 0.06);
-  --text: #f5f0e8;
-  --text-muted: #8a8070;
-  --text-subtle: #524e45;
-  --text-light: #c8bfb0;
-  --danger: #ef4444;
-}
