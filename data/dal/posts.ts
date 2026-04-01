@@ -134,25 +134,7 @@ export const getFollowingPosts = cache(async () => {
 
 export type FollowingPosts = Awaited<ReturnType<typeof getFollowingPosts>>;
 
-export const getArtImages = cache(async (postId: string) => {
-  try {
-    const images = await prisma.postImages.findMany({
-      where: {
-        postId,
-      },
-      select: {
-        url: true,
-        id: true,
-      },
-    });
-    return images;
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
-});
 
-export type ArtImages = Awaited<ReturnType<typeof getArtImages>>;
 
 export const getPostComments = cache(async (postId: string) => {
   try {

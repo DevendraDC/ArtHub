@@ -1,6 +1,6 @@
 "use client"
 
-import { toggleLike } from "@/src/dal/posts";
+import { toggleLike } from "@/src/data/dal/posts";
 import { Heart } from "lucide-react";
 import { useOptimistic, useState, useTransition } from "react";
 

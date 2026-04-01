@@ -3,7 +3,8 @@
 import { getPostDetails } from "@/src/data/dal/Post/queries";
 import PostDetailsClient from "./PostDetailsClient";
 
-export default async function PostDetailsServer({ id }: { id: string }) {
+export default async function PostDetailsServer({ params }: { params: Promise<{ id: string }> }) {
+    const {id} = await params;
     const result = await getPostDetails(id)
     if (!result) {
         return null;

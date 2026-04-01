@@ -16,26 +16,29 @@ export default function ArtImagesClient({ images }: Props) {
     const [displayImage, setDisplayImage] = useState(images[0]);
 
     return (
-        <div className="flex flex-col gap-8 pt-2 w-full">
-            <motion.div
-                key={displayImage.id}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2, ease: "easeInOut" }}
-                className="flex justify-center items-center"
-            >
-                <Image
-                    src={cloudinaryTransform(displayImage.url, "f_auto,q_auto,w_1000,c_limit")}
-                    alt=""
-                    height={1000}
-                    width={1000}
-                    loading="lazy"
-                    className="object-contain h-136 rounded-lg"
-                />
-            </motion.div>
+        <div className="flex flex-col gap-12 pt-2 w-full overflow-auto no-scrollbar">
+            {images.map(img => (
+                <motion.div
+                    key={img.id}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2, ease: "easeInOut" }}
+                    className="flex justify-center relative items-center"
+                >
+                    <Image
+                        src={cloudinaryTransform(img.url, "f_auto,q_auto,w_1000,c_limit")}
+                        alt=""
+                        height={1000}
+                        width={1000}
+                        loading="lazy"
+                        className="object-contain max-w-full max-h-150 rounded-lg"
+                    />
+                </motion.div>
+            ))}
 
-            <div className="flex gap-5 w-full">
+
+            {/* <div className="flex gap-5 w-full">
                 {images.map(img => (
                     <div key={img.id} className="cursor-pointer" onClick={() => setDisplayImage(img)}>
                         <Image
@@ -51,7 +54,7 @@ export default function ArtImagesClient({ images }: Props) {
                         />
                     </div>
                 ))}
-            </div>
+            </div> */}
         </div>
     )
 }

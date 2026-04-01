@@ -207,7 +207,8 @@ model Like {
   createdAt DateTime @default(now())
 
   @@unique([artPostId, ownerId])
-  @@index([artPostId, ownerId])
+  @@index([artPostId])
+  @@index([ownerId])
   @@map("like")
 }
 

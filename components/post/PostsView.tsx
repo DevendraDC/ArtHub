@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { postTime } from "@/src/utils/postUtils";
-import { Posts } from "@/src/dal/Post/queries";
+import { Posts } from "@/src/data/dal/Post/queries";
 import Link from "next/link";
 import { cloudinaryTransform } from "@/src/utils/cloudinaryTransform";
 import { motion } from "motion/react"
@@ -18,15 +18,15 @@ const PostsView = memo(function PostsView({ posts }: { posts: Posts }) {
                     const url = post.artImages[0].url;
                     const previewUrl = cloudinaryTransform(url, "f_auto,q_auto,w_370,c_limit")
                     const previewData = {
-                        id : post.id,
-                        thumbnail : post.artImages[0].url,
+                        id: post.id,
+                        thumbnail: post.artImages[0].url,
                         tags: post.tags,
                         mediums: post.mediums,
                         user: {
-                            id: post.user.id,
-                            name: post.user.name,
-                            image: post.user.image ?? "",
-                            username: post.user.username ?? ""
+                            id: post.id,
+                            name: post.user.user.name,
+                            image: post.user.user.image ?? "",
+                            username: post.user.user.username ?? ""
                         }
                     }
                     return (
@@ -39,7 +39,8 @@ const PostsView = memo(function PostsView({ posts }: { posts: Posts }) {
                                 transition={{ duration: 0.3, ease: "easeOut" }}
                             >
                                 <Image
-                                    loading="lazy"
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                    loading="eager"
                                     src={previewUrl}
                                     alt=""
                                     fill
@@ -50,9 +51,9 @@ const PostsView = memo(function PostsView({ posts }: { posts: Posts }) {
                                 >
                                     <div className="flex text-xs justify-between items-center">
                                         <div className="flex gap-3 items-center">
-                                            {post.user.image && (
+                                            {post.user.user.image && (
                                                 <Image
-                                                    src={post.user.image}
+                                                    src={post.user.user.image}
                                                     alt=""
                                                     width={40}
                                                     height={40}
@@ -60,9 +61,9 @@ const PostsView = memo(function PostsView({ posts }: { posts: Posts }) {
                                                 />
                                             )}
                                             <div className="flex flex-col">
-                                                <div className="text-sm">{post.user.name}</div>
+                                                <div className="text-sm">{post.user.user.name}</div>
                                                 <div className="text-xs text-blue-100/40">
-                                                    {post.user.username}
+                                                    {post.user.user.username}
                                                 </div>
                                             </div>
                                         </div>

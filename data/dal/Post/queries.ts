@@ -4,6 +4,7 @@ import { prisma } from "@/src/lib/prisma";
 import { getUserSession } from "../getUserSession";
 import { cache } from "react";
 import { PostMedium } from "@/src/lib/generated/prisma/enums";
+import { unstable_cache } from "next/cache";
 
 export const getPosts = cache(async (filter: number) => {
   try {
@@ -191,3 +192,24 @@ export const getSearchedPosts = cache(
 );
 
 export type SearchedPosts = Awaited<ReturnType<typeof getSearchedPosts>>;
+
+
+export const getArtImages = unstable_cache(async (postId: string) => {
+  try {
+    const images = await prisma.postImages.findMany({
+      where: {
+        postId,
+      },
+      select: {
+        url: true,
+        id: true,
+      },
+    });
+    return images;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+});
+
+export type ArtImages = Awaited<ReturnType<typeof getArtImages>>;

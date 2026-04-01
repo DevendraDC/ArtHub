@@ -25,7 +25,7 @@ export function SelectTags({tagsController} : {tagsController : Controller<strin
                 id="tags"
                 onChange={(e) => onTagChange(e)}
                 placeholder="Add the tags...."
-                className="border placeholder:text-white/30 w-full rounded-sm py-3 text-(--text-light) text-sm px-5 resize-none focus:outline-none border-border bg-(--surface2)"
+                className="border placeholder:text-white/40 w-full rounded-sm py-3 text-sm px-5 resize-none focus:outline-none"
             />
             <div className="text-xs text-blue-100/40">
                 Enter comma to include a tag

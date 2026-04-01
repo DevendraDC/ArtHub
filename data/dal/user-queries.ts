@@ -4,6 +4,7 @@ import { prisma } from "@/src/lib/prisma";
 import { uploadImage } from "@/src/lib/cloudinaryFunctions";
 import { cache } from "react";
 import { fetchPostsProfile } from "./posts";
+import { getUserSession } from "./getUserSession";
 
 interface userDataType {
   id: string;

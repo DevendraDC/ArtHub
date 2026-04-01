@@ -28,8 +28,8 @@ export default function PostDetailsModal({ children }: { children: React.ReactNo
                 </div>
                 {children}
                 <div className="Mediums flex flex-col gap-3">
-                    <div className="text-sm font-sans tracking-widest text-(--text-light)">
-                        MEDIUMS
+                    <div className="text-sm">
+                        Mediums
                     </div>
                     <div className="flex flex-wrap gap-3">
                         {preview?.mediums.map((med, i) => (
@@ -39,18 +39,21 @@ export default function PostDetailsModal({ children }: { children: React.ReactNo
                         ))}
                     </div>
                 </div>
-                <div className="tags flex flex-col gap-3">
-                    <div className="text-sm font-sans tracking-widest text-(--text-light)">
-                        TAGS
+                {!!preview?.tags.length && (
+                    <div className="tags flex flex-col gap-3">
+                        <div className="text-sm">
+                            Tags
+                        </div>
+                        <div className="flex flex-wrap gap-3">
+                            {preview?.tags.map((tag, i) => (
+                                <div key={i} className="py-1 px-3 rounded-lg bg-blue-500/25 border border-blue-400 font-sans text-sm">
+                                    {tag}
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                    <div className="flex flex-wrap gap-3">
-                        {preview?.tags.map((tag, i) => (
-                            <div key={i} className="p-2 rounded-lg text-blue-400/80 text-[0.8rem]">
-                                # {tag}
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                )}
+
             </div>
         </motion.div>
     )

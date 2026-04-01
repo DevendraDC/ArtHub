@@ -199,7 +199,7 @@ export type PostImagesGroupByOutputType = {
   _max: PostImagesMaxAggregateOutputType | null
 }
 
-type GetPostImagesGroupByPayload<T extends PostImagesGroupByArgs> = Prisma.PrismaPromise<
+export type GetPostImagesGroupByPayload<T extends PostImagesGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<PostImagesGroupByOutputType, T['by']> &
       {
@@ -1215,6 +1215,11 @@ export type PostImagesFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Skip the first `n` PostImages.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of PostImages.
+   */
   distinct?: Prisma.PostImagesScalarFieldEnum | Prisma.PostImagesScalarFieldEnum[]
 }
 

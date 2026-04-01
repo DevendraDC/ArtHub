@@ -1,5 +1,3 @@
-"use server"
-
 const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 const presetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
 

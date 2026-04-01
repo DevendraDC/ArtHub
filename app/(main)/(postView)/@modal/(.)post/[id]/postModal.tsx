@@ -9,7 +9,7 @@ export default function PostModal(
 ) {
     const router = useRouter()
     return (
-        <motion.div className="bg-white/10 border-2 border-(--bl0)/15 rounded-3xl backdrop-blur-lg flex gap-5 absolute z-999 top-1/2 left-1/2 -translate-1/2 w-[75vw] h-[90vh] overflow-hidden"
+        <motion.div className="bg-white/10 border-2 border-(--bl0)/15 rounded-3xl backdrop-blur-lg flex gap-5 absolute z-999 top-1/2 left-1/2 -translate-1/2 w-[90vw] h-[90vh] overflow-hidden"
             initial={{ opacity: 0, y: 10, }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}>

@@ -12,13 +12,13 @@ type props = {
 export default function PostImagesUpload({ selectedImages, setSelectedImages }: props) {
     const imagesUploadRef = useRef<HTMLInputElement>(null);
     return (
-        <div className="images flex flex-col gap-5 border border-border p-6 rounded-xl cursor-pointer">
-            <div className="text-sm font-sans tracking-widest text-blue-200">
+        <div className="images flex flex-col gap-5 border-2 border-white/15 p-6 rounded-xl cursor-pointer">
+            <div className="font-sans text-blue-200">
                 <span className="text-blue-500">&middot; </span>IMAGES
             </div>
             <div
                 onClick={() => imagesUploadRef.current?.click()}
-                className="flex flex-col items-center gap-1 border text-sm p-7 rounded-lg hover:bg-blue-400/10 hover:border-(--bl2) transition-all duration-300"
+                className="flex flex-col items-center gap-1 border-2 text-sm p-7 rounded-lg hover:bg-blue-400/10 hover:border-(--bl2) transition-all duration-300"
             >
                 <input
                     type="file"

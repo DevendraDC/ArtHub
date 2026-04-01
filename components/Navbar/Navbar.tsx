@@ -9,6 +9,7 @@ import Image from "next/image"
 
 export default async function Navbar() {
     const session = await getUserSession()
+    if(!session || !session.userId) return null;
     const navOptions = [
         // {
         //     icon: <LayoutGrid size={18} />,
@@ -57,7 +58,7 @@ export default async function Navbar() {
 
                 <div className="flex items-center gap-10 mr-5">
                     <Link href={"/create-post"} className="hover-col cursor-pointer"><button className="bg-blue-700 py-1 px-2 text-sm text-blue-200 hover:shadow-[0px_0px_40px] transition-all duration-300 hover:shadow-blue-400/40 flex items-center rounded-sm"><PlusIcon className="inline w-4 h-4" /> Post</button></Link>
-                    <ProfileDropdown>
+                    <ProfileDropdown sessionUserId={session.userId}>
                         <div className="flex gap-2 p-2 items-center hover:bg-white/5">
                             {session.image && <Image src={session.image} width={40} height={40} className="object-cover rounded-full" alt="" />}
                             {session.profileCreated && <div>
