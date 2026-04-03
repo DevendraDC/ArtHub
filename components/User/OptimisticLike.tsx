@@ -30,11 +30,11 @@ export default function OptimisticLike({ data }: { data: data}) {
         startTransition(async () => {
             updateOptimisticLike(newLikedState);
             try {
-                await toggleLike(postId, userId);
+                await toggleLike(postId, userId, isLiked);
                 setBaseLikeState((prev) => ({
                     isLiked: newLikedState,
                     likes:
-                        prev.likes + (newLikedState ? 1 : -1),
+                        prev.likes + (newLikedState ? +1 : -1),
                 }));
             } catch (error) {
                 updateOptimisticLike(!newLikedState)

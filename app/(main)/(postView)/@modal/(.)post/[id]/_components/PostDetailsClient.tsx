@@ -22,7 +22,6 @@ export default function PostDetailsClient({ post }: { post: PostDetails }) {
             <div className="w-full mb-3">
                 <OptimisticFollow data={{
                     isFollowing: !!postInfo.user.followers.length,
-                    followers: postInfo.user._count.followers,
                     postOwnerId: sessionUserId,
                     userId: postInfo.user.profileId
                 }} />
@@ -43,7 +42,7 @@ export default function PostDetailsClient({ post }: { post: PostDetails }) {
                 <div className="border border-white/20"></div>
                 <div className="flex gap-10 text-(--text-light)">
                     <OptimisticLike data={{
-                        isLiked: !!postInfo.likes,
+                        isLiked: !!postInfo.likes.length,
                         likes: postInfo._count.likes,
                         postId: postInfo.id,
                         userId: sessionUserId

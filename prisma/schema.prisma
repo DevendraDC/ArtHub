@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client"
   output   = "../lib/generated/prisma"
@@ -56,9 +53,8 @@ model User {
   updatedAt      DateTime  @updatedAt
   sessions       Session[]
   accounts       Account[]
-  profile       Profile?
+  profile        Profile?
 
-  @@index([id])
   @@index([email])
   @@index([username])
   @@map("user")
@@ -79,7 +75,6 @@ model Profile {
   likes       Like[]
   comments    Comment[]
 
-  @@index([profileId])
   @@map("profile")
 }
 
@@ -143,28 +138,32 @@ model Follow {
   @@unique([followerId, followingId])
   @@index([followerId])
   @@index([followingId])
+  @@index([followingId, followerId])
   @@map("follow")
 }
 
 model Post {
-  id          String       @id @default(uuid())
-  authorId    String
-  user        Profile      @relation(fields: [authorId], references: [profileId], onDelete: Cascade)
-  title       String
-  artImages   PostImages[]
-  tags        String[]
-  inPortfolio Boolean      @default(false)
-  mediums     PostMedium[]
-  description String?
-  likes       Like[]
-  Collections Collection[]
-  comments    Comment[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @default(now())
+  id             String       @id @default(uuid())
+  authorId       String
+  user           Profile      @relation(fields: [authorId], references: [profileId], onDelete: Cascade)
+  title          String
+  artImages      PostImages[]
+  tags           String[]
+  inPortfolio    Boolean      @default(false)
+  mediums        PostMedium[]
+  description    String?
+  likes          Like[]
+  Collections    Collection[]
+  comments       Comment[]
+  score          Float        @default(0)
+  scoreUpdatedAt DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @default(now())
 
-  @@index([id])
   @@index([authorId])
   @@index([createdAt(sort: Desc)])
+  @@index([authorId, createdAt(sort: Desc)])
+  @@index([score(sort: Desc)])
   @@map("post")
 }
 
@@ -178,7 +177,6 @@ model PostImages {
   createdAt     DateTime @default(now())
 
   @@unique([postId, order])
-  @@index([id])
   @@index([postId, order])
   @@map("post_images")
 }
@@ -194,7 +192,6 @@ model Collection {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  @@index([id])
   @@index([ownerId])
   @@map("collection")
 }
@@ -225,7 +222,6 @@ model Comment {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now())
 
-  @@index([id])
   @@index([artPostId, ownerId])
   @@map("comment")
 }

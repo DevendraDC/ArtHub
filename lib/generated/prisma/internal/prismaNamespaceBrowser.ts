@@ -170,6 +170,8 @@ export const PostScalarFieldEnum = {
   inPortfolio: 'inPortfolio',
   mediums: 'mediums',
   description: 'description',
+  score: 'score',
+  scoreUpdatedAt: 'scoreUpdatedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

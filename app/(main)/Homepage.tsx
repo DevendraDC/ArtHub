@@ -21,7 +21,7 @@ function groupOptions(id: number) {
 
 export function HomePageClient() {
     const [curFilter, setCurFilter] = useState(0);
-    const tabs = ["All Posts", "Following", "Popular Posts"];
+    const tabs = ["Trending", "Latest"];
     const { isLoading, isError, data, error } = useQuery(groupOptions(curFilter));
     const posts = useMemo(() => data ?? [], [data]);
     useEffect(() => {

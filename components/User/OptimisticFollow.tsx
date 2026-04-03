@@ -5,22 +5,20 @@ import { useOptimistic, useState, useTransition } from "react";
 
 type data = {
     isFollowing: boolean;
-    followers: number | undefined;
     postOwnerId: string;
     userId: string;
 }
 
 export default function OptimisticFollow({ data }: {data: data}) {
-    const {followers, isFollowing, postOwnerId, userId} = data;
+    const {isFollowing, postOwnerId, userId} = data;
     const [isPending, startTransition] = useTransition();
     const [baseFollowState, setBaseFollowState] = useState({
-        isFollowing, followers : followers ?? 0
+        isFollowing
     })
     const [optimisticFollowState, updateOptimisticFollow] = useOptimistic(
         baseFollowState,
         (current, isFollowing: boolean) => ({
-            isFollowing,
-            followers: current.followers + (isFollowing ? +1 : -1)
+            isFollowing
         })
     )
     const handleFollow = () => {
@@ -29,10 +27,8 @@ export default function OptimisticFollow({ data }: {data: data}) {
             updateOptimisticFollow(newFollowState);
             try {
                 await toggleFollow(userId, postOwnerId)
-                setBaseFollowState((prev) => ({
-                    isFollowing: newFollowState,
-                    followers:
-                        prev.followers + (newFollowState ? 1 : -1),
+                setBaseFollowState(() => ({
+                    isFollowing: newFollowState
                 }));
             } catch (error) {
                 updateOptimisticFollow(!newFollowState)

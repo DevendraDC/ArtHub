@@ -5,21 +5,13 @@ import { getUserSession } from "../getUserSession";
 import { cache } from "react";
 import { PostMedium } from "@/src/lib/generated/prisma/enums";
 import { unstable_cache } from "next/cache";
+import { headers } from "next/headers";
 
 export const getPosts = cache(async (filter: number) => {
   try {
-    const session = await getUserSession();
-    if (!session || !session.userId) throw new Error("session not found");
+    const userId = (await headers()).get("x-user-id");
+    if (!userId) throw new Error("session not found");
     return await prisma.post.findMany({
-      where:
-        filter === 1
-          ? {
-              user: {
-                followers: { some: { followerId: session.userId } },
-              },
-            }
-          : undefined,
-
       select: {
         id: true,
         createdAt: true,
@@ -45,7 +37,7 @@ export const getPosts = cache(async (filter: number) => {
       },
 
       orderBy:
-        filter === 2 ? { likes: { _count: "desc" } } : { createdAt: "desc" },
+        filter === 0 ? { score: "desc" } : { createdAt: "desc" },
     });
   } catch (error) {
     console.error(error);
@@ -57,8 +49,8 @@ export type Posts = Awaited<ReturnType<typeof getPosts>>;
 
 export const getPostDetails = cache(async (postId: string) => {
   try {
-    const session = await getUserSession();
-    const userId = session.userId;
+    const userId = (await headers()).get("x-user-id");
+    if (!userId) throw new Error("session not found");
     const postDetails = await prisma.post.findUnique({
       where: {
         id: postId,
@@ -81,13 +73,6 @@ export const getPostDetails = cache(async (postId: string) => {
               },
               select: {
                 followerId: true,
-              },
-            },
-            _count: {
-              select: {
-                followers: true,
-                following: true,
-                artPosts: true,
               },
             },
           },
@@ -192,7 +177,6 @@ export const getSearchedPosts = cache(
 );
 
 export type SearchedPosts = Awaited<ReturnType<typeof getSearchedPosts>>;
-
 
 export const getArtImages = unstable_cache(async (postId: string) => {
   try {

@@ -1,17 +1,14 @@
 "use server";
 
 import { NextRequest, NextResponse } from "next/server";
-import { headers } from "next/headers";
-import { auth } from "./lib/better-auth/auth";
+
+import { getUserSession } from "./data/dal/getUserSession";
 
 const protectedRoutes = [
-  "/",
   "/settings",
   "/create-post",
-  "/search",
-  "/profile",
 ];
-const publicRoutes = ["/login", "/signup"];
+const publicRoutes = ["/login", "/signup", "/", "/profile", "/search"];
 
 export default async function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname;
@@ -20,19 +17,25 @@ export default async function proxy(req: NextRequest) {
 
   if (isPublicRoute) return NextResponse.next();
 
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await getUserSession();
 
   if (isProtectedRoute && !session) {
     return NextResponse.redirect(new URL("/login", req.nextUrl));
   }
 
-  if (!session?.user.profileCreated && !req.nextUrl.pathname.startsWith("/settings")) {
+  if (
+    !session?.profileCreated &&
+    !req.nextUrl.pathname.startsWith("/settings")
+  ) {
     return NextResponse.redirect(new URL("/settings", req.nextUrl));
   }
 
   const requestHeaders = new Headers(req.headers);
+
+  if (session && session.userId) {
+    requestHeaders.set("x-user-id", session.userId);
+    requestHeaders.set("x-profile-created", String(session.profileCreated));
+  }
 
   return NextResponse.next({
     request: { headers: requestHeaders },
@@ -40,5 +43,14 @@ export default async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
+  matcher: [
+    "/",
+    "/post/:path*",
+    "/settings/:path*",
+    "/create-post/:path*",
+    "/search/:path*",
+    "/profile/:path*",
+    "/login",
+    "/signup",
+  ],
 };

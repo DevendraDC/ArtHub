@@ -152,15 +152,7 @@ export const getPostComments = cache(async (postId: string) => {
 
 export type PostComments = Awaited<ReturnType<typeof getPostComments>>;
 
-export const toggleLike = async (artPostId: string, ownerId: string) => {
-  const isLiked = await prisma.like.findUnique({
-    where: {
-      artPostId_ownerId: {
-        artPostId,
-        ownerId,
-      },
-    },
-  });
+export const toggleLike = async (artPostId: string, ownerId: string, isLiked: boolean) => {
   if (isLiked) {
     await prisma.like.delete({
       where: {

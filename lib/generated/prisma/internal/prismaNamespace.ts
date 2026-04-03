@@ -1357,6 +1357,8 @@ export const PostScalarFieldEnum = {
   inPortfolio: 'inPortfolio',
   mediums: 'mediums',
   description: 'description',
+  score: 'score',
+  scoreUpdatedAt: 'scoreUpdatedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1504,6 +1506,20 @@ export type EnumPostMediumFieldRefInput<$PrismaModel> = FieldRefInputType<$Prism
 
 
 /**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -1528,20 +1544,6 @@ export type EnumCollectionViewFieldRefInput<$PrismaModel> = FieldRefInputType<$P
  * Reference to a field of type 'CollectionView[]'
  */
 export type ListEnumCollectionViewFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CollectionView[]'>
-    
-
-
-/**
- * Reference to a field of type 'Float'
- */
-export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-/**
- * Reference to a field of type 'Float[]'
- */
-export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**
