@@ -24,18 +24,13 @@ export default async function proxy(req: NextRequest) {
   }
 
   if (
-    !session?.profileCreated &&
+    !session?.user.username &&
     !req.nextUrl.pathname.startsWith("/settings")
   ) {
     return NextResponse.redirect(new URL("/settings", req.nextUrl));
   }
 
   const requestHeaders = new Headers(req.headers);
-
-  if (session && session.userId) {
-    requestHeaders.set("x-user-id", session.userId);
-    requestHeaders.set("x-profile-created", String(session.profileCreated));
-  }
 
   return NextResponse.next({
     request: { headers: requestHeaders },

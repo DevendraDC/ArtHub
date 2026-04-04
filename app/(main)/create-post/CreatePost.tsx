@@ -12,12 +12,12 @@ import { uploadMultipleImages } from "@/src/lib/cloudinaryFunctions";
 import PostImagesUpload from "./_components/ImagesUpload";
 import PostOtherDetails from "./_components/OtherDetails";
 import z from "zod";
-import { UserSession } from "@/src/data/dto/userdto";
+import { useSession } from "../Providers";
 
 
-export default function CreatePost({ session }: { session: Promise<UserSession> }) {
-    const router = useRouter()
-    const sessionUserId = session.then((res) => res.userId);
+export default function CreatePost() {
+    const session = useSession();
+    const router = useRouter();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -54,7 +54,7 @@ export default function CreatePost({ session }: { session: Promise<UserSession> 
         data.forEach(img => formData.append("images", img.secure_url));
         toast("Post published successfully");
         setIsPublishing(false);
-        router.push(`/profile/${sessionUserId}`);
+        router.push(`/profile/${session?.user.id}`);
         postUpload(formData).then(({ isSuccess }) => {
             if (!isSuccess) {
                 toast.error("something went wrong while publishing the post")

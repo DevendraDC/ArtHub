@@ -9,8 +9,8 @@ import z from "zod";
 export async function postUpload(formData: FormData) {
   try {
     const session = await getUserSession();
-    if (!session || !session.userId) throw new Error("session not found");
-    const authorId = session.userId;
+    if (!session || !session.user.id) throw new Error("session not found");
+    const authorId = session.user.id;
     const title = formData.get("title") as string;
     const description = formData.get("description") as string;
     const tags = formData.getAll("tags") as string[];
@@ -34,6 +34,7 @@ export async function postUpload(formData: FormData) {
       data: {
         authorId,
         title,
+        thumbnail: artImages[0],
         description,
         mediums,
         tags,

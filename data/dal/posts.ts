@@ -13,14 +13,10 @@ export const getAllPosts = cache(async () => {
 
         user: {
           select: {
-            profileId: true,
-            user: {
-              select: {
-                username: true,
-                name: true,
-                image: true,
-              },
-            },
+            id: true,
+            username: true,
+            name: true,
+            image: true,
           },
         },
 
@@ -55,14 +51,10 @@ export const getPopularPosts = cache(async () => {
 
         user: {
           select: {
-            profileId: true,
-            user: {
-              select: {
-                username: true,
-                name: true,
-                image: true,
-              },
-            },
+            id: true,
+            username: true,
+            name: true,
+            image: true,
           },
         },
 
@@ -86,55 +78,49 @@ export const getPopularPosts = cache(async () => {
 
 export type PopularPosts = Awaited<ReturnType<typeof getPopularPosts>>;
 
-export const getFollowingPosts = cache(async () => {
-  try {
-    const session = await getUserSession();
-    return await prisma.post.findMany({
-      where: {
-        user: {
-          followers: { some: { followerId: session.userId } },
-        },
-      },
-      select: {
-        id: true,
-        createdAt: true,
+// export const getFollowingPosts = cache(async () => {
+//   try {
+//     const session = await getUserSession();
+//     return await prisma.post.findMany({
+//       where: {
+//         user: {
+//           followers: { some: { followerId: session.user.id } },
+//         },
+//       },
+//       select: {
+//         id: true,
+//         createdAt: true,
 
-        user: {
-          select: {
-            profileId: true,
-            user: {
-              select: {
-                name: true,
-                username: true,
-                image: true,
-              },
-            },
-          },
-        },
+//         user: {
+//           select: {
+//             id: true,
+//             name: true,
+//             username: true,
+//             image: true,
+//           },
+//         },
 
-        artImages: {
-          orderBy: {
-            order: "asc",
-          },
-          take: 1,
-          select: {
-            url: true,
-          },
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-});
+//         artImages: {
+//           orderBy: {
+//             order: "asc",
+//           },
+//           take: 1,
+//           select: {
+//             url: true,
+//           },
+//         },
+//       },
+//       orderBy: {
+//         createdAt: "desc",
+//       },
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     return null;
+//   }
+// });
 
-export type FollowingPosts = Awaited<ReturnType<typeof getFollowingPosts>>;
-
-
+// export type FollowingPosts = Awaited<ReturnType<typeof getFollowingPosts>>;
 
 export const getPostComments = cache(async (postId: string) => {
   try {
@@ -152,7 +138,11 @@ export const getPostComments = cache(async (postId: string) => {
 
 export type PostComments = Awaited<ReturnType<typeof getPostComments>>;
 
-export const toggleLike = async (artPostId: string, ownerId: string, isLiked: boolean) => {
+export const toggleLike = async (
+  artPostId: string,
+  ownerId: string,
+  isLiked: boolean,
+) => {
   if (isLiked) {
     await prisma.like.delete({
       where: {
@@ -176,7 +166,7 @@ export const fetchPostsProfile = cache(async (userId: string) => {
   return await prisma.post.findMany({
     where: {
       user: {
-        profileId: userId,
+        id: userId,
       },
     },
     select: {

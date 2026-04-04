@@ -20,27 +20,17 @@ export type PostModel = runtime.Types.Result.DefaultSelection<Prisma.$PostPayloa
 
 export type AggregatePost = {
   _count: PostCountAggregateOutputType | null
-  _avg: PostAvgAggregateOutputType | null
-  _sum: PostSumAggregateOutputType | null
   _min: PostMinAggregateOutputType | null
   _max: PostMaxAggregateOutputType | null
-}
-
-export type PostAvgAggregateOutputType = {
-  score: number | null
-}
-
-export type PostSumAggregateOutputType = {
-  score: number | null
 }
 
 export type PostMinAggregateOutputType = {
   id: string | null
   authorId: string | null
   title: string | null
+  thumbnail: string | null
   inPortfolio: boolean | null
   description: string | null
-  score: number | null
   scoreUpdatedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -50,9 +40,9 @@ export type PostMaxAggregateOutputType = {
   id: string | null
   authorId: string | null
   title: string | null
+  thumbnail: string | null
   inPortfolio: boolean | null
   description: string | null
-  score: number | null
   scoreUpdatedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -62,11 +52,11 @@ export type PostCountAggregateOutputType = {
   id: number
   authorId: number
   title: number
+  thumbnail: number
   tags: number
   inPortfolio: number
   mediums: number
   description: number
-  score: number
   scoreUpdatedAt: number
   createdAt: number
   updatedAt: number
@@ -74,21 +64,13 @@ export type PostCountAggregateOutputType = {
 }
 
 
-export type PostAvgAggregateInputType = {
-  score?: true
-}
-
-export type PostSumAggregateInputType = {
-  score?: true
-}
-
 export type PostMinAggregateInputType = {
   id?: true
   authorId?: true
   title?: true
+  thumbnail?: true
   inPortfolio?: true
   description?: true
-  score?: true
   scoreUpdatedAt?: true
   createdAt?: true
   updatedAt?: true
@@ -98,9 +80,9 @@ export type PostMaxAggregateInputType = {
   id?: true
   authorId?: true
   title?: true
+  thumbnail?: true
   inPortfolio?: true
   description?: true
-  score?: true
   scoreUpdatedAt?: true
   createdAt?: true
   updatedAt?: true
@@ -110,11 +92,11 @@ export type PostCountAggregateInputType = {
   id?: true
   authorId?: true
   title?: true
+  thumbnail?: true
   tags?: true
   inPortfolio?: true
   mediums?: true
   description?: true
-  score?: true
   scoreUpdatedAt?: true
   createdAt?: true
   updatedAt?: true
@@ -159,18 +141,6 @@ export type PostAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: PostAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: PostSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: PostMinAggregateInputType
@@ -201,8 +171,6 @@ export type PostGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: PostCountAggregateInputType | true
-  _avg?: PostAvgAggregateInputType
-  _sum?: PostSumAggregateInputType
   _min?: PostMinAggregateInputType
   _max?: PostMaxAggregateInputType
 }
@@ -211,17 +179,15 @@ export type PostGroupByOutputType = {
   id: string
   authorId: string
   title: string
+  thumbnail: string
   tags: string[]
   inPortfolio: boolean
   mediums: $Enums.PostMedium[]
   description: string | null
-  score: number
   scoreUpdatedAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: PostCountAggregateOutputType | null
-  _avg: PostAvgAggregateOutputType | null
-  _sum: PostSumAggregateOutputType | null
   _min: PostMinAggregateOutputType | null
   _max: PostMaxAggregateOutputType | null
 }
@@ -248,15 +214,15 @@ export type PostWhereInput = {
   id?: Prisma.StringFilter<"Post"> | string
   authorId?: Prisma.StringFilter<"Post"> | string
   title?: Prisma.StringFilter<"Post"> | string
+  thumbnail?: Prisma.StringFilter<"Post"> | string
   tags?: Prisma.StringNullableListFilter<"Post">
   inPortfolio?: Prisma.BoolFilter<"Post"> | boolean
   mediums?: Prisma.EnumPostMediumNullableListFilter<"Post">
   description?: Prisma.StringNullableFilter<"Post"> | string | null
-  score?: Prisma.FloatFilter<"Post"> | number
   scoreUpdatedAt?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Post"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Post"> | Date | string
-  user?: Prisma.XOR<Prisma.ProfileScalarRelationFilter, Prisma.ProfileWhereInput>
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   artImages?: Prisma.PostImagesListRelationFilter
   likes?: Prisma.LikeListRelationFilter
   Collections?: Prisma.CollectionListRelationFilter
@@ -267,15 +233,15 @@ export type PostOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  thumbnail?: Prisma.SortOrder
   tags?: Prisma.SortOrder
   inPortfolio?: Prisma.SortOrder
   mediums?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  score?: Prisma.SortOrder
   scoreUpdatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  user?: Prisma.ProfileOrderByWithRelationInput
+  user?: Prisma.UserOrderByWithRelationInput
   artImages?: Prisma.PostImagesOrderByRelationAggregateInput
   likes?: Prisma.LikeOrderByRelationAggregateInput
   Collections?: Prisma.CollectionOrderByRelationAggregateInput
@@ -289,15 +255,15 @@ export type PostWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.PostWhereInput | Prisma.PostWhereInput[]
   authorId?: Prisma.StringFilter<"Post"> | string
   title?: Prisma.StringFilter<"Post"> | string
+  thumbnail?: Prisma.StringFilter<"Post"> | string
   tags?: Prisma.StringNullableListFilter<"Post">
   inPortfolio?: Prisma.BoolFilter<"Post"> | boolean
   mediums?: Prisma.EnumPostMediumNullableListFilter<"Post">
   description?: Prisma.StringNullableFilter<"Post"> | string | null
-  score?: Prisma.FloatFilter<"Post"> | number
   scoreUpdatedAt?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Post"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Post"> | Date | string
-  user?: Prisma.XOR<Prisma.ProfileScalarRelationFilter, Prisma.ProfileWhereInput>
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   artImages?: Prisma.PostImagesListRelationFilter
   likes?: Prisma.LikeListRelationFilter
   Collections?: Prisma.CollectionListRelationFilter
@@ -308,19 +274,17 @@ export type PostOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  thumbnail?: Prisma.SortOrder
   tags?: Prisma.SortOrder
   inPortfolio?: Prisma.SortOrder
   mediums?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  score?: Prisma.SortOrder
   scoreUpdatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.PostCountOrderByAggregateInput
-  _avg?: Prisma.PostAvgOrderByAggregateInput
   _max?: Prisma.PostMaxOrderByAggregateInput
   _min?: Prisma.PostMinOrderByAggregateInput
-  _sum?: Prisma.PostSumOrderByAggregateInput
 }
 
 export type PostScalarWhereWithAggregatesInput = {
@@ -330,11 +294,11 @@ export type PostScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Post"> | string
   authorId?: Prisma.StringWithAggregatesFilter<"Post"> | string
   title?: Prisma.StringWithAggregatesFilter<"Post"> | string
+  thumbnail?: Prisma.StringWithAggregatesFilter<"Post"> | string
   tags?: Prisma.StringNullableListFilter<"Post">
   inPortfolio?: Prisma.BoolWithAggregatesFilter<"Post"> | boolean
   mediums?: Prisma.EnumPostMediumNullableListFilter<"Post">
   description?: Prisma.StringNullableWithAggregatesFilter<"Post"> | string | null
-  score?: Prisma.FloatWithAggregatesFilter<"Post"> | number
   scoreUpdatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Post"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Post"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Post"> | Date | string
@@ -343,15 +307,15 @@ export type PostScalarWhereWithAggregatesInput = {
 export type PostCreateInput = {
   id?: string
   title: string
+  thumbnail: string
   tags?: Prisma.PostCreatetagsInput | string[]
   inPortfolio?: boolean
   mediums?: Prisma.PostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
-  score?: number
   scoreUpdatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.ProfileCreateNestedOneWithoutArtPostsInput
+  user: Prisma.UserCreateNestedOneWithoutArtPostsInput
   artImages?: Prisma.PostImagesCreateNestedManyWithoutArtPostInput
   likes?: Prisma.LikeCreateNestedManyWithoutArtPostInput
   Collections?: Prisma.CollectionCreateNestedManyWithoutPostsInput
@@ -362,11 +326,11 @@ export type PostUncheckedCreateInput = {
   id?: string
   authorId: string
   title: string
+  thumbnail: string
   tags?: Prisma.PostCreatetagsInput | string[]
   inPortfolio?: boolean
   mediums?: Prisma.PostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
-  score?: number
   scoreUpdatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -379,15 +343,15 @@ export type PostUncheckedCreateInput = {
 export type PostUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.PostUpdatetagsInput | string[]
   inPortfolio?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mediums?: Prisma.PostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  score?: Prisma.FloatFieldUpdateOperationsInput | number
   scoreUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.ProfileUpdateOneRequiredWithoutArtPostsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutArtPostsNestedInput
   artImages?: Prisma.PostImagesUpdateManyWithoutArtPostNestedInput
   likes?: Prisma.LikeUpdateManyWithoutArtPostNestedInput
   Collections?: Prisma.CollectionUpdateManyWithoutPostsNestedInput
@@ -398,11 +362,11 @@ export type PostUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.PostUpdatetagsInput | string[]
   inPortfolio?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mediums?: Prisma.PostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  score?: Prisma.FloatFieldUpdateOperationsInput | number
   scoreUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -416,11 +380,11 @@ export type PostCreateManyInput = {
   id?: string
   authorId: string
   title: string
+  thumbnail: string
   tags?: Prisma.PostCreatetagsInput | string[]
   inPortfolio?: boolean
   mediums?: Prisma.PostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
-  score?: number
   scoreUpdatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -429,11 +393,11 @@ export type PostCreateManyInput = {
 export type PostUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.PostUpdatetagsInput | string[]
   inPortfolio?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mediums?: Prisma.PostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  score?: Prisma.FloatFieldUpdateOperationsInput | number
   scoreUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -443,11 +407,11 @@ export type PostUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.PostUpdatetagsInput | string[]
   inPortfolio?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mediums?: Prisma.PostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  score?: Prisma.FloatFieldUpdateOperationsInput | number
   scoreUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -483,27 +447,23 @@ export type PostCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  thumbnail?: Prisma.SortOrder
   tags?: Prisma.SortOrder
   inPortfolio?: Prisma.SortOrder
   mediums?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  score?: Prisma.SortOrder
   scoreUpdatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type PostAvgOrderByAggregateInput = {
-  score?: Prisma.SortOrder
 }
 
 export type PostMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  thumbnail?: Prisma.SortOrder
   inPortfolio?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  score?: Prisma.SortOrder
   scoreUpdatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -513,16 +473,12 @@ export type PostMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  thumbnail?: Prisma.SortOrder
   inPortfolio?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  score?: Prisma.SortOrder
   scoreUpdatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type PostSumOrderByAggregateInput = {
-  score?: Prisma.SortOrder
 }
 
 export type PostScalarRelationFilter = {
@@ -588,14 +544,6 @@ export type PostUpdatetagsInput = {
 export type PostUpdatemediumsInput = {
   set?: $Enums.PostMedium[]
   push?: $Enums.PostMedium | $Enums.PostMedium[]
-}
-
-export type FloatFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
 }
 
 export type PostCreateNestedOneWithoutArtImagesInput = {
@@ -681,11 +629,11 @@ export type PostUpdateOneRequiredWithoutCommentsNestedInput = {
 export type PostCreateWithoutUserInput = {
   id?: string
   title: string
+  thumbnail: string
   tags?: Prisma.PostCreatetagsInput | string[]
   inPortfolio?: boolean
   mediums?: Prisma.PostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
-  score?: number
   scoreUpdatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -698,11 +646,11 @@ export type PostCreateWithoutUserInput = {
 export type PostUncheckedCreateWithoutUserInput = {
   id?: string
   title: string
+  thumbnail: string
   tags?: Prisma.PostCreatetagsInput | string[]
   inPortfolio?: boolean
   mediums?: Prisma.PostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
-  score?: number
   scoreUpdatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -745,11 +693,11 @@ export type PostScalarWhereInput = {
   id?: Prisma.StringFilter<"Post"> | string
   authorId?: Prisma.StringFilter<"Post"> | string
   title?: Prisma.StringFilter<"Post"> | string
+  thumbnail?: Prisma.StringFilter<"Post"> | string
   tags?: Prisma.StringNullableListFilter<"Post">
   inPortfolio?: Prisma.BoolFilter<"Post"> | boolean
   mediums?: Prisma.EnumPostMediumNullableListFilter<"Post">
   description?: Prisma.StringNullableFilter<"Post"> | string | null
-  score?: Prisma.FloatFilter<"Post"> | number
   scoreUpdatedAt?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Post"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Post"> | Date | string
@@ -758,15 +706,15 @@ export type PostScalarWhereInput = {
 export type PostCreateWithoutArtImagesInput = {
   id?: string
   title: string
+  thumbnail: string
   tags?: Prisma.PostCreatetagsInput | string[]
   inPortfolio?: boolean
   mediums?: Prisma.PostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
-  score?: number
   scoreUpdatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.ProfileCreateNestedOneWithoutArtPostsInput
+  user: Prisma.UserCreateNestedOneWithoutArtPostsInput
   likes?: Prisma.LikeCreateNestedManyWithoutArtPostInput
   Collections?: Prisma.CollectionCreateNestedManyWithoutPostsInput
   comments?: Prisma.CommentCreateNestedManyWithoutArtPostInput
@@ -776,11 +724,11 @@ export type PostUncheckedCreateWithoutArtImagesInput = {
   id?: string
   authorId: string
   title: string
+  thumbnail: string
   tags?: Prisma.PostCreatetagsInput | string[]
   inPortfolio?: boolean
   mediums?: Prisma.PostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
-  score?: number
   scoreUpdatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -808,15 +756,15 @@ export type PostUpdateToOneWithWhereWithoutArtImagesInput = {
 export type PostUpdateWithoutArtImagesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.PostUpdatetagsInput | string[]
   inPortfolio?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mediums?: Prisma.PostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  score?: Prisma.FloatFieldUpdateOperationsInput | number
   scoreUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.ProfileUpdateOneRequiredWithoutArtPostsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutArtPostsNestedInput
   likes?: Prisma.LikeUpdateManyWithoutArtPostNestedInput
   Collections?: Prisma.CollectionUpdateManyWithoutPostsNestedInput
   comments?: Prisma.CommentUpdateManyWithoutArtPostNestedInput
@@ -826,11 +774,11 @@ export type PostUncheckedUpdateWithoutArtImagesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.PostUpdatetagsInput | string[]
   inPortfolio?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mediums?: Prisma.PostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  score?: Prisma.FloatFieldUpdateOperationsInput | number
   scoreUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -842,15 +790,15 @@ export type PostUncheckedUpdateWithoutArtImagesInput = {
 export type PostCreateWithoutCollectionsInput = {
   id?: string
   title: string
+  thumbnail: string
   tags?: Prisma.PostCreatetagsInput | string[]
   inPortfolio?: boolean
   mediums?: Prisma.PostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
-  score?: number
   scoreUpdatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.ProfileCreateNestedOneWithoutArtPostsInput
+  user: Prisma.UserCreateNestedOneWithoutArtPostsInput
   artImages?: Prisma.PostImagesCreateNestedManyWithoutArtPostInput
   likes?: Prisma.LikeCreateNestedManyWithoutArtPostInput
   comments?: Prisma.CommentCreateNestedManyWithoutArtPostInput
@@ -860,11 +808,11 @@ export type PostUncheckedCreateWithoutCollectionsInput = {
   id?: string
   authorId: string
   title: string
+  thumbnail: string
   tags?: Prisma.PostCreatetagsInput | string[]
   inPortfolio?: boolean
   mediums?: Prisma.PostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
-  score?: number
   scoreUpdatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -897,15 +845,15 @@ export type PostUpdateManyWithWhereWithoutCollectionsInput = {
 export type PostCreateWithoutLikesInput = {
   id?: string
   title: string
+  thumbnail: string
   tags?: Prisma.PostCreatetagsInput | string[]
   inPortfolio?: boolean
   mediums?: Prisma.PostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
-  score?: number
   scoreUpdatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.ProfileCreateNestedOneWithoutArtPostsInput
+  user: Prisma.UserCreateNestedOneWithoutArtPostsInput
   artImages?: Prisma.PostImagesCreateNestedManyWithoutArtPostInput
   Collections?: Prisma.CollectionCreateNestedManyWithoutPostsInput
   comments?: Prisma.CommentCreateNestedManyWithoutArtPostInput
@@ -915,11 +863,11 @@ export type PostUncheckedCreateWithoutLikesInput = {
   id?: string
   authorId: string
   title: string
+  thumbnail: string
   tags?: Prisma.PostCreatetagsInput | string[]
   inPortfolio?: boolean
   mediums?: Prisma.PostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
-  score?: number
   scoreUpdatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -947,15 +895,15 @@ export type PostUpdateToOneWithWhereWithoutLikesInput = {
 export type PostUpdateWithoutLikesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.PostUpdatetagsInput | string[]
   inPortfolio?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mediums?: Prisma.PostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  score?: Prisma.FloatFieldUpdateOperationsInput | number
   scoreUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.ProfileUpdateOneRequiredWithoutArtPostsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutArtPostsNestedInput
   artImages?: Prisma.PostImagesUpdateManyWithoutArtPostNestedInput
   Collections?: Prisma.CollectionUpdateManyWithoutPostsNestedInput
   comments?: Prisma.CommentUpdateManyWithoutArtPostNestedInput
@@ -965,11 +913,11 @@ export type PostUncheckedUpdateWithoutLikesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.PostUpdatetagsInput | string[]
   inPortfolio?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mediums?: Prisma.PostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  score?: Prisma.FloatFieldUpdateOperationsInput | number
   scoreUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -981,15 +929,15 @@ export type PostUncheckedUpdateWithoutLikesInput = {
 export type PostCreateWithoutCommentsInput = {
   id?: string
   title: string
+  thumbnail: string
   tags?: Prisma.PostCreatetagsInput | string[]
   inPortfolio?: boolean
   mediums?: Prisma.PostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
-  score?: number
   scoreUpdatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.ProfileCreateNestedOneWithoutArtPostsInput
+  user: Prisma.UserCreateNestedOneWithoutArtPostsInput
   artImages?: Prisma.PostImagesCreateNestedManyWithoutArtPostInput
   likes?: Prisma.LikeCreateNestedManyWithoutArtPostInput
   Collections?: Prisma.CollectionCreateNestedManyWithoutPostsInput
@@ -999,11 +947,11 @@ export type PostUncheckedCreateWithoutCommentsInput = {
   id?: string
   authorId: string
   title: string
+  thumbnail: string
   tags?: Prisma.PostCreatetagsInput | string[]
   inPortfolio?: boolean
   mediums?: Prisma.PostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
-  score?: number
   scoreUpdatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1031,15 +979,15 @@ export type PostUpdateToOneWithWhereWithoutCommentsInput = {
 export type PostUpdateWithoutCommentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.PostUpdatetagsInput | string[]
   inPortfolio?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mediums?: Prisma.PostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  score?: Prisma.FloatFieldUpdateOperationsInput | number
   scoreUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.ProfileUpdateOneRequiredWithoutArtPostsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutArtPostsNestedInput
   artImages?: Prisma.PostImagesUpdateManyWithoutArtPostNestedInput
   likes?: Prisma.LikeUpdateManyWithoutArtPostNestedInput
   Collections?: Prisma.CollectionUpdateManyWithoutPostsNestedInput
@@ -1049,11 +997,11 @@ export type PostUncheckedUpdateWithoutCommentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.PostUpdatetagsInput | string[]
   inPortfolio?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mediums?: Prisma.PostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  score?: Prisma.FloatFieldUpdateOperationsInput | number
   scoreUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1065,11 +1013,11 @@ export type PostUncheckedUpdateWithoutCommentsInput = {
 export type PostCreateManyUserInput = {
   id?: string
   title: string
+  thumbnail: string
   tags?: Prisma.PostCreatetagsInput | string[]
   inPortfolio?: boolean
   mediums?: Prisma.PostCreatemediumsInput | $Enums.PostMedium[]
   description?: string | null
-  score?: number
   scoreUpdatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1078,11 +1026,11 @@ export type PostCreateManyUserInput = {
 export type PostUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.PostUpdatetagsInput | string[]
   inPortfolio?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mediums?: Prisma.PostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  score?: Prisma.FloatFieldUpdateOperationsInput | number
   scoreUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1095,11 +1043,11 @@ export type PostUpdateWithoutUserInput = {
 export type PostUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.PostUpdatetagsInput | string[]
   inPortfolio?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mediums?: Prisma.PostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  score?: Prisma.FloatFieldUpdateOperationsInput | number
   scoreUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1112,11 +1060,11 @@ export type PostUncheckedUpdateWithoutUserInput = {
 export type PostUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.PostUpdatetagsInput | string[]
   inPortfolio?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mediums?: Prisma.PostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  score?: Prisma.FloatFieldUpdateOperationsInput | number
   scoreUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1125,15 +1073,15 @@ export type PostUncheckedUpdateManyWithoutUserInput = {
 export type PostUpdateWithoutCollectionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.PostUpdatetagsInput | string[]
   inPortfolio?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mediums?: Prisma.PostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  score?: Prisma.FloatFieldUpdateOperationsInput | number
   scoreUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.ProfileUpdateOneRequiredWithoutArtPostsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutArtPostsNestedInput
   artImages?: Prisma.PostImagesUpdateManyWithoutArtPostNestedInput
   likes?: Prisma.LikeUpdateManyWithoutArtPostNestedInput
   comments?: Prisma.CommentUpdateManyWithoutArtPostNestedInput
@@ -1143,11 +1091,11 @@ export type PostUncheckedUpdateWithoutCollectionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.PostUpdatetagsInput | string[]
   inPortfolio?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mediums?: Prisma.PostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  score?: Prisma.FloatFieldUpdateOperationsInput | number
   scoreUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1160,11 +1108,11 @@ export type PostUncheckedUpdateManyWithoutCollectionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.PostUpdatetagsInput | string[]
   inPortfolio?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mediums?: Prisma.PostUpdatemediumsInput | $Enums.PostMedium[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  score?: Prisma.FloatFieldUpdateOperationsInput | number
   scoreUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1232,15 +1180,15 @@ export type PostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   id?: boolean
   authorId?: boolean
   title?: boolean
+  thumbnail?: boolean
   tags?: boolean
   inPortfolio?: boolean
   mediums?: boolean
   description?: boolean
-  score?: boolean
   scoreUpdatedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   artImages?: boolean | Prisma.Post$artImagesArgs<ExtArgs>
   likes?: boolean | Prisma.Post$likesArgs<ExtArgs>
   Collections?: boolean | Prisma.Post$CollectionsArgs<ExtArgs>
@@ -1252,49 +1200,49 @@ export type PostSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   authorId?: boolean
   title?: boolean
+  thumbnail?: boolean
   tags?: boolean
   inPortfolio?: boolean
   mediums?: boolean
   description?: boolean
-  score?: boolean
   scoreUpdatedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["post"]>
 
 export type PostSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   authorId?: boolean
   title?: boolean
+  thumbnail?: boolean
   tags?: boolean
   inPortfolio?: boolean
   mediums?: boolean
   description?: boolean
-  score?: boolean
   scoreUpdatedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["post"]>
 
 export type PostSelectScalar = {
   id?: boolean
   authorId?: boolean
   title?: boolean
+  thumbnail?: boolean
   tags?: boolean
   inPortfolio?: boolean
   mediums?: boolean
   description?: boolean
-  score?: boolean
   scoreUpdatedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "authorId" | "title" | "tags" | "inPortfolio" | "mediums" | "description" | "score" | "scoreUpdatedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["post"]>
+export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "authorId" | "title" | "thumbnail" | "tags" | "inPortfolio" | "mediums" | "description" | "scoreUpdatedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["post"]>
 export type PostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   artImages?: boolean | Prisma.Post$artImagesArgs<ExtArgs>
   likes?: boolean | Prisma.Post$likesArgs<ExtArgs>
   Collections?: boolean | Prisma.Post$CollectionsArgs<ExtArgs>
@@ -1302,16 +1250,16 @@ export type PostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   _count?: boolean | Prisma.PostCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PostIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type PostIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $PostPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Post"
   objects: {
-    user: Prisma.$ProfilePayload<ExtArgs>
+    user: Prisma.$UserPayload<ExtArgs>
     artImages: Prisma.$PostImagesPayload<ExtArgs>[]
     likes: Prisma.$LikePayload<ExtArgs>[]
     Collections: Prisma.$CollectionPayload<ExtArgs>[]
@@ -1321,11 +1269,11 @@ export type $PostPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     id: string
     authorId: string
     title: string
+    thumbnail: string
     tags: string[]
     inPortfolio: boolean
     mediums: $Enums.PostMedium[]
     description: string | null
-    score: number
     scoreUpdatedAt: Date | null
     createdAt: Date
     updatedAt: Date
@@ -1723,7 +1671,7 @@ readonly fields: PostFieldRefs;
  */
 export interface Prisma__PostClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.ProfileDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfileDefaultArgs<ExtArgs>>): Prisma.Prisma__ProfileClient<runtime.Types.Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   artImages<T extends Prisma.Post$artImagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Post$artImagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostImagesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   likes<T extends Prisma.Post$likesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Post$likesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   Collections<T extends Prisma.Post$CollectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Post$CollectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CollectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1760,11 +1708,11 @@ export interface PostFieldRefs {
   readonly id: Prisma.FieldRef<"Post", 'String'>
   readonly authorId: Prisma.FieldRef<"Post", 'String'>
   readonly title: Prisma.FieldRef<"Post", 'String'>
+  readonly thumbnail: Prisma.FieldRef<"Post", 'String'>
   readonly tags: Prisma.FieldRef<"Post", 'String[]'>
   readonly inPortfolio: Prisma.FieldRef<"Post", 'Boolean'>
   readonly mediums: Prisma.FieldRef<"Post", 'PostMedium[]'>
   readonly description: Prisma.FieldRef<"Post", 'String'>
-  readonly score: Prisma.FieldRef<"Post", 'Float'>
   readonly scoreUpdatedAt: Prisma.FieldRef<"Post", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Post", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Post", 'DateTime'>

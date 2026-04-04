@@ -1,8 +1,8 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import React, { createContext, useState } from "react"
-import { UserSession } from "@/src/data/dto/userdto";
+import React, { createContext, useContext, useState } from "react"
+import { SessionType } from "@/src/data/dal/getUserSession";
 
 export function QueryProviders({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient({
@@ -20,14 +20,18 @@ export function QueryProviders({ children }: { children: React.ReactNode }) {
   );
 }
 
-export const SessionContext = createContext<Promise<UserSession> | null>(null)
+export const SessionContext = createContext<SessionType>(null)
 
 export function SessionProvider({
   children,
-  sessionPromise
+  session
 }: {
   children: React.ReactNode,
-  sessionPromise: Promise<UserSession>
+  session: SessionType
 }) {
-  return <SessionContext value={sessionPromise} >{children}</SessionContext>
+  return <SessionContext value={session} >{children}</SessionContext>
+}
+
+export function useSession() {
+  return useContext(SessionContext);
 }

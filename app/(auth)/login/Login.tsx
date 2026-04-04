@@ -24,11 +24,14 @@ import { toast } from "sonner";
 import z from "zod";
 import { loginUser } from "@/src/data/dal/auth/queries";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import EmailVerify from "@/src/components/VerifyEmail";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const [email, setEmail] = useState<string | null>(null)
   const router = useRouter();
   const {
     handleSubmit,
@@ -45,21 +48,22 @@ export function LoginForm({
   const onSubmit = async (data: z.infer<typeof authSchema>) => {
     const { success, error } = await loginUser(data);
     if (!success) {
-      toast(error?.toString);
-      if (error === "Email not verified") {
-        toast("email not verified!, email verification link is sent to your gmail, click it to verify your gmail")
-      }
+      toast.error(error);
+      if(error === "email not verified") setEmail(data.email);
     }
     else {
-      toast("Sign in successfull");
+      toast.success("Sign in successfull");
       router.push("/");
     }
   };
+
+  if(email) return <EmailVerify email={email}/>
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="bg-transparent border-0">
         <CardHeader>
-          <CardTitle className="text-center text-2xl font-serif mb-3">Login</CardTitle>
+          <CardTitle className="text-center text-2xl font-sans mb-3">Login</CardTitle>
           <CardDescription className="text-center text-(--text-muted)">
             Enter your email and password to login to your account
           </CardDescription>
@@ -73,7 +77,7 @@ export function LoginForm({
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
                     <FieldLabel htmlFor="email" className="text-(--text-light)">Email</FieldLabel>
-                    <Input {...field} id="email" />
+                    <Input {...field} id="email" className="h-12"/>
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
@@ -94,7 +98,7 @@ export function LoginForm({
                         Forgot your password?
                       </a>
                     </div>
-                    <Input {...field} id="password" type="password"/>
+                    <Input {...field} id="password" type="password" className="h-12"/>
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
@@ -103,10 +107,10 @@ export function LoginForm({
               />
 
               <Field>
-                <Button type="submit" disabled={isSubmitting} className="bg-(--amber) hover:bg-amber-300 transition-all duration-300 hover:-translate-y-1">
+                <Button type="submit" disabled={isSubmitting} className="h-12">
                   Login
                 </Button>
-                <Button variant="outline" type="button" disabled={isSubmitting}>
+                <Button variant="outline" type="button" disabled={isSubmitting} className="h-12">
                   Login with Google
                 </Button>
                 <FieldDescription className="text-center">

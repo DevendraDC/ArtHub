@@ -4,9 +4,9 @@ import { Bookmark, LogOut, Settings, User } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import Link from "next/link"
 
-export function ProfileDropdown({ children, sessionUserId }: { children: React.ReactNode, sessionUserId: string }) {
+export function ProfileDropdown({ children, username }: { children: React.ReactNode, username: string }) {
     const options = [
-        { to: `/profile/${sessionUserId}`, icon: <User />, name: "Your Profile" },
+        { to: `/profile/${username}`, icon: <User />, name: "Your Profile" },
         { to: "/profile", icon: <Bookmark />, name: "Your Collections" },
         { to: "/settings", icon: <Settings />, name: "Settings" },
         { to: "/profile", icon: <LogOut />, name: "Logout" },

@@ -10,7 +10,6 @@ export const authSchema = z.object({
 
 export const profileSchema = z
   .object({
-    userId: z.string(),
     artistName: z
       .string()
       .min(6, "Name must be atleast 6 characters long")

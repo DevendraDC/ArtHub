@@ -29,7 +29,6 @@ export function sessionDTO(session: Session) {
     name: session?.user.name,
     username: session?.user.username,
     image: session?.user.image,
-    profileCreated: session?.user.profileCreated,
     email: session?.user.email
   };
 }

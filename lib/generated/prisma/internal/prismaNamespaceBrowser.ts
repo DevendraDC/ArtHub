@@ -52,7 +52,6 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
-  Profile: 'Profile',
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
@@ -86,18 +85,8 @@ export const UserScalarFieldEnum = {
   name: 'name',
   username: 'username',
   email: 'email',
-  profileCreated: 'profileCreated',
   emailVerified: 'emailVerified',
   image: 'image',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
-
-
-export const ProfileScalarFieldEnum = {
-  profileId: 'profileId',
   bio: 'bio',
   portfolio: 'portfolio',
   location: 'location',
@@ -105,7 +94,7 @@ export const ProfileScalarFieldEnum = {
   updatedAt: 'updatedAt'
 } as const
 
-export type ProfileScalarFieldEnum = (typeof ProfileScalarFieldEnum)[keyof typeof ProfileScalarFieldEnum]
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
 export const SessionScalarFieldEnum = {
@@ -166,11 +155,11 @@ export const PostScalarFieldEnum = {
   id: 'id',
   authorId: 'authorId',
   title: 'title',
+  thumbnail: 'thumbnail',
   tags: 'tags',
   inPortfolio: 'inPortfolio',
   mediums: 'mediums',
   description: 'description',
-  score: 'score',
   scoreUpdatedAt: 'scoreUpdatedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

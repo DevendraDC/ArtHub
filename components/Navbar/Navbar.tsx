@@ -1,15 +1,15 @@
 "use server"
 
-import { getUserSession } from "@/src/data/dal/getUserSession"
+import { getUserSession, SessionType } from "@/src/data/dal/getUserSession"
 import { Bell, Bookmark, Compass, PlusIcon } from "lucide-react"
 import Link from "next/link"
 import { ProfileDropdown } from "./ProfileDropdown"
 import { SearchBarDropdown } from "./SearchBarDropdown"
 import Image from "next/image"
+import { UserSession } from "@/src/data/dto/userdto"
+import { Button } from "../ui/button"
 
-export default async function Navbar() {
-    const session = await getUserSession()
-    if(!session || !session.userId) return null;
+export default async function Navbar({ session }: { session: SessionType }) {
     const navOptions = [
         // {
         //     icon: <LayoutGrid size={18} />,
@@ -33,7 +33,7 @@ export default async function Navbar() {
         }
     ]
     return (
-        <div className="bg-[#111111] border-2 border-blue-200/12 w-full backdrop-blur-lg rounded-xl flex items-center justify-around">
+        <div className="bg-[#111111] border-2 border-blue-200/12 p-2 w-full backdrop-blur-lg rounded-xl flex items-center justify-around">
             <div className="flex items-center gap-10">
                 {/* <div className="bg-gradient-to-r text-3xl flex flex-col font-semibold items-center font-serif ml-10 from-[#AFA9EC] via-[#7F77DD] to-[#3B8BD4] bg-clip-text text-transparent">
                     <div>ArtHub</div>
@@ -55,20 +55,41 @@ export default async function Navbar() {
             </div>
             <div className="flex gap-20 items-center">
                 <SearchBarDropdown />
+                <NavAuth session={session} />
 
-                <div className="flex items-center gap-10 mr-5">
-                    <Link href={"/create-post"} className="hover-col cursor-pointer"><button className="bg-blue-700 py-1 px-2 text-sm text-blue-200 hover:shadow-[0px_0px_40px] transition-all duration-300 hover:shadow-blue-400/40 flex items-center rounded-sm"><PlusIcon className="inline w-4 h-4" /> Post</button></Link>
-                    <ProfileDropdown sessionUserId={session.userId}>
-                        <div className="flex gap-2 p-2 items-center hover:bg-white/5">
-                            {session.image && <Image src={session.image} width={40} height={40} className="object-cover rounded-full" alt="" />}
-                            {session.profileCreated && <div>
-                                <div className="font-serif text-sm">{session.name}</div>
-                                <div className="text-xs text-blue-200/42">{session.username}</div>
-                            </div>}
-                        </div>
-                    </ProfileDropdown>
-                </div>
             </div>
         </div>
     )
+}
+
+
+function NavAuth({ session }: { session: SessionType }) {
+    if (!session) {
+        return (
+            <div className="flex gap-4 text-sm ">
+                <Link href={"/login"}><button className="bg-white cursor-pointer rounded-lg p-1 px-2 font-semibold text-black">Login</button></Link>
+                <Link href={"/signup"}><button className="bg-blue-700 cursor-pointer p-1 px-2 rounded-lg">Signup</button></Link>
+            </div>
+        )
+    }
+    else if (session && (!session.user.username || !session.user.name)) {
+        return (
+            <Link href={"/settings"}><Button className="text-sm">Setup Profile</Button></Link>
+        )
+    }
+    else {
+
+        return (<div className="flex items-center gap-10 mr-5">
+            <Link href={"/create-post"} className="hover-col cursor-pointer"><button className="bg-blue-700 py-1 px-2 text-sm text-blue-200 hover:shadow-[0px_0px_40px] transition-all duration-300 hover:shadow-blue-400/40 flex items-center rounded-sm"><PlusIcon className="inline w-4 h-4" /> Post</button></Link>
+            <ProfileDropdown username={session.user.username ?? ""}>
+                <div className="flex gap-2 p-2 items-center hover:bg-white/5">
+                    {session.user.image && <Image src={session.user.image} width={40} height={40} className="object-cover rounded-full" alt="" />}
+                    <div>
+                        <div className="font-serif text-sm">{session.user.name}</div>
+                        <div className="text-xs text-blue-200/42">{session.user.username}</div>
+                    </div>
+                </div>
+            </ProfileDropdown>
+        </div>)
+    }
 }

@@ -1,49 +1,104 @@
 "use server";
 
 import { prisma } from "@/src/lib/prisma";
-import { getUserSession } from "../getUserSession";
 import { cache } from "react";
 import { PostMedium } from "@/src/lib/generated/prisma/enums";
 import { unstable_cache } from "next/cache";
 import { headers } from "next/headers";
+import { Prisma } from "@/src/lib/generated/prisma/client";
 
-export const getPosts = cache(async (filter: number) => {
-  try {
-    const userId = (await headers()).get("x-user-id");
-    if (!userId) throw new Error("session not found");
-    return await prisma.post.findMany({
-      select: {
-        id: true,
-        createdAt: true,
-        mediums: true,
-        tags: true,
-        user: {
-          select: {
-            profileId: true,
-            user: {
-              select: {
-                name: true,
-                username: true,
-                image: true,
+export type PostWithUser = {
+  id: string;
+  thumbnail: string;
+  tags: string[];
+  mediums: PostMedium[];
+  createdAt: Date;
+  user: {
+    id: string;
+    name: string | null;
+    username: string | null;
+    image: string | null;
+  };
+};
+
+export const getPosts = cache(
+  async (filter: number, cursor?: string, take = 20) => {
+    try {
+      switch (filter) {
+        case 1: {
+          const posts = await prisma.post.findMany({
+            take: take + 1, 
+            ...(cursor && {
+              cursor: { id: cursor },
+              skip: 1, 
+            }),
+            select: {
+              id: true,
+              thumbnail: true,
+              createdAt: true,
+              mediums: true,
+              tags: true,
+              user: {
+                select: { id: true, name: true, username: true, image: true },
               },
             },
-          },
-        },
-        artImages: {
-          orderBy: { order: "asc" },
-          take: 1,
-          select: { url: true },
-        },
-      },
+            orderBy: { createdAt: "desc" },
+          });
 
-      orderBy:
-        filter === 0 ? { score: "desc" } : { createdAt: "desc" },
-    });
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
-});
+          const hasNextPage = posts.length > take;
+          const data = hasNextPage ? posts.slice(0, -1) : posts; 
+          const nextCursor = hasNextPage ? data[data.length - 1].id : null;
+
+          return { data, nextCursor };
+        }
+
+        case 0: {
+          const posts = await prisma.$queryRaw<PostWithUser[]>`
+          SELECT
+            p.id,
+            p.thumbnail,
+            p."createdAt",
+            p.mediums,
+            p.tags,
+            json_build_object(
+              'id', u.id,
+              'name', u.name,
+              'username', u.username,
+              'image', u.image
+            ) AS user,
+            (
+              (COUNT(DISTINCT l."ownerId") * 3) +
+              (COUNT(DISTINCT c."ownerId") * 2)
+            ) / (
+              EXTRACT(EPOCH FROM (NOW() - p."createdAt")) / 3600 + 2
+            ) AS score
+          FROM "post" p
+          LEFT JOIN "user" u ON u.id = p."authorId"
+          LEFT JOIN "like" l ON l."artPostId" = p.id
+          LEFT JOIN "comment" c ON c."artPostId" = p.id
+          WHERE p."createdAt" > NOW() - INTERVAL '7 days'
+          ${cursor ? Prisma.sql`AND p.id < ${cursor}` : Prisma.empty}
+          GROUP BY p.id, u.id
+          ORDER BY score DESC
+          LIMIT ${take + 1}
+        `;
+
+          const hasNextPage = posts.length > take;
+          const data = hasNextPage ? posts.slice(0, -1) : posts;
+          const nextCursor = hasNextPage ? data[data.length - 1].id : null;
+
+          return { data, nextCursor };
+        }
+
+        default:
+          return { data: [], nextCursor: null };
+      }
+    } catch (error) {
+      console.error(error);
+      return { data: [], nextCursor: null };
+    }
+  },
+);
 
 export type Posts = Awaited<ReturnType<typeof getPosts>>;
 
@@ -66,7 +121,7 @@ export const getPostDetails = cache(async (postId: string) => {
         },
         user: {
           select: {
-            profileId: true,
+            id: true,
             followers: {
               where: {
                 followerId: userId,

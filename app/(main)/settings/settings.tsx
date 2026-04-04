@@ -24,14 +24,28 @@ import { ProfileSettingsData, usernameExist } from "@/src/data/dal/User/queries"
 import { cloudinaryTransform } from "@/src/utils/cloudinaryTransform";
 import { uploadImage } from "@/src/lib/cloudinaryFunctions";
 import { Spinner } from "@/src/components/ui/spinner";
+import { useSession } from "../Providers";
 
 
-export default function Settings({ profileData }: { profileData: ProfileSettingsData }) {
+type data = {
+    userId: string | null;
+    username: string | null;
+    name: string | null;
+    email: string | null;
+    image: string | null;
+    bio: string | null;
+    portfolio: string | null;
+    location: string | null;
+}
+
+export default function Settings() {
     const router = useRouter()
-    const { data } = profileData;
+    const session = useSession();
+    if(!session || !session.user) return null;
+    const { username, name, bio, image, email, portfolio, location, id } = session.user;
     const uploadFileRef = useRef<HTMLInputElement | null>(null);
     const [avatar, setAvatar] = useState<File | null>(null);
-    const avatarPreview = data?.image;
+    const avatarPreview = image;
     const [openImageCrop, setOpenImageCrop] = useState(false);
     const avatarBlobUrl = useMemo(() => avatar ? URL.createObjectURL(avatar) : null, [avatar]);
     const {
@@ -42,17 +56,19 @@ export default function Settings({ profileData }: { profileData: ProfileSettings
         resolver: zodResolver(profileSchema),
         mode: "onChange",
         defaultValues: {
-            artistName: data?.name,
-            username: data?.profileCreated ? data.username : "",
-            bio: data?.profile?.bio ?? "",
-            portfolio: data?.profile?.portfolio ?? "",
-            location: data?.profile?.location ?? ""
+            artistName: name ?? "",
+            username: username ?? "",
+            bio: bio ?? "",
+            portfolio: portfolio ?? "",
+            location: location ?? ""
         },
     });
 
     const formSubmit = async (resolvedData: z.infer<typeof profileSchema>) => {
+        if(!id) return;
+        console.log("hello")
         const userData = {
-            id: resolvedData.userId,
+            id: id,
             name: resolvedData.artistName,
             username: resolvedData.username,
             bio: resolvedData.bio ?? "",
@@ -60,16 +76,16 @@ export default function Settings({ profileData }: { profileData: ProfileSettings
             portfolio: resolvedData.portfolio,
             location: resolvedData.location
         }
-        if (!data?.profileCreated || data.username !== userData.username) {
+        if (username !== userData.username) {
             const res = await usernameExist(userData.username);
             if (res) {
-                toast("username already exist!");
+                toast.error("username already exist!");
                 return;
             }
         }
         if (avatar) {
             const profileImage = await uploadImage(avatar);
-            userData.image = profileImage;
+            userData.image = profileImage.secure_url;
         }
 
         const { success, error } = await updateUser(userData)
@@ -87,7 +103,7 @@ export default function Settings({ profileData }: { profileData: ProfileSettings
         <div className="w-full flex justify-center p-5 bg-transparent">
             <div className="w-[45%] flex flex-col gap-7">
                 <div className="ProfilePictureUpload flex flex-col justify-center gap-5">
-                    <div className="text-3xl mb-10 font-sans">Change <span className="text-(--bl2)">Profile</span></div>
+                    <div className="text-3xl mb-10 font-sans"><span className="text-blue-400">Profile</span> Settings</div>
                     {avatarPreview && (
                         <div className="flex flex-col items-center gap-8">
                             <img
@@ -161,7 +177,7 @@ export default function Settings({ profileData }: { profileData: ProfileSettings
 
                                 <Field>
                                     <FieldLabel htmlFor="email">Email</FieldLabel>
-                                    <Input value={data?.email} disabled />
+                                    <Input value={email ?? ""} disabled />
                                     <FieldDescription>User email cannot be changed</FieldDescription>
                                 </Field>
                                 <Controller

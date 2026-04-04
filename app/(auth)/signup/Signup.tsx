@@ -22,8 +22,11 @@ import { authSchema } from "@/src/validators/user"
 import z from "zod"
 import { toast } from "sonner"
 import { signupUser } from "@/src/data/dal/auth/queries"
+import { useState } from "react"
+import EmailVerify from "@/src/components/VerifyEmail"
 
 export function SignupForm() {
+  const [email, setEmail] = useState<string | null>(null);
   const { handleSubmit, control, formState: { isSubmitting } } = useForm({
     resolver: zodResolver(authSchema),
     defaultValues: {
@@ -33,14 +36,17 @@ export function SignupForm() {
   })
 
   const onSubmit = async (data: z.infer<typeof authSchema>) => {
-    const { success, error } = await signupUser(data)
+    const { success } = await signupUser(data)
     if (success) {
-      toast("email verification link is sent to your gmail")
+      toast.success("email verification link is sent to your gmail")
+      setEmail(data.email);
     }
     else {
-      toast(error?.toString)
+      toast.error("User with this email already exists")
     }
   }
+
+  if(email) return <EmailVerify email={email}/>
 
   return (
     <Card className="bg-transparent border-0">
@@ -62,6 +68,7 @@ export function SignupForm() {
                   <Input
                     {...field}
                     id="email"
+                    className="h-12"
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -75,7 +82,7 @@ export function SignupForm() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="password">Password</FieldLabel>
-                  <Input {...field} id="password" type="password" />
+                  <Input {...field} id="password" type="password" className="h-12" />
                   <FieldDescription>
                     Must be at least 8 characters long.
                   </FieldDescription>
@@ -88,8 +95,8 @@ export function SignupForm() {
 
             <FieldGroup>
               <Field>
-                <Button type="submit" disabled={isSubmitting}>Create Account</Button>
-                <Button variant="outline" type="button" disabled={isSubmitting}>
+                <Button type="submit" disabled={isSubmitting} className="h-12">Create Account</Button>
+                <Button variant="outline" type="button" disabled={isSubmitting} className="h-12">
                   Sign up with Google
                 </Button>
                 <FieldDescription className="px-6 text-center">

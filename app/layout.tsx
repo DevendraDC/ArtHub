@@ -27,17 +27,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark box-border">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-(--bg)`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black`}
       >
         <NextTopLoader />
-        <Toaster position="top-center" theme="dark" toastOptions={{
-          style: {
-            boxShadow: "0 0 50px rgba(96, 165, 250, 0.3)",
-            border: "1px solid rgba(96, 165, 250, 0.3)",
-            background: "#0f172a",
-            color: "#fff",
-          },
-        }} />
+        <Toaster position="top-center" theme="dark" />
         {children}
       </body>
     </html>

@@ -190,7 +190,7 @@ export type CollectionWhereInput = {
   view?: Prisma.EnumCollectionViewFilter<"Collection"> | $Enums.CollectionView
   createdAt?: Prisma.DateTimeFilter<"Collection"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Collection"> | Date | string
-  user?: Prisma.XOR<Prisma.ProfileScalarRelationFilter, Prisma.ProfileWhereInput>
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   posts?: Prisma.PostListRelationFilter
 }
 
@@ -201,7 +201,7 @@ export type CollectionOrderByWithRelationInput = {
   view?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  user?: Prisma.ProfileOrderByWithRelationInput
+  user?: Prisma.UserOrderByWithRelationInput
   posts?: Prisma.PostOrderByRelationAggregateInput
 }
 
@@ -215,7 +215,7 @@ export type CollectionWhereUniqueInput = Prisma.AtLeast<{
   view?: Prisma.EnumCollectionViewFilter<"Collection"> | $Enums.CollectionView
   createdAt?: Prisma.DateTimeFilter<"Collection"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Collection"> | Date | string
-  user?: Prisma.XOR<Prisma.ProfileScalarRelationFilter, Prisma.ProfileWhereInput>
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   posts?: Prisma.PostListRelationFilter
 }, "id">
 
@@ -249,7 +249,7 @@ export type CollectionCreateInput = {
   view?: $Enums.CollectionView
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.ProfileCreateNestedOneWithoutCollectionsInput
+  user: Prisma.UserCreateNestedOneWithoutCollectionsInput
   posts?: Prisma.PostCreateNestedManyWithoutCollectionsInput
 }
 
@@ -269,7 +269,7 @@ export type CollectionUpdateInput = {
   view?: Prisma.EnumCollectionViewFieldUpdateOperationsInput | $Enums.CollectionView
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.ProfileUpdateOneRequiredWithoutCollectionsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutCollectionsNestedInput
   posts?: Prisma.PostUpdateManyWithoutCollectionsNestedInput
 }
 
@@ -492,7 +492,7 @@ export type CollectionCreateWithoutPostsInput = {
   view?: $Enums.CollectionView
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.ProfileCreateNestedOneWithoutCollectionsInput
+  user: Prisma.UserCreateNestedOneWithoutCollectionsInput
 }
 
 export type CollectionUncheckedCreateWithoutPostsInput = {
@@ -565,7 +565,7 @@ export type CollectionUpdateWithoutPostsInput = {
   view?: Prisma.EnumCollectionViewFieldUpdateOperationsInput | $Enums.CollectionView
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.ProfileUpdateOneRequiredWithoutCollectionsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutCollectionsNestedInput
 }
 
 export type CollectionUncheckedUpdateWithoutPostsInput = {
@@ -624,7 +624,7 @@ export type CollectionSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   view?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   posts?: boolean | Prisma.Collection$postsArgs<ExtArgs>
   _count?: boolean | Prisma.CollectionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["collection"]>
@@ -636,7 +636,7 @@ export type CollectionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   view?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["collection"]>
 
 export type CollectionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -646,7 +646,7 @@ export type CollectionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   view?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["collection"]>
 
 export type CollectionSelectScalar = {
@@ -660,21 +660,21 @@ export type CollectionSelectScalar = {
 
 export type CollectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "ownerId" | "view" | "createdAt" | "updatedAt", ExtArgs["result"]["collection"]>
 export type CollectionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   posts?: boolean | Prisma.Collection$postsArgs<ExtArgs>
   _count?: boolean | Prisma.CollectionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CollectionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type CollectionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $CollectionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Collection"
   objects: {
-    user: Prisma.$ProfilePayload<ExtArgs>
+    user: Prisma.$UserPayload<ExtArgs>
     posts: Prisma.$PostPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1078,7 +1078,7 @@ readonly fields: CollectionFieldRefs;
  */
 export interface Prisma__CollectionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.ProfileDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfileDefaultArgs<ExtArgs>>): Prisma.Prisma__ProfileClient<runtime.Types.Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   posts<T extends Prisma.Collection$postsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Collection$postsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.

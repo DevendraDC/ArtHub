@@ -2,31 +2,31 @@
 
 import Image from "next/image";
 import { postTime } from "@/src/utils/postUtils";
-import { Posts } from "@/src/data/dal/Post/queries";
+import { Posts, PostWithUser } from "@/src/data/dal/Post/queries";
 import Link from "next/link";
 import { cloudinaryTransform } from "@/src/utils/cloudinaryTransform";
 import { motion } from "motion/react"
 import { memo } from "react";
 import { usePostStore } from "@/src/store/usePostStore";
 
-const PostsView = memo(function PostsView({ posts }: { posts: Posts }) {
+const PostsView = memo(function PostsView({ posts }: { posts: PostWithUser[] }) {
     const setPreview = usePostStore((s) => s.setPreview)
     return (
         <div>
             <div className="grid grid-cols-6 gap-4">
                 {posts.map((post) => {
-                    const url = post.artImages[0].url;
+                    const url = post.thumbnail;
                     const previewUrl = cloudinaryTransform(url, "f_auto,q_auto,w_370,c_limit")
                     const previewData = {
                         id: post.id,
-                        thumbnail: post.artImages[0].url,
+                        thumbnail: post.thumbnail,
                         tags: post.tags,
                         mediums: post.mediums,
                         user: {
                             id: post.id,
-                            name: post.user.user.name,
-                            image: post.user.user.image ?? "",
-                            username: post.user.user.username ?? ""
+                            name: post.user.name,
+                            image: post.user.image ?? "",
+                            username: post.user.username ?? ""
                         }
                     }
                     return (
@@ -51,9 +51,9 @@ const PostsView = memo(function PostsView({ posts }: { posts: Posts }) {
                                 >
                                     <div className="flex text-xs justify-between items-center">
                                         <div className="flex gap-3 items-center">
-                                            {post.user.user.image && (
+                                            {post.user.image && (
                                                 <Image
-                                                    src={post.user.user.image}
+                                                    src={post.user.image}
                                                     alt=""
                                                     width={40}
                                                     height={40}
@@ -61,9 +61,9 @@ const PostsView = memo(function PostsView({ posts }: { posts: Posts }) {
                                                 />
                                             )}
                                             <div className="flex flex-col">
-                                                <div className="text-sm">{post.user.user.name}</div>
+                                                <div className="text-sm">{post.user.name}</div>
                                                 <div className="text-xs text-blue-100/40">
-                                                    {post.user.user.username}
+                                                    {post.user.username}
                                                 </div>
                                             </div>
                                         </div>

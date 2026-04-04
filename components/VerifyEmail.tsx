@@ -1,0 +1,72 @@
+"use client"
+
+import { useState } from "react";
+import { Button } from "./ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import { Field, FieldGroup } from "./ui/field";
+import {
+    InputOTP,
+    InputOTPGroup,
+    InputOTPSlot,
+} from "./ui/input-otp"
+import { toast } from "sonner";
+import { verifyEmail } from "../data/dal/auth/queries";
+import { useRouter } from "next/navigation";
+
+
+
+export default function EmailVerify({ email }: { email: string }) {
+    const router = useRouter()
+    const [code, setCode] = useState("")
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const formSubmit = async (e: React.SubmitEvent) => {
+        setIsSubmitting(true)
+        e.preventDefault()
+        if (code.length !== 6) {
+            toast("please enter the complete verification code")
+            setIsSubmitting(false);
+            return;
+        }
+        const { success, error } = await verifyEmail(code, email)
+        if (!success) {
+            toast.error(error);
+            setIsSubmitting(false)
+            return;
+        }
+        else {
+            toast.success("User verified successfully")
+            router.push("/")
+        }
+    }
+    return (
+        <Card className="bg-transparent border-0">
+            <CardHeader>
+                <CardTitle className="text-center mb-5 text-2xl">Verify your account</CardTitle>
+                <CardDescription className="">Enter the 6 digit verification code send to your email address <span className="text-blue-500">{email}</span> in order to verify your account</CardDescription>
+            </CardHeader>
+            <CardContent className="w-full">
+                <form id="verify-email" onSubmit={formSubmit}>
+                    <FieldGroup>
+                        <Field>
+                            <InputOTP maxLength={6} value={code} onChange={e => setCode(e)}>
+                                <InputOTPGroup className="w-full">
+                                    {[0, 1, 2, 3, 4, 5].map((key) => (
+                                        <InputOTPSlot index={key} key={key} className="h-16 text-xl w-full" />
+                                    ))}
+                                </InputOTPGroup>
+                            </InputOTP>
+                        </Field>
+                        <FieldGroup>
+                            <Field className="text-sm w-fit text-white/60 underline cursor-pointer hover:text-white transition-colors duration-200">Resend code</Field>
+                            <Field>
+                                <Button type="submit" form="verify-email" disabled={code.length !== 6 || isSubmitting}>Verify</Button>
+                            </Field>
+                        </FieldGroup>
+
+                    </FieldGroup>
+
+                </form>
+            </CardContent>
+        </Card>
+    )
+}

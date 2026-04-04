@@ -9,5 +9,7 @@ export const getUserSession = cache(async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-  return sessionDTO(session);
+  return session;
 });
+
+export type SessionType = Awaited<ReturnType<typeof getUserSession>>;

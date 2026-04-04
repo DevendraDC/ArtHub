@@ -21,23 +21,11 @@ export const updateUser = async (userData: userData) => {
       },
       data: {
         ...(userData.image && { image: userData.image }),
-        profileCreated: true,
         name: userData.name,
         username: userData.username,
-        profile: {
-          upsert: {
-            create: {
-              bio: userData.bio,
-              portfolio: userData.portfolio,
-              location: userData.location,
-            },
-            update: {
-              bio: userData.bio,
-              portfolio: userData.portfolio,
-              location: userData.location,
-            },
-          },
-        },
+        bio: userData.bio,
+        portfolio: userData.portfolio,
+        location: userData.location,
       },
     });
 

@@ -2,43 +2,34 @@
 
 import { prisma } from "@/src/lib/prisma";
 import { getUserSession } from "../getUserSession";
-import { unstable_cache } from "next/cache";
 import { cache } from "react";
 
-export const getProfileSettingsData = async () => {
+
+
+export const getProfileSettingsData = cache(async (userId: string) => {
   try {
-    const userSession = await getUserSession();
-    if (!userSession.userId) throw new Error("Session not found");
-    const data = await unstable_cache(
-      async (userId: string) => {
-        return await prisma.user.findUnique({
-          where: { id: userId },
-          select: {
-            id: true,
-            name: true,
-            image: true,
-            email: true,
-            username: true,
-            profileCreated: true,
-            profile: {
-              select: {
-                bio: true,
-                portfolio: true,
-                location: true,
-              },
-            },
-          },
-        });
+    const session = await getUserSession();
+    if (!session || !session.user.id) throw new Error("Session not found");
+    const data = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        name: true,
+        image: true,
+        email: true,
+        username: true,
+        bio: true,
+        portfolio: true,
+        location: true,
       },
-      [userSession.userId],
-    )(userSession.userId);
+    });
 
     return { success: true, data };
   } catch (error) {
     console.error(error);
     return { success: false };
   }
-};
+});
 export type ProfileSettingsData = Awaited<
   ReturnType<typeof getProfileSettingsData>
 >;
@@ -46,9 +37,10 @@ export type ProfileSettingsData = Awaited<
 export const getUserData2 = async () => {
   try {
     const session = await getUserSession();
-    const data = await prisma.profile.findUnique({
+    if (!session || !session.user.id) throw new Error("Session not found");
+    const data = await prisma.user.findUnique({
       where: {
-        profileId: session.userId,
+        id: session.userId,
       },
       select: {
         bio: true,
@@ -82,12 +74,12 @@ export const usernameExist = async (username: string) => {
   return !!user;
 };
 
-export const getUser = cache(async (userId: string) => {
+export const getProfile = cache(async (username: string) => {
   try {
     const session = await getUserSession();
     const user = await prisma.user.findUnique({
       where: {
-        id: userId,
+        username,
       },
       select: {
         id: true,
@@ -128,4 +120,4 @@ export const getUser = cache(async (userId: string) => {
   }
 });
 
-export type UserProfile = Awaited<ReturnType<typeof getUser>>;
+export type UserProfile = Awaited<ReturnType<typeof getProfile>>;

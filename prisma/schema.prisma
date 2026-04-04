@@ -13,6 +13,7 @@ datasource db {
 enum Role {
   ADMIN
   USER
+  RECRUITER
 }
 
 enum CollectionView {
@@ -41,41 +42,30 @@ enum PostMedium {
 }
 
 model User {
-  id             String    @id
-  role           Role      @default(USER)
-  name           String
-  username       String    @unique
-  email          String    @unique
-  profileCreated Boolean   @default(false)
-  emailVerified  Boolean   @default(false)
-  image          String?   @default("https://res.cloudinary.com/dailhnvvl/image/upload/v1771605999/pfpdefault_omrkpw.png")
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  sessions       Session[]
-  accounts       Account[]
-  profile        Profile?
+  id            String       @id
+  role          Role         @default(USER)
+  name          String?
+  username      String?      @unique
+  email         String       @unique
+  emailVerified Boolean      @default(false)
+  image         String?      @default("https://res.cloudinary.com/dailhnvvl/image/upload/v1771605999/pfpdefault_omrkpw.png")
+  bio           String?
+  portfolio     String?
+  location      String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+  followers     Follow[]     @relation("followers")
+  following     Follow[]     @relation("following")
+  artPosts      Post[]
+  collections   Collection[]
+  likes         Like[]
+  comments      Comment[]
 
   @@index([email])
   @@index([username])
   @@map("user")
-}
-
-model Profile {
-  profileId   String       @id @unique
-  user        User         @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  bio         String?
-  portfolio   String?
-  location    String?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @default(now())
-  followers   Follow[]     @relation("followers")
-  following   Follow[]     @relation("following")
-  artPosts    Post[]
-  collections Collection[]
-  likes       Like[]
-  comments    Comment[]
-
-  @@map("profile")
 }
 
 model Session {
@@ -130,23 +120,23 @@ model Follow {
   followerId  String
   followingId String
 
-  follower  Profile @relation("following", fields: [followerId], references: [profileId], onDelete: Cascade)
-  following Profile @relation("followers", fields: [followingId], references: [profileId], onDelete: Cascade)
+  follower  User @relation("following", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("followers", fields: [followingId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
   @@unique([followerId, followingId])
   @@index([followerId])
   @@index([followingId])
-  @@index([followingId, followerId])
   @@map("follow")
 }
 
 model Post {
   id             String       @id @default(uuid())
   authorId       String
-  user           Profile      @relation(fields: [authorId], references: [profileId], onDelete: Cascade)
+  user           User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
   title          String
+  thumbnail      String
   artImages      PostImages[]
   tags           String[]
   inPortfolio    Boolean      @default(false)
@@ -155,7 +145,6 @@ model Post {
   likes          Like[]
   Collections    Collection[]
   comments       Comment[]
-  score          Float        @default(0)
   scoreUpdatedAt DateTime?
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @default(now())
@@ -163,7 +152,6 @@ model Post {
   @@index([authorId])
   @@index([createdAt(sort: Desc)])
   @@index([authorId, createdAt(sort: Desc)])
-  @@index([score(sort: Desc)])
   @@map("post")
 }
 
@@ -177,7 +165,7 @@ model PostImages {
   createdAt     DateTime @default(now())
 
   @@unique([postId, order])
-  @@index([postId, order])
+  @@index([postId])
   @@map("post_images")
 }
 
@@ -186,7 +174,7 @@ model Collection {
   name    String
   ownerId String
   view    CollectionView @default(PUBLIC)
-  user    Profile        @relation(fields: [ownerId], references: [profileId], onDelete: Cascade)
+  user    User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   posts   Post[]
 
   createdAt DateTime @default(now())
@@ -200,7 +188,7 @@ model Like {
   artPostId String
   ownerId   String
   artPost   Post     @relation(fields: [artPostId], references: [id], onDelete: Cascade)
-  user      Profile  @relation(fields: [ownerId], references: [profileId], onDelete: Cascade)
+  user      User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 
   @@unique([artPostId, ownerId])
@@ -216,7 +204,7 @@ model Comment {
   likes     Int       @default(0)
   replies   Comment[] @relation("replies")
   artPost   Post      @relation(fields: [artPostId], references: [id], onDelete: Cascade)
-  user      Profile   @relation(fields: [ownerId], references: [profileId], onDelete: Cascade)
+  user      User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   comment   Comment?  @relation("replies", fields: [commentId], references: [id])
   commentId String?
   createdAt DateTime  @default(now())
