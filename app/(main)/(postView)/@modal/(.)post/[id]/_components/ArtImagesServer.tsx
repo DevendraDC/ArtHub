@@ -1,6 +1,6 @@
 "use server"
 
-import { getArtImages } from "@/src/data/dal/Post/queries";
+import { getArtImages } from "@/data/dal/Post/queries";
 import ArtImagesClient from "./ArtImagesClient";
 
 export default async function ArtImagesServer({ params }: { params: Promise<{ id: string }> }) {

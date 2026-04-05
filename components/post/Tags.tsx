@@ -1,6 +1,6 @@
 import { ChangeEvent } from "react";
 import { X } from "lucide-react";
-import { Controller } from "@/src/utils/types/controller";
+import { Controller } from "@/utils/types/controller";
 
 
 export function SelectTags({tagsController} : {tagsController : Controller<string[]>}) {

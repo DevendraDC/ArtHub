@@ -7,7 +7,7 @@ import {
   ComboboxInput,
   ComboboxItem,
   ComboboxList,
-} from "@/src/components/ui/combobox"
+} from "@/components/ui/combobox"
 import { ChevronDownIcon } from "lucide-react"
 import { Dispatch, SetStateAction, useState } from "react"
 

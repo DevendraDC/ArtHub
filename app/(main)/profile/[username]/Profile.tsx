@@ -1,7 +1,7 @@
 "use server"
 
-import { UserProfile } from "@/src/data/dal/User/queries";
-import { cloudinaryTransform } from "@/src/utils/cloudinaryTransform";
+import { UserProfile } from "@/data/dal/User/queries";
+import { cloudinaryTransform } from "@/utils/cloudinaryTransform";
 import Image from "next/image";
 import Link from "next/link";
 import Tabs from "./_components/Tabs";

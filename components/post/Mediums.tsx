@@ -1,5 +1,5 @@
-import { PostMedium } from "@/src/lib/generated/prisma/enums";
-import { Controller } from "@/src/utils/types/controller";
+import { PostMedium } from "@/lib/generated/prisma/enums";
+import { Controller } from "@/utils/types/controller";
 
 export function SelectMediums({ mediumsController }: { mediumsController : Controller<PostMedium[]>}) {
     const {value, setValue} = mediumsController;

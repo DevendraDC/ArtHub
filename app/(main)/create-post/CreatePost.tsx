@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { postUpload } from "@/src/data/dal/Post/mutations";
+import { postUpload } from "@/data/dal/Post/mutations";
 import { useRouter } from 'nextjs-toploader/app';
-import { Spinner } from "@/src/components/ui/spinner";
+import { Spinner } from "@/components/ui/spinner";
 import { motion } from "motion/react"
-import { PostMedium } from "@/src/lib/generated/prisma/enums";
-import { createPostSchemaClient, ZodTreeError } from "@/src/validators/post";
-import { uploadMultipleImages } from "@/src/lib/cloudinaryFunctions";
+import { PostMedium } from "@/lib/generated/prisma/enums";
+import { createPostSchemaClient, ZodTreeError } from "@/validators/post";
+import { uploadMultipleImages } from "@/lib/cloudinaryFunctions";
 import PostImagesUpload from "./_components/ImagesUpload";
 import PostOtherDetails from "./_components/OtherDetails";
 import z from "zod";

@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/src/lib/better-auth/auth";
+import { auth } from "@/lib/better-auth/auth";
 import { headers } from "next/headers";
 import { cache } from "react";
 import { sessionDTO } from "../dto/userdto";

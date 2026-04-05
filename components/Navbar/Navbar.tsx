@@ -1,12 +1,12 @@
 "use server"
 
-import { getUserSession, SessionType } from "@/src/data/dal/getUserSession"
+import { getUserSession, SessionType } from "@/data/dal/getUserSession"
 import { Bell, Bookmark, Compass, PlusIcon } from "lucide-react"
 import Link from "next/link"
 import { ProfileDropdown } from "./ProfileDropdown"
 import { SearchBarDropdown } from "./SearchBarDropdown"
 import Image from "next/image"
-import { UserSession } from "@/src/data/dto/userdto"
+import { UserSession } from "@/data/dto/userdto"
 import { Button } from "../ui/button"
 
 export default async function Navbar({ session }: { session: SessionType }) {

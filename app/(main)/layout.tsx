@@ -1,8 +1,8 @@
 "use server"
 
-import Navbar from "@/src/components/Navbar/Navbar";
+import Navbar from "@/components/Navbar/Navbar";
 import { QueryProviders, SessionProvider } from "./Providers";
-import { getUserSession } from "@/src/data/dal/getUserSession";
+import { getUserSession } from "@/data/dal/getUserSession";
 
 
 export default async function MainLayout({

@@ -2,12 +2,12 @@
 
 import { useQueryState, parseAsArrayOf, parseAsString } from "nuqs";
 import { useQuery } from "@tanstack/react-query";
-import { getSearchedPosts } from "@/src/data/dal/Post/queries";
-import { SortByBox } from "@/src/components/ComboBox";
-import { SelectMediums } from "@/src/components/post/Mediums";
-import { SelectTags } from "@/src/components/post/Tags";
-import { PostMedium } from "@/src/lib/generated/prisma/enums";
-import PostsView from "@/src/components/post/PostsView";
+import { getSearchedPosts } from "@/data/dal/Post/queries";
+import { SortByBox } from "@/components/ComboBox";
+import { SelectMediums } from "@/components/post/Mediums";
+import { SelectTags } from "@/components/post/Tags";
+import { PostMedium } from "@/lib/generated/prisma/enums";
+import PostsView from "@/components/post/PostsView";
 import { Dispatch, SetStateAction } from "react";
 
 export function SearchPageClient() {

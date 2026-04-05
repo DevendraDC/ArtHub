@@ -6,7 +6,7 @@ import { useDebounce } from "use-debounce";
 import { getUsers } from "../data/dal/user-queries";
 import { UserBox } from "./Navbar/UIComponent";
 import { toast } from "sonner";
-import { DialogTitle } from "@/src/components/ui/dialog";
+import { DialogTitle } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";;
 
 export function SearchArtists() {

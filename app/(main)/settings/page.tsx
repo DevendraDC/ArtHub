@@ -1,6 +1,6 @@
 "use server";
 
-import ProfileSettings from "@/src/app/(main)/settings/settings";
+import ProfileSettings from "@/app/(main)/settings/settings";
 
 export default async function Page() {
     return (

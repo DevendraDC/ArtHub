@@ -1,11 +1,11 @@
 "use server";
 
-import { prisma } from "@/src/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { cache } from "react";
-import { PostMedium } from "@/src/lib/generated/prisma/enums";
+import { PostMedium } from "@/lib/generated/prisma/enums";
 import { unstable_cache } from "next/cache";
 import { headers } from "next/headers";
-import { Prisma } from "@/src/lib/generated/prisma/client";
+import { Prisma } from "@/lib/generated/prisma/client";
 
 export type PostWithUser = {
   id: string;

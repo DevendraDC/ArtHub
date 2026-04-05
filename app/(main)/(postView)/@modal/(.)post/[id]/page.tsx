@@ -2,8 +2,8 @@
 
 import { Suspense } from "react";
 import PostModal from "./postModal";
-import ArtImagesServer from "@/src/app/(main)/(postView)/@modal/(.)post/[id]/_components/ArtImagesServer";
-import PostDetailsServer from "@/src/app/(main)/(postView)/@modal/(.)post/[id]/_components/PostDetailsServer";
+import ArtImagesServer from "@/app/(main)/(postView)/@modal/(.)post/[id]/_components/ArtImagesServer";
+import PostDetailsServer from "@/app/(main)/(postView)/@modal/(.)post/[id]/_components/PostDetailsServer";
 import PostDetailsModal from "./_components/PostDetailsModal";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {

@@ -1,13 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { postTime } from "@/src/utils/postUtils";
-import { Posts, PostWithUser } from "@/src/data/dal/Post/queries";
+import { postTime } from "@/utils/postUtils";
+import { Posts, PostWithUser } from "@/data/dal/Post/queries";
 import Link from "next/link";
-import { cloudinaryTransform } from "@/src/utils/cloudinaryTransform";
+import { cloudinaryTransform } from "@/utils/cloudinaryTransform";
 import { motion } from "motion/react"
 import { memo } from "react";
-import { usePostStore } from "@/src/store/usePostStore";
+import { usePostStore } from "@/store/usePostStore";
 
 const PostsView = memo(function PostsView({ posts }: { posts: PostWithUser[] }) {
     const setPreview = usePostStore((s) => s.setPreview)

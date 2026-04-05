@@ -8,22 +8,22 @@ import {
     Field,
     FieldLabel,
     FieldError,
-} from "@/src/components/ui/field";
-import { Input } from "@/src/components/ui/input";
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import { useMemo, useRef, useState } from "react";
-import ImageCropDialog from "@/src/components/ImageCropDialog";
-import { Button } from "@/src/components/ui/button";
+import ImageCropDialog from "@/components/ImageCropDialog";
+import { Button } from "@/components/ui/button";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { profileSchema } from "@/src/validators/user";
+import { profileSchema } from "@/validators/user";
 import z from "zod";
-import { updateUser } from "@/src/data/dal/User/mutations";
+import { updateUser } from "@/data/dal/User/mutations";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { ProfileSettingsData, usernameExist } from "@/src/data/dal/User/queries";
-import { cloudinaryTransform } from "@/src/utils/cloudinaryTransform";
-import { uploadImage } from "@/src/lib/cloudinaryFunctions";
-import { Spinner } from "@/src/components/ui/spinner";
+import { ProfileSettingsData, usernameExist } from "@/data/dal/User/queries";
+import { cloudinaryTransform } from "@/utils/cloudinaryTransform";
+import { uploadImage } from "@/lib/cloudinaryFunctions";
+import { Spinner } from "@/components/ui/spinner";
 import { useSession } from "../Providers";
 
 

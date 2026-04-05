@@ -1,9 +1,9 @@
 "use server";
 
-import { PostMedium } from "@/src/lib/generated/prisma/enums";
-import { prisma } from "@/src/lib/prisma";
+import { PostMedium } from "@/lib/generated/prisma/enums";
+import { prisma } from "@/lib/prisma";
 import { getUserSession } from "../getUserSession";
-import { createPostSchemaServer } from "@/src/validators/post";
+import { createPostSchemaServer } from "@/validators/post";
 import z from "zod";
 
 export async function postUpload(formData: FormData) {

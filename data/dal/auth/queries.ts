@@ -1,7 +1,7 @@
 "use server";
 
-import { auth } from "@/src/lib/better-auth/auth";
-import { authSchema } from "@/src/validators/user";
+import { auth } from "@/lib/better-auth/auth";
+import { authSchema } from "@/validators/user";
 import { APIError } from "better-auth/api";
 import { headers } from "next/headers";
 import z from "zod";

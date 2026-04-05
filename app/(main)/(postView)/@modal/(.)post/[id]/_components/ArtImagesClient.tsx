@@ -1,6 +1,6 @@
 "use client"
 
-import { cloudinaryTransform } from "@/src/utils/cloudinaryTransform";
+import { cloudinaryTransform } from "@/utils/cloudinaryTransform";
 import Image from "next/image";
 import { useState } from "react";
 import { motion } from "motion/react"

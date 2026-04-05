@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@/src/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { cache } from "react";
 import { getUserSession } from "./getUserSession";
 

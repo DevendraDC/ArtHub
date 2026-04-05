@@ -1,7 +1,7 @@
 "use server"
 
 import Profile from "./Profile";
-import { getProfile } from "@/src/data/dal/User/queries";
+import { getProfile } from "@/data/dal/User/queries";
 
 export default async function Page({params}: {params: Promise<{username: string}>}) {
   const {username} = await params;

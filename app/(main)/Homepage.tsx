@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { getPosts } from "@/src/data/dal/Post/queries";
-import PostsView from "@/src/components/post/PostsView";
+import { getPosts } from "@/data/dal/Post/queries";
+import PostsView from "@/components/post/PostsView";
 import { queryOptions, useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
-import { LoadingDots } from "@/src/components/animations";
+import { LoadingDots } from "@/components/animations";
 
 
 // function groupOptions(id: number) {

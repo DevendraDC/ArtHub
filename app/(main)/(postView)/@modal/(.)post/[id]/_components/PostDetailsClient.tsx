@@ -2,9 +2,9 @@
 
 import { Bookmark, MessageSquare } from "lucide-react";
 import { motion } from "motion/react"
-import OptimisticFollow from "@/src/components/User/OptimisticFollow";
-import OptimisticLike from "@/src/components/User/OptimisticLike";
-import { PostDetails } from "@/src/data/dal/Post/queries";
+import OptimisticFollow from "@/components/User/OptimisticFollow";
+import OptimisticLike from "@/components/User/OptimisticLike";
+import { PostDetails } from "@/data/dal/Post/queries";
 
 export default function PostDetailsClient({ post }: { post: PostDetails }) {
     if (!post || !post.postInfo || !post.sessionUserId) return null;

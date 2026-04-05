@@ -1,7 +1,7 @@
 "use server";
 
-import { prisma } from "@/src/lib/prisma";
-import { uploadImage } from "@/src/lib/cloudinaryFunctions";
+import { prisma } from "@/lib/prisma";
+import { uploadImage } from "@/lib/cloudinaryFunctions";
 import { cache } from "react";
 import { fetchPostsProfile } from "./posts";
 import { getUserSession } from "./getUserSession";

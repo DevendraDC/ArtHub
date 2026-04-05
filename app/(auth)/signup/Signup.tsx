@@ -1,29 +1,29 @@
 "use client"
 
-import { Button } from "@/src/components/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/src/components/ui/card"
+} from "@/components/ui/card"
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@/src/components/ui/field"
-import { Input } from "@/src/components/ui/input"
+} from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { authSchema } from "@/src/validators/user"
+import { authSchema } from "@/validators/user"
 import z from "zod"
 import { toast } from "sonner"
-import { signupUser } from "@/src/data/dal/auth/queries"
+import { signupUser } from "@/data/dal/auth/queries"
 import { useState } from "react"
-import EmailVerify from "@/src/components/VerifyEmail"
+import EmailVerify from "@/components/VerifyEmail"
 
 export function SignupForm() {
   const [email, setEmail] = useState<string | null>(null);

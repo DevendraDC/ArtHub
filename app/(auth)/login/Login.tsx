@@ -1,31 +1,31 @@
 "use client";
 
-import { cn } from "@/src/lib/utils";
-import { Button } from "@/src/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/src/components/ui/card";
+} from "@/components/ui/card";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@/src/components/ui/field";
-import { Input } from "@/src/components/ui/input";
-import { authSchema } from "@/src/validators/user"
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { authSchema } from "@/validators/user"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import { loginUser } from "@/src/data/dal/auth/queries";
+import { loginUser } from "@/data/dal/auth/queries";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import EmailVerify from "@/src/components/VerifyEmail";
+import EmailVerify from "@/components/VerifyEmail";
 
 export function LoginForm({
   className,

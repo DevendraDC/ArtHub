@@ -1,7 +1,7 @@
-import { SelectMediums } from "@/src/components/post/Mediums";
-import { SelectTags } from "@/src/components/post/Tags";
-import { PostMedium } from "@/src/lib/generated/prisma/enums";
-import { Controller } from "@/src/utils/types/controller";
+import { SelectMediums } from "@/components/post/Mediums";
+import { SelectTags } from "@/components/post/Tags";
+import { PostMedium } from "@/lib/generated/prisma/enums";
+import { Controller } from "@/utils/types/controller";
 
 
 type PostOtherDetailsProps = {

@@ -1,7 +1,7 @@
 "use client"
 
-import { usePostStore } from "@/src/store/usePostStore"
-import { mediumLabels } from "@/src/utils/postUtils";
+import { usePostStore } from "@/store/usePostStore"
+import { mediumLabels } from "@/utils/postUtils";
 import { motion } from "framer-motion"
 import Image from "next/image";
 

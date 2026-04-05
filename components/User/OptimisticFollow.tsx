@@ -1,6 +1,6 @@
 "use client"
 
-import { toggleFollow } from "@/src/data/dal/user-queries";
+import { toggleFollow } from "@/data/dal/user-queries";
 import { useOptimistic, useState, useTransition } from "react";
 
 type data = {

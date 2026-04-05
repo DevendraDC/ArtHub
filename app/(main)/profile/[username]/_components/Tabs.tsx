@@ -1,8 +1,8 @@
 "use client"
 
-import FollowList from "@/src/components/FollowList";
-import ProfilePostsGrid from "@/src/components/Navbar/UIComponent";
-import { getProfileData, ProfileData } from "@/src/data/dal/user-queries";
+import FollowList from "@/components/FollowList";
+import ProfilePostsGrid from "@/components/Navbar/UIComponent";
+import { getProfileData, ProfileData } from "@/data/dal/user-queries";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
 import {
