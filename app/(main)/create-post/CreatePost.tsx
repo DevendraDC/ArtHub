@@ -42,7 +42,7 @@ export default function CreatePost() {
         setIsPublishing(true);
         const { data, success } = await uploadMultipleImages(selectedImages);
         if (!success || !data) {
-            toast("Failed to upload images to cloudinary");
+            toast.error("Failed to upload images to cloudinary");
             setIsPublishing(false);
             return;
         }
@@ -52,9 +52,9 @@ export default function CreatePost() {
         selectedTags.forEach(tag => formData.append("tags", tag));
         selectedMediums.forEach(med => formData.append("mediums", med));
         data.forEach(img => formData.append("images", img.secure_url));
-        toast("Post published successfully");
+        toast.success("Post published successfully");
         setIsPublishing(false);
-        router.push(`/profile/${session?.user.id}`);
+        router.push(`/profile/${session?.user.username}`);
         postUpload(formData).then(({ isSuccess }) => {
             if (!isSuccess) {
                 toast.error("something went wrong while publishing the post")

@@ -23,7 +23,7 @@ export default function PostDetailsClient({ post }: { post: PostDetails }) {
                 <OptimisticFollow data={{
                     isFollowing: !!postInfo.user.followers.length,
                     postOwnerId: sessionUserId,
-                    userId: postInfo.user.profileId
+                    userId: postInfo.user.id
                 }} />
             </div>
 

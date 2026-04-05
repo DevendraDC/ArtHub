@@ -58,7 +58,7 @@ export const getPosts = cache(
             p.id,
             p.thumbnail,
             p."createdAt",
-            p.mediums,
+            to_json(p.mediums) AS mediums,
             p.tags,
             json_build_object(
               'id', u.id,
@@ -71,7 +71,7 @@ export const getPosts = cache(
               (COUNT(DISTINCT c."ownerId") * 2)
             ) / (
               EXTRACT(EPOCH FROM (NOW() - p."createdAt")) / 3600 + 2
-            ) AS score
+            )::float AS score
           FROM "post" p
           LEFT JOIN "user" u ON u.id = p."authorId"
           LEFT JOIN "like" l ON l."artPostId" = p.id
@@ -104,7 +104,7 @@ export type Posts = Awaited<ReturnType<typeof getPosts>>;
 
 export const getPostDetails = cache(async (postId: string) => {
   try {
-    const userId = (await headers()).get("x-user-id");
+    const userId = (await headers()).get("user-id");
     if (!userId) throw new Error("session not found");
     const postDetails = await prisma.post.findUnique({
       where: {

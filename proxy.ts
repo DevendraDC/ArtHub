@@ -4,16 +4,19 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { getUserSession } from "./data/dal/getUserSession";
 
-const protectedRoutes = [
-  "/settings",
-  "/create-post",
-];
-const publicRoutes = ["/login", "/signup", "/", "/profile", "/search"];
+const protectedRoutes = ["/settings", "/create-post"];
+const publicRoutes = ["/login", "/signup", "/", "/profile", "/search", "/post"];
 
 export default async function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const isProtectedRoute = protectedRoutes.includes(path);
-  const isPublicRoute = publicRoutes.includes(path);
+  const isPublicRoute =
+    path === "/" ||
+    path === "/login" ||
+    path === "/signup" ||
+    path.startsWith("/post") ||
+    path.startsWith("/profile") ||
+    path.startsWith("/search");
 
   if (isPublicRoute) return NextResponse.next();
 
@@ -31,6 +34,8 @@ export default async function proxy(req: NextRequest) {
   }
 
   const requestHeaders = new Headers(req.headers);
+
+  if (session) requestHeaders.set("user-id", session?.user.id);
 
   return NextResponse.next({
     request: { headers: requestHeaders },

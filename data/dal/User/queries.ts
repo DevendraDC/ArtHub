@@ -4,8 +4,6 @@ import { prisma } from "@/src/lib/prisma";
 import { getUserSession } from "../getUserSession";
 import { cache } from "react";
 
-
-
 export const getProfileSettingsData = cache(async (userId: string) => {
   try {
     const session = await getUserSession();
@@ -77,9 +75,11 @@ export const usernameExist = async (username: string) => {
 export const getProfile = cache(async (username: string) => {
   try {
     const session = await getUserSession();
+    if (!session || !session.user.id) throw new Error("Session not found");
+    if(!session.user.username) throw new Error("profile not found")
     const user = await prisma.user.findUnique({
       where: {
-        username,
+        username
       },
       select: {
         id: true,
@@ -87,23 +87,19 @@ export const getProfile = cache(async (username: string) => {
         username: true,
         image: true,
         email: true,
-        profile: {
+        bio: true,
+        location: true,
+        portfolio: true,
+        followers: {
+          where: {
+            followerId: session.user.id,
+          },
+        },
+        _count: {
           select: {
-            bio: true,
-            location: true,
-            portfolio: true,
-            followers: {
-              where: {
-                followerId: session.userId,
-              },
-            },
-            _count: {
-              select: {
-                artPosts: true,
-                followers: true,
-                following: true,
-              },
-            },
+            artPosts: true,
+            followers: true,
+            following: true,
           },
         },
       },
