@@ -36,8 +36,8 @@ export function HomePageClient() {
         initialPageParam: undefined as string | undefined,
         getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
         staleTime: 10 * 60 * 1000,
-        refetchOnWindowFocus: false,
-        refetchOnMount: false,
+        // refetchOnWindowFocus: false,
+        // refetchOnMount: false,
     });
     const posts = data?.pages.flatMap((page) => page.data) ?? [];
     useEffect(() => {
@@ -60,17 +60,17 @@ export function HomePageClient() {
     return (
         <div className="flex justify-center">
             <div className="w-[90%] flex flex-col justify-center items-center gap-8 p-5">
-                <div className="flex sticky z-99 items-center gap-10 bg-white/8 w-fit p-5 text-(--bl0)/50 text-sm rounded-3xl">
+                <div className="flex sticky z-99 items-center gap-10 bg-white/8 w-fit p-4 px-6 text-sm text-blue-100/50 text-sm rounded-3xl">
                     {tabs.map((tab, i) => (
                         <div
                             key={i}
                             onClick={() => setCurFilter(i)}
-                            className={`${curFilter === i && " text-white rounded-3xl transition-all duration-500 "} cursor-pointer text-[1rem]`}
+                            className={`${curFilter === i && " text-white rounded-3xl transition-all duration-500 "} cursor-pointer text-sm`}
                         >
                             <div className="relative">
                                 <span className="relative z-9">{tab}</span>
                                 {curFilter === i && (
-                                    <motion.div className={`bg-blue-700 top-1/2 left-1/2 -translate-1/2 rounded-2xl absolute ${tabw[i]} h-12`} initial={{ opacity: 0, y: 0 }}
+                                    <motion.div className={`bg-blue-700 top-1/2 left-1/2 -translate-1/2 rounded-2xl absolute ${tabw[i]} h-9`} initial={{ opacity: 0, y: 0 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.5, ease: "easeOut" }}></motion.div>
                                 )}

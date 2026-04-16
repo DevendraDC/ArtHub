@@ -7,7 +7,6 @@ import Link from "next/link";
 import Tabs from "./_components/Tabs";
 
 
-
 export default async function Profile({ user }: { user: UserProfile }) {
   const { userData } = user;
   if (!userData?.id)
@@ -32,7 +31,7 @@ export default async function Profile({ user }: { user: UserProfile }) {
                   <Image
                     src={cloudinaryTransform(
                       userData.image,
-                      "f_auto,q_auto,w_150,c_limit",
+                      "150",
                     )}
                     width={140}
                     height={100}
@@ -45,11 +44,10 @@ export default async function Profile({ user }: { user: UserProfile }) {
                 <div className="userInfoAndFunctions flex justify-between">
                   <div className="usernameandname flex flex-col ">
                     <div className="name text-2xl font-serif">{userData.name}</div>
-                    <div className="username text-sm text-blue-200/50">{userData.username}</div>
+                    <div className="username text-sm text-blue-200/50">@{userData.username}</div>
                   </div>
                   <div className="functions flex gap-10 items-center">
-                    <button className={`p-1 ${isFollowing ? "text-white/30 border-2 border-white/30 bg-transparent" : "bg-blue-100/90 text-black font-sans font-semibold"} cursor-pointer hover:-translate-y-1 transition-all duration-300 h-fit rounded-lg px-10`}>{!!userData.followers.length ? "Following" : "Follow"}</button>
-                    <Link href={"/create-post"} className="bg-blue-700 font-sans h-fit p-1 rounded-lg px-2">Create Post</Link>
+                    <button className={`p-1 ${isFollowing ? "text-white/30 border-2 border-white/30 bg-transparent" : "bg-blue-100/90 text-black font-sans font-semibold"} cursor-pointer transition-all duration-300 h-fit rounded-sm px-10`}>{!!userData.followers.length ? "Following" : "Follow"}</button>
                   </div>
                 </div>
                 <div className="bioAndPortfolioLink flex flex-col gap-1">

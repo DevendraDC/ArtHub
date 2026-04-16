@@ -13,10 +13,10 @@ type PostOtherDetailsProps = {
 
 export default function PostOtherDetails({ tagsController, mediumsController, titleController, descriptionController }: PostOtherDetailsProps) {
     return (
-        <div className="details flex flex-col gap-8 border-2 border-white/15 p-8 rounded-xl">
-            <div className="font-sans text-blue-200">
+        <div className="details flex flex-col gap-8 p-8 rounded-xl">
+            {/* <div className="font-sans text-blue-200">
                 <span className="text-blue-500">&middot; </span>DETAILS
-            </div>
+            </div> */}
             <div className="text-sm flex flex-col gap-8">
                 <div className="flex flex-col gap-3">
                     <label htmlFor="title">Title</label>

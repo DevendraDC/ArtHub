@@ -1,6 +1,6 @@
 "use client"
 
-import { toggleFollow } from "@/data/dal/user-queries";
+import { toggleFollow } from "@/data/dal/User/mutations";
 import { useOptimistic, useState, useTransition } from "react";
 
 type data = {
@@ -22,11 +22,12 @@ export default function OptimisticFollow({ data }: {data: data}) {
         })
     )
     const handleFollow = () => {
+        const oldFollowState = optimisticFollowState.isFollowing;
         const newFollowState = !optimisticFollowState.isFollowing;
         startTransition(async () => {
             updateOptimisticFollow(newFollowState);
             try {
-                await toggleFollow(userId, postOwnerId)
+                await toggleFollow(userId, postOwnerId, oldFollowState)
                 setBaseFollowState(() => ({
                     isFollowing: newFollowState
                 }));
@@ -37,7 +38,7 @@ export default function OptimisticFollow({ data }: {data: data}) {
     }
 
     return (
-        <button disabled={isPending} onClick={handleFollow} className={`p-2 w-full font-sans rounded-lg hover:-translate-y-1 transition-all duration-300 ${optimisticFollowState.isFollowing ? "text-white/45 bg-transparent border border-white/45" : "bg-(--bl2) font-semibold text-black"}`} >
+        <button disabled={isPending} onClick={handleFollow} className={`p-2 w-full font-sans rounded-lg hover:-translate-y-1 cursor-pointer transition-all duration-300 ${optimisticFollowState.isFollowing ? "text-white/45 bg-transparent border border-white/45" : "bg-blue-200/15 text-blue-400 text-black"}`} >
             {optimisticFollowState.isFollowing ? "Following" : "Follow"}
         </button>
     )

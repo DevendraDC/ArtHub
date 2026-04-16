@@ -6,6 +6,7 @@ import { PostMedium } from "@/lib/generated/prisma/enums";
 import { unstable_cache } from "next/cache";
 import { headers } from "next/headers";
 import { Prisma } from "@/lib/generated/prisma/client";
+import { getUserSession } from "../getUserSession";
 
 export type PostWithUser = {
   id: string;
@@ -76,7 +77,6 @@ export const getPosts = cache(
           LEFT JOIN "user" u ON u.id = p."authorId"
           LEFT JOIN "like" l ON l."artPostId" = p.id
           LEFT JOIN "comment" c ON c."artPostId" = p.id
-          WHERE p."createdAt" > NOW() - INTERVAL '7 days'
           ${cursor ? Prisma.sql`AND p.id < ${cursor}` : Prisma.empty}
           GROUP BY p.id, u.id
           ORDER BY score DESC
@@ -104,8 +104,9 @@ export type Posts = Awaited<ReturnType<typeof getPosts>>;
 
 export const getPostDetails = cache(async (postId: string) => {
   try {
-    const userId = (await headers()).get("user-id");
-    if (!userId) throw new Error("session not found");
+    const session = await getUserSession();
+    if (!session || !session.user.id) throw new Error("session not found");
+    const userId = session.user.id;
     const postDetails = await prisma.post.findUnique({
       where: {
         id: postId,
@@ -146,12 +147,17 @@ export const getPostDetails = cache(async (postId: string) => {
       },
     });
     return {
-      postInfo: postDetails,
-      sessionUserId: userId,
+      success: true,
+      data: {
+        post: postDetails,
+        userId: userId
+      }
     };
   } catch (error) {
     console.error(error);
-    return null;
+    return {
+      success: false
+    }
   }
 });
 
@@ -186,30 +192,18 @@ export const getSearchedPosts = cache(
         },
         select: {
           id: true,
+          thumbnail: true,
           createdAt: true,
           mediums: true,
           tags: true,
           user: {
             select: {
-              profileId: true,
-              user: {
-                select: {
-                  name: true,
-                  username: true,
-                  image: true,
-                },
-              },
-            },
-          },
-
-          artImages: {
-            orderBy: {
-              order: "asc",
-            },
-            take: 1,
-            select: {
-              url: true,
-            },
+              id: true,
+              name: true,
+              username: true,
+              image: true,
+              email: true
+            }
           },
         },
         orderBy: {

@@ -16,7 +16,7 @@ const PostsView = memo(function PostsView({ posts }: { posts: PostWithUser[] }) 
             <div className="grid grid-cols-6 gap-4">
                 {posts.map((post) => {
                     const url = post.thumbnail;
-                    const previewUrl = cloudinaryTransform(url, "f_auto,q_auto,w_370,c_limit")
+                    const previewUrl = cloudinaryTransform(url, "370")
                     const previewData = {
                         id: post.id,
                         thumbnail: post.thumbnail,

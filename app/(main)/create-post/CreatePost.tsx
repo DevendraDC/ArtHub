@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { postUpload } from "@/data/dal/Post/mutations";
-import { useRouter } from 'nextjs-toploader/app';
 import { Spinner } from "@/components/ui/spinner";
 import { motion } from "motion/react"
 import { PostMedium } from "@/lib/generated/prisma/enums";
@@ -12,12 +11,9 @@ import { uploadMultipleImages } from "@/lib/cloudinaryFunctions";
 import PostImagesUpload from "./_components/ImagesUpload";
 import PostOtherDetails from "./_components/OtherDetails";
 import z from "zod";
-import { useSession } from "../Providers";
 
 
 export default function CreatePost() {
-    const session = useSession();
-    const router = useRouter();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -35,7 +31,6 @@ export default function CreatePost() {
         }
         const validatedData = createPostSchemaClient.safeParse(toValidate);
         if (!validatedData.success) {
-            console.log("hello")
             setErrors(z.treeifyError(validatedData.error));
             return;
         }
@@ -54,7 +49,7 @@ export default function CreatePost() {
         data.forEach(img => formData.append("images", img.secure_url));
         toast.success("Post published successfully");
         setIsPublishing(false);
-        router.push(`/profile/${session?.user.username}`);
+        handleDiscard();
         postUpload(formData).then(({ isSuccess }) => {
             if (!isSuccess) {
                 toast.error("something went wrong while publishing the post")
@@ -77,7 +72,7 @@ export default function CreatePost() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}>
-                <div className="w-[60%] flex flex-col gap-7 py-2">
+                <div className="w-[58%] flex flex-col gap-7 py-2">
                     <div className="flex flex-col gap-2">
                         <div className="font-sans text-4xl">Create a new <span className="text-blue-400">Post</span></div>
                         <div className="text-sm text-white/35">
@@ -105,11 +100,11 @@ export default function CreatePost() {
                             setValue: setSelectedMediums
                         }}
                     />
-                    <div className="flex gap-7 bg-transparent border-2 border-white/15 p-5 rounded-xl">
-                        <button disabled={isPublishing} onClick={handleDiscard} className="py-2 px-4 border-2 text-white/60 rounded-sm hover:border-red-700 hover:text-red-700 hover:bg-red-500/10 transition-colors duration-300">
+                    <div className="flex gap-7 bg-transparent p-5 rounded-xl">
+                        <button disabled={isPublishing} onClick={handleDiscard} className="py-2 flex-2 px-4 border-2 text-white/60 rounded-sm hover:border-red-700 hover:text-red-700 hover:bg-red-500/10 transition-colors duration-300">
                             Discard
                         </button>
-                        <button disabled={isPublishing} onClick={handlePublish} className="py-2 px-4 border text-center bg-blue-400 flex justify-center items-center font-sans font-semibold text-black w-full rounded-lg hover:shadow-[0_0_30px] hover:shadow-blue-400/50 hover:-translate-y-1 transition-all duration-300">
+                        <button disabled={isPublishing} onClick={handlePublish} className="py-2 px-4 flex-3 border text-center bg-blue-400 flex justify-center items-center font-sans font-semibold text-black rounded-lg hover:shadow-[0_0_30px] hover:shadow-blue-400/50 transition-all duration-300">
                             {isPublishing ? <Spinner fontSize={20} /> : "Publish Post"}
                         </button>
                     </div>

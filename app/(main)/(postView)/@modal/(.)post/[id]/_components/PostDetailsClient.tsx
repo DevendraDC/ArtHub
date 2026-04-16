@@ -7,8 +7,9 @@ import OptimisticLike from "@/components/User/OptimisticLike";
 import { PostDetails } from "@/data/dal/Post/queries";
 
 export default function PostDetailsClient({ post }: { post: PostDetails }) {
-    if (!post || !post.postInfo || !post.sessionUserId) return null;
-    const { sessionUserId, postInfo } = post;
+    const sessionUserId = post.data?.userId;
+    const postInfo = post.data?.post;
+    if(!postInfo || !sessionUserId) return null;
     const date = new Date(postInfo?.createdAt ?? Date.now());
     const time = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }).toLowerCase();
     const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });

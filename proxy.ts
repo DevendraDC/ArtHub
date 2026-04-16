@@ -1,5 +1,3 @@
-"use server";
-
 import { NextRequest, NextResponse } from "next/server";
 
 import { getUserSession } from "./data/dal/getUserSession";
@@ -9,7 +7,7 @@ const publicRoutes = ["/login", "/signup", "/", "/profile", "/search", "/post"];
 
 export default async function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname;
-  const isProtectedRoute = protectedRoutes.includes(path);
+  const isProtectedRoute = path.startsWith("/settings") || path.startsWith("/create-post");
   const isPublicRoute =
     path === "/" ||
     path === "/login" ||

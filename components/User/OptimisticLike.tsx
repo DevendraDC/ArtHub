@@ -26,11 +26,12 @@ export default function OptimisticLike({ data }: { data: data}) {
     )
     const handleLikeToggle = () => {
         // if (!postInfo?.id) return;
+        const oldLikeState = optimisticLikeState.isLiked;
         const newLikedState = !optimisticLikeState.isLiked;
         startTransition(async () => {
             updateOptimisticLike(newLikedState);
             try {
-                await toggleLike(postId, userId, isLiked);
+                await toggleLike(postId, userId, oldLikeState);
                 setBaseLikeState((prev) => ({
                     isLiked: newLikedState,
                     likes:
@@ -49,7 +50,7 @@ export default function OptimisticLike({ data }: { data: data}) {
         >
             <Heart
                 size={22}
-                className={`transition-colors ${optimisticLikeState.isLiked ? "fill-(--bl2) stroke-(--bl2)" : "stroke-current"}`}
+                className={`transition-colors ${optimisticLikeState.isLiked ? "fill-blue-600 stroke-blue-600" : "stroke-current"}`}
             />
             <div className="text-white/45">{optimisticLikeState.likes}</div>
         </button>

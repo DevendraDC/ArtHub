@@ -16,7 +16,7 @@ export default function ArtImagesClient({ images }: Props) {
     const [displayImage, setDisplayImage] = useState(images[0]);
 
     return (
-        <div className="flex flex-col gap-12 pt-2 w-full overflow-auto no-scrollbar">
+        <div className="carousel carousel-vertical w-full rounded-box h-full">
             {images.map(img => (
                 <motion.div
                     key={img.id}
@@ -24,15 +24,15 @@ export default function ArtImagesClient({ images }: Props) {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.2, ease: "easeInOut" }}
-                    className="flex justify-center relative items-center"
+                    className="carousel-item h-full w-full"
                 >
                     <Image
-                        src={cloudinaryTransform(img.url, "f_auto,q_auto,w_1000,c_limit")}
+                        src={cloudinaryTransform(img.url, "1000")}
                         alt=""
-                        height={1000}
                         width={1000}
+                        height={1000}
                         loading="lazy"
-                        className="object-contain max-w-full max-h-150 rounded-lg"
+                        className="object-contain h-full w-auto mx-auto max-w-full"
                     />
                 </motion.div>
             ))}

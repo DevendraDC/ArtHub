@@ -41,33 +41,7 @@ export const getUser = async (username: string, userId: string) => {
 
 
 
-export const toggleFollow = async (followerId: string, followingId: string) => {
-  const isFollowing = await prisma.follow.findUnique({
-    where: {
-      followerId_followingId: {
-        followerId,
-        followingId,
-      },
-    },
-  });
-  if (isFollowing) {
-    await prisma.follow.delete({
-      where: {
-        followerId_followingId: {
-          followerId,
-          followingId,
-        },
-      },
-    });
-  } else {
-    await prisma.follow.create({
-      data: {
-        followerId,
-        followingId,
-      },
-    });
-  }
-};
+
 
 export const getProfileData = cache(
   async (tab: number, userId: string): Promise<ProfileData | null> => {

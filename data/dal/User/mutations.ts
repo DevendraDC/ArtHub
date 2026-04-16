@@ -43,3 +43,27 @@ export const updateUser = async (userData: userData) => {
     };
   }
 };
+
+export const toggleFollow = async (
+  followerId: string,
+  followingId: string,
+  isFollowing: boolean,
+) => {
+  if (isFollowing) {
+    await prisma.follow.delete({
+      where: {
+        followerId_followingId: {
+          followerId,
+          followingId,
+        },
+      },
+    });
+  } else {
+    await prisma.follow.create({
+      data: {
+        followerId,
+        followingId,
+      },
+    });
+  }
+};
