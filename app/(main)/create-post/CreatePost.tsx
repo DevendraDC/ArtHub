@@ -101,7 +101,7 @@ export default function CreatePost() {
                         }}
                     />
                     <div className="flex gap-7 bg-transparent p-5 rounded-xl">
-                        <button disabled={isPublishing} onClick={handleDiscard} className="py-2 flex-2 px-4 border-2 text-white/60 rounded-sm hover:border-red-700 hover:text-red-700 hover:bg-red-500/10 transition-colors duration-300">
+                        <button disabled={isPublishing} onClick={handleDiscard} className="py-2 flex-2 px-4 border-2 border-blue-100/15 text-white/60 rounded-sm hover:border-red-700 hover:text-red-700 hover:bg-red-500/10 transition-colors duration-300">
                             Discard
                         </button>
                         <button disabled={isPublishing} onClick={handlePublish} className="py-2 px-4 flex-3 border text-center bg-blue-400 flex justify-center items-center font-sans font-semibold text-black rounded-lg hover:shadow-[0_0_30px] hover:shadow-blue-400/50 transition-all duration-300">

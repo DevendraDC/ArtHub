@@ -7,6 +7,9 @@ import Image from "next/image";
 
 export default function PostDetailsModal({ children }: { children: React.ReactNode }) {
     const preview = usePostStore((s) => s.preview);
+    const date = new Date(preview?.createdAt ?? Date.now());
+    const time = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }).toLowerCase();
+    const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     return (
         <motion.div className="w-full min-h-full flex flex-col gap-8 bg-black p-5 rounded-r-2xl"
             initial={{ opacity: 0, y: 10 }}
@@ -21,11 +24,24 @@ export default function PostDetailsModal({ children }: { children: React.ReactNo
                         <div className="font-serif">
                             {preview?.user.name}
                         </div>
-                        <div className="text-sm text-(--text-subtle)">
+                        <div className="text-sm text-blue-100/40">
                             {preview?.user.username}
                         </div>
                     </div>
                 </div>
+                <section>
+                    <div className="text-xl font-serif">
+                        {preview?.title}
+                    </div>
+                    {preview?.description && <div className="text-white/60 wrap-break-word min-w-0">
+                        {preview?.description}
+                    </div>}
+                    <div className="text-sm text-white/30 flex gap-2 items-center">
+                        {time}
+                        <span className="text-xl text-white/50">&middot;</span>
+                        {dateStr}
+                    </div>
+                </section>
                 {children}
                 <div className="Mediums flex flex-col gap-3">
                     <div className="text-sm">

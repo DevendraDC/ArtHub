@@ -1,45 +1,38 @@
 "use client"
 
 
-import { Bell, Bookmark, Compass } from "lucide-react";
+import { Bell, Bookmark, Compass, Image } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function NavbarTabs() {
     const pathname = usePathname();
     const navTabs = [
-        // {
-        //     icon: <LayoutGrid size={18} />,
-        //     name: "Feed",
-        //     link: "/"
-        // },
         {
-            icon: <Compass size={15} />,
-            name: "Explore",
+            icon: Compass,
+            name: "Discover",
             link: "/"
         },
         {
-            icon: <Bell size={15} />,
-            name: "Notifications",
+            icon: Bookmark,
+            name: "Collections",
             link: ""
         },
         {
-            icon: <Bookmark size={15} />,
-            name: "Collections",
-            link: ""
+            icon: Image,
+            name: "Browse Artworks",
+            link: "/browse-artworks"
         }
     ]
 
     return (
-        <ul className="flex gap-15 text-sm items-center">
+        <ul className="flex gap-12 text-sm font-sans items-center">
             {
                 navTabs.map((op, index) => (
-                    <li key={index} className={`hover:text-blue-600 hover:scale-108 hover:translate-y-1 transition-all duration-300 ${pathname === op.link && "text-blue-500"}`}>
-                        <Link className="flex gap-1 items-center" href={op.link}>
-                            <div>{op.icon}</div>
-                            <div>{op.name}</div>
-                        </Link>
-                    </li>
+                    <Link key={index} className={`p-2 flex gap-1 items-center ${pathname === op.link ? "text-blue-600 border-b border-blue-600" : "hover:text-blue-600 transition-all duration-300"}`} href={op.link}>
+                        <div><op.icon size={15} /></div>
+                        <div>{op.name}</div>
+                    </Link>
                 ))
             }
         </ul>

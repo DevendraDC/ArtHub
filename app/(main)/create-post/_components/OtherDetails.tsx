@@ -26,7 +26,7 @@ export default function PostOtherDetails({ tagsController, mediumsController, ti
                         value={titleController.value}
                         name="title"
                         onChange={e => titleController.setValue(e.target.value)}
-                        className="border placeholder:text-white/40 rounded-sm p-3 resize-none focus:outline-0"
+                        className="input-box"
                     />
                 </div>
                 <div className="flex flex-col gap-3">
@@ -50,7 +50,7 @@ export default function PostOtherDetails({ tagsController, mediumsController, ti
                         onChange={e => descriptionController.setValue(e.target.value)}
                         maxLength={500}
                         placeholder="Tell the story behind this piece....."
-                        className="border placeholder:text-white/40 rounded-sm p-4 resize-none focus:outline-0 border-border bg-(--surface2)"
+                        className="input-box p-4"
                     />
                 </div>
                 <div className="flex flex-col gap-3">

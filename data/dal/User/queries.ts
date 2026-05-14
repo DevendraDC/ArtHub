@@ -38,7 +38,7 @@ export const getUserData2 = async () => {
     if (!session || !session.user.id) throw new Error("Session not found");
     const data = await prisma.user.findUnique({
       where: {
-        id: session.userId,
+        id: session.user.id,
       },
       select: {
         bio: true,

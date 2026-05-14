@@ -1,30 +1,9 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { uploadImage } from "@/lib/cloudinaryFunctions";
 import { cache } from "react";
 import { fetchPostsProfile } from "./posts";
-import { getUserSession } from "./getUserSession";
 
-interface userDataType {
-  id: string;
-  email: string;
-  image: File | null;
-  name: string;
-  username: string;
-  bio: string;
-}
-
-enum getUserBy {
-  ID,
-  USERNAME,
-  EMAIL,
-}
-
-interface param {
-  type: getUserBy;
-  val: string;
-}
 
 export const getUser = async (username: string, userId: string) => {
   const user = await prisma.user.findUnique({
@@ -38,10 +17,6 @@ export const getUser = async (username: string, userId: string) => {
 
   return user;
 };
-
-
-
-
 
 export const getProfileData = cache(
   async (tab: number, userId: string): Promise<ProfileData | null> => {
@@ -72,14 +47,10 @@ const getFollowers = cache(async (userId: string) => {
     select: {
       follower: {
         select: {
-          profileId: true,
-          user: {
-              select: {
-                username: true,
-                name: true,
-                image: true,
-              },
-            },
+          id: true,
+          username: true,
+          name: true,
+          image: true,
         },
       },
     },
@@ -97,14 +68,10 @@ const getFollowing = cache(async (userId: string) => {
     select: {
       following: {
         select: {
-          profileId: true,
-          user: {
-              select: {
-                username: true,
-                name: true,
-                image: true,
-              },
-            },
+          id: true,
+          username: true,
+          name: true,
+          image: true,
         },
       },
     },
@@ -120,36 +87,32 @@ export type ProfileData =
   | { type: "followers"; data: Awaited<ReturnType<typeof getFollowers>> }
   | { type: "following"; data: Awaited<ReturnType<typeof getFollowing>> };
 
-
-
-export const getUsers = cache(async (keyword : string) => {
+export const getUsers = cache(async (keyword: string) => {
   try {
     return await prisma.user.findMany({
-      where : {
+      where: {
         ...(keyword.trim() && {
-          AND : [
-            {name : {contains : keyword, mode : "insensitive"}},
-            {username : {contains : keyword, mode : "insensitive"}},
-            {role : "USER"}
-          ]
-        })
+          AND: [
+            { name: { contains: keyword, mode: "insensitive" } },
+            { username: { contains: keyword, mode: "insensitive" } },
+            { role: "USER" },
+          ],
+        }),
       },
-      select : {
-        id : true,
-        name : true,
-        username : true,
-        image : true
+      select: {
+        id: true,
+        name: true,
+        username: true,
+        image: true,
       },
-      orderBy : {
-        profile: {
-          followers: {
-            _count: "desc"
-          }
-        }
-      }
-    })
+      orderBy: {
+        followers: {
+          _count: "desc",
+        },
+      },
+    });
   } catch (error) {
     console.error(error);
     return null;
   }
-})
+});

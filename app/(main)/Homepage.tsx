@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { getPosts } from "@/data/dal/Post/queries";
+import { useEffect, useRef, useState } from "react";
+import { getPosts } from "@/data/dal/Post/queriesActions";
 import PostsView from "@/components/post/PostsView";
-import { queryOptions, useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { LoadingDots } from "@/components/animations";
@@ -59,8 +59,8 @@ export function HomePageClient() {
 
     return (
         <div className="flex justify-center">
-            <div className="w-[90%] flex flex-col justify-center items-center gap-8 p-5">
-                <div className="flex sticky z-99 items-center gap-10 bg-white/8 w-fit p-4 px-6 text-sm text-blue-100/50 text-sm rounded-3xl">
+            <div className="w-[98%] flex flex-col justify-center items-center gap-8 p-5">
+                <div className="flex sticky z-99 items-center gap-10 bg-white/8 w-fit p-4 px-6 text-sm text-blue-100/50 rounded-3xl">
                     {tabs.map((tab, i) => (
                         <div
                             key={i}

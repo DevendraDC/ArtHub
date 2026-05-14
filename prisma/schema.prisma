@@ -211,5 +211,6 @@ model Comment {
   updatedAt DateTime  @default(now())
 
   @@index([artPostId, ownerId])
+  @@index([artPostId])
   @@map("comment")
 }

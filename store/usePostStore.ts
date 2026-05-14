@@ -4,8 +4,11 @@ import { PostMedium } from "../lib/generated/prisma/enums";
 type PostPreview = {
   id: string;
   thumbnail: string;
+  title: string;
+  description: string | null;
   tags: string[];
   mediums: PostMedium[];
+  createdAt: Date;
   user: {
     id: string;
     name: string | null;

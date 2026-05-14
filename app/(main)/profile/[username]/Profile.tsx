@@ -19,10 +19,10 @@ export default async function Profile({ user }: { user: UserProfile }) {
 
   return (
     <div className="w-full min-h-screen pb-20 overflow-x-hidden">
-      <div className="w-[60%] mx-auto px-4">
+      <div className="w-[80%] mx-auto px-4">
         <div
-        
-          className="bg-white/5 backdrop-blur-2xl border border-white/10 shadow-2xl rounded-3xl p-6 md:p-10"
+
+          className="bg-transparent w-[70%] backdrop-blur-2xl rounded-3xl p-6 md:p-10"
         >
           <div className="flex flex-col gap-8">
             <div className="info flex gap-8">
