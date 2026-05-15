@@ -201,6 +201,7 @@ model Comment {
   id        String    @id @default(uuid())
   artPostId String
   ownerId   String
+  content   String
   likes     Int       @default(0)
   replies   Comment[] @relation("replies")
   artPost   Post      @relation(fields: [artPostId], references: [id], onDelete: Cascade)
@@ -212,5 +213,6 @@ model Comment {
 
   @@index([artPostId, ownerId])
   @@index([artPostId])
+  @@index([artPostId, createdAt(sort: Desc)])
   @@map("comment")
 }

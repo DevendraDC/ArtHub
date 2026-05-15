@@ -3,6 +3,8 @@
 import { PostMedium } from "@/lib/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@/lib/generated/prisma/client";
+import { auth } from "@/lib/better-auth/auth";
+import { headers } from "next/headers";
 
 export type PostWithUser = {
   id: string;
@@ -20,42 +22,40 @@ export type PostWithUser = {
   };
 };
 
-
-export const getPosts =
-  async (filter: number, cursor?: string, take = 20) => {
-    try {
-      switch (filter) {
-        case 1: {
-          const posts = await prisma.post.findMany({
-            take: take + 1,
-            ...(cursor && {
-              cursor: { id: cursor },
-              skip: 1,
-            }),
-            select: {
-              id: true,
-              thumbnail: true,
-              title: true,
-              description: true,
-              createdAt: true,
-              mediums: true,
-              tags: true,
-              user: {
-                select: { id: true, name: true, username: true, image: true },
-              },
+export const getPosts = async (filter: number, cursor?: string, take = 20) => {
+  try {
+    switch (filter) {
+      case 1: {
+        const posts = await prisma.post.findMany({
+          take: take + 1,
+          ...(cursor && {
+            cursor: { id: cursor },
+            skip: 1,
+          }),
+          select: {
+            id: true,
+            thumbnail: true,
+            title: true,
+            description: true,
+            createdAt: true,
+            mediums: true,
+            tags: true,
+            user: {
+              select: { id: true, name: true, username: true, image: true },
             },
-            orderBy: { createdAt: "desc" },
-          });
+          },
+          orderBy: { createdAt: "desc" },
+        });
 
-          const hasNextPage = posts.length > take;
-          const data = hasNextPage ? posts.slice(0, -1) : posts;
-          const nextCursor = hasNextPage ? data[data.length - 1].id : null;
+        const hasNextPage = posts.length > take;
+        const data = hasNextPage ? posts.slice(0, -1) : posts;
+        const nextCursor = hasNextPage ? data[data.length - 1].id : null;
 
-          return { data, nextCursor };
-        }
+        return { data, nextCursor };
+      }
 
-        case 0: {
-          const posts = await prisma.$queryRaw<PostWithUser[]>`
+      case 0: {
+        const posts = await prisma.$queryRaw<PostWithUser[]>`
           SELECT
             p.id,
             p.thumbnail,
@@ -86,21 +86,21 @@ export const getPosts =
           LIMIT ${take + 1}
         `;
 
-          const hasNextPage = posts.length > take;
-          const data = hasNextPage ? posts.slice(0, -1) : posts;
-          const nextCursor = hasNextPage ? data[data.length - 1].id : null;
+        const hasNextPage = posts.length > take;
+        const data = hasNextPage ? posts.slice(0, -1) : posts;
+        const nextCursor = hasNextPage ? data[data.length - 1].id : null;
 
-          return { data, nextCursor };
-        }
-
-        default:
-          return { data: [], nextCursor: null };
+        return { data, nextCursor };
       }
-    } catch (error) {
-      console.error(error);
-      return { data: [], nextCursor: null };
+
+      default:
+        return { data: [], nextCursor: null };
     }
+  } catch (error) {
+    console.error(error);
+    return { data: [], nextCursor: null };
   }
+};
 
 export type Posts = Awaited<ReturnType<typeof getPosts>>;
 
@@ -169,11 +169,11 @@ export const getSearchedPosts = async (
 
 export type SearchedPosts = Awaited<ReturnType<typeof getSearchedPosts>>;
 
-
-
-export const getPostDetails = async (postId: string, userId: string) => {
+export const getPostStats = async (postId: string) => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
   try {
-    if (!userId) throw new Error("session not found");
     const postDetails = await prisma.post.findUnique({
       where: {
         id: postId,
@@ -187,42 +187,65 @@ export const getPostDetails = async (postId: string, userId: string) => {
             Collections: true,
           },
         },
-        // user: {
-        //   select: {
-        //     id: true,
-        //     followers: {
-        //       where: {
-        //         followerId: userId,
-        //       },
-        //       select: {
-        //         followerId: true,
-        //       },
-        //     },
-        //   },
-        // },
-        likes: {
-          where: {
-            ownerId: userId,
-          },
-          select: {
-            ownerId: true,
-          },
-        },
+        ...(session && {
+          likes: {
+            where: {
+              ownerId: session.user.id
+            }
+          }
+        })
       },
     });
     return {
       success: true,
       data: {
         post: postDetails,
-        userId: userId,
-      },
+        userId: session?.user.id
+      }
     };
   } catch (error) {
     console.error(error);
     return {
       success: false,
+      data: null
     };
   }
-}
+};
 
-export type PostDetails = Awaited<ReturnType<typeof getPostDetails>>;
+export type PostDetails = Awaited<ReturnType<typeof getPostStats>>;
+
+export const isLikedByUser = async (postId: string) => {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    if (!session || !session.user.id) throw new Error("session not found");
+    const isLiked = await prisma.like.findUnique({
+      where: {
+        artPostId_ownerId: {
+          artPostId: postId,
+          ownerId: session.user.id,
+        },
+      },
+    });
+    if (isLiked)
+      return {
+        success: true,
+        isLiked: true,
+        userId: session.user.id,
+      };
+    else
+      return {
+        success: true,
+        isLiked: false,
+        userId: session.user.id,
+      };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      isLiked: null,
+      userId: null,
+    };
+  }
+};

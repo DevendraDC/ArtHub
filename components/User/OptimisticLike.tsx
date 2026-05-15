@@ -5,10 +5,10 @@ import { Heart } from "lucide-react";
 import { useOptimistic, useState, useTransition } from "react";
 
 type data = {
-    isLiked : boolean;
+    isLiked: boolean;
     likes: number;
-    userId: string;
     postId: string;
+    userId: string;
 }
 
 export default function OptimisticLike({ data }: { data: data}) {

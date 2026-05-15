@@ -5,8 +5,9 @@ import { mediumLabels } from "@/utils/postUtils";
 import { motion } from "framer-motion"
 import Image from "next/image";
 
-export default function PostDetailsModal({ children }: { children: React.ReactNode }) {
+export default function PostDetailsModal({ postDetails, postComments }: { postDetails: React.ReactNode, postComments: React.ReactNode }) {
     const preview = usePostStore((s) => s.preview);
+    if (!preview) return null;
     const date = new Date(preview?.createdAt ?? Date.now());
     const time = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }).toLowerCase();
     const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -24,13 +25,13 @@ export default function PostDetailsModal({ children }: { children: React.ReactNo
                         <div className="font-serif">
                             {preview?.user.name}
                         </div>
-                        <div className="text-sm text-blue-100/40">
+                        <div className="text-sm text-white/40">
                             {preview?.user.username}
                         </div>
                     </div>
                 </div>
                 <section>
-                    <div className="text-xl font-serif">
+                    <div className="text-2xl font-serif">
                         {preview?.title}
                     </div>
                     {preview?.description && <div className="text-white/60 wrap-break-word min-w-0">
@@ -42,11 +43,12 @@ export default function PostDetailsModal({ children }: { children: React.ReactNo
                         {dateStr}
                     </div>
                 </section>
-                {children}
+                <section>
+                    {postDetails}
+                </section>
+
                 <div className="Mediums flex flex-col gap-3">
-                    <div className="text-sm">
-                        Mediums
-                    </div>
+                    <h1>Mediums</h1>
                     <div className="flex flex-wrap gap-3">
                         {preview?.mediums.map((med, i) => (
                             <div key={i} className="p-2 rounded-lg border border-white/35 text-white/70 text-xs">
@@ -57,18 +59,23 @@ export default function PostDetailsModal({ children }: { children: React.ReactNo
                 </div>
                 {!!preview?.tags.length && (
                     <div className="tags flex flex-col gap-3">
-                        <div className="text-sm">
-                            Tags
-                        </div>
+                        <h1>Tags</h1>
                         <div className="flex flex-wrap gap-3">
                             {preview?.tags.map((tag, i) => (
-                                <div key={i} className="py-1 px-3 rounded-lg bg-blue-500/25 border border-blue-400 font-sans text-sm">
-                                    {tag}
+                                <div key={i} className="text-blue-400/80 font-sans text-sm">
+                                    #{tag}
                                 </div>
                             ))}
                         </div>
                     </div>
                 )}
+
+                <section className="mt-5 flex flex-col gap-5">
+                    <h1>Comments</h1>
+                    <main>
+                        {postComments}
+                    </main>
+                </section>
 
             </div>
         </motion.div>

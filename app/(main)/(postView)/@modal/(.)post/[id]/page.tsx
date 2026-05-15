@@ -3,8 +3,10 @@ import ArtImages from "@/app/(main)/(postView)/@modal/(.)post/[id]/_components/A
 import PostDetails from "@/app/(main)/(postView)/@modal/(.)post/[id]/_components/PostDetails";
 import PostDetailsModal from "./_components/PostDetailsModal";
 import ModalClose from "./_components/ModalCloseButton";
+import PostComments from "./_components/PostComments";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+    const {id} = await params;
     return (
         <main className="absolute inset-0 z-9999 bg-black/10 backdrop-blur-lg flex items-center">
             <section className="flex w-full h-full overflow-hidden">
@@ -17,10 +19,17 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     </div>
                 </div>
                 <div className="flex-2 min-h-full">
-                    <PostDetailsModal>
+                    <PostDetailsModal postDetails={
                         <Suspense>
                             <PostDetails params={params} />
                         </Suspense>
+                    }
+                    postComments={
+                        <Suspense>
+                            <PostComments postId={id} />
+                        </Suspense>
+                    }>
+
                     </PostDetailsModal>
                 </div>
             </section>

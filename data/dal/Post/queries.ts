@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { cache } from "react";
 import { unstable_cache } from "next/cache";
-
+import { headers } from "next/headers";
+import { auth } from "@/lib/better-auth/auth";
 
 export const getArtImages = unstable_cache(async (postId: string) => {
   try {
@@ -51,6 +52,86 @@ export const getPostTitleAndDesc = cache(async (postId: string) => {
     console.error(error);
     return {
       success: false,
+    };
+  }
+});
+
+export const getPostComments = cache(async (postId: string) => {
+  try {
+    const postComments = await prisma.comment.findMany({
+      where: {
+        artPostId: postId,
+      },
+      select: {
+        id: true,
+        artPostId: true,
+        ownerId: true,
+
+        user: {
+          select: {
+            id: true,
+            name: true,
+            username: true,
+            image: true,
+          },
+        },
+        createdAt: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    return {
+      success: true,
+      data: postComments,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+    };
+  }
+});
+
+export const getPostStats = cache(async (postId: string) => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  try {
+    const postDetails = await prisma.post.findUnique({
+      where: {
+        id: postId,
+      },
+      select: {
+        id: true,
+        _count: {
+          select: {
+            comments: true,
+            likes: true,
+            Collections: true,
+          },
+        },
+        ...(session && {
+          likes: {
+            where: {
+              ownerId: session.user.id,
+            },
+          },
+        }),
+      },
+    });
+    return {
+      success: true,
+      data: {
+        post: postDetails,
+        userId: session?.user.id,
+      },
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      data: null,
     };
   }
 });
