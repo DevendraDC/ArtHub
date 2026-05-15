@@ -3,7 +3,7 @@
 import Navbar from "@/components/Navbar/Navbar";
 import { QueryProviders, SessionProvider } from "./Providers";
 import { getUserSession } from "@/data/dal/getUserSession";
-
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 export default async function MainLayout({
     children,
@@ -18,7 +18,9 @@ export default async function MainLayout({
             <div className="mt-5">
                 <QueryProviders>
                     <SessionProvider session={session}>
-                    {children}
+                        <NuqsAdapter>
+                            {children}
+                        </NuqsAdapter>
                     </SessionProvider>
                 </QueryProviders>
             </div>

@@ -7,6 +7,8 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { LoadingDots } from "@/components/animations";
+import { useQueryState } from "nuqs";
+import { useRouter, useSearchParams } from "next/navigation";
 
 
 // function groupOptions(id: number) {
@@ -20,7 +22,14 @@ import { LoadingDots } from "@/components/animations";
 // }
 
 export function HomePageClient() {
-    const [curFilter, setCurFilter] = useState(0);
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    useEffect(() => {
+        if(!searchParams.get("sortBy")) router.replace("?sortBy=Trending")
+    }, [searchParams, router])
+    const [sortBy, setSortBy] = useQueryState("sortBy", {
+        defaultValue: "Trending"
+    })
     const tabs = ["Trending", "Latest"];
     const {
         data,
@@ -31,8 +40,8 @@ export function HomePageClient() {
         isLoading,
         isError
     } = useInfiniteQuery({
-        queryKey: ["posts", curFilter],
-        queryFn: ({ pageParam }) => getPosts(curFilter, pageParam),
+        queryKey: ["posts", sortBy],
+        queryFn: ({ pageParam }) => getPosts(sortBy, pageParam),
         initialPageParam: undefined as string | undefined,
         getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
         staleTime: 10 * 60 * 1000,
@@ -64,12 +73,12 @@ export function HomePageClient() {
                     {tabs.map((tab, i) => (
                         <div
                             key={i}
-                            onClick={() => setCurFilter(i)}
-                            className={`${curFilter === i && " text-white rounded-3xl transition-all duration-500 "} cursor-pointer text-sm`}
+                            onClick={() => setSortBy(tab)}
+                            className={`${sortBy === tab && " text-white rounded-3xl transition-all duration-500 "} cursor-pointer text-sm`}
                         >
                             <div className="relative">
                                 <span className="relative z-9">{tab}</span>
-                                {curFilter === i && (
+                                {sortBy === tab && (
                                     <motion.div className={`bg-blue-700 top-1/2 left-1/2 -translate-1/2 rounded-2xl absolute ${tabw[i]} h-9`} initial={{ opacity: 0, y: 0 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.5, ease: "easeOut" }}></motion.div>

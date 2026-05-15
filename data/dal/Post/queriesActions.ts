@@ -22,10 +22,10 @@ export type PostWithUser = {
   };
 };
 
-export const getPosts = async (filter: number, cursor?: string, take = 20) => {
+export const getPosts = async (filter: string, cursor?: string, take = 20) => {
   try {
     switch (filter) {
-      case 1: {
+      case "Latest": {
         const posts = await prisma.post.findMany({
           take: take + 1,
           ...(cursor && {
@@ -54,7 +54,7 @@ export const getPosts = async (filter: number, cursor?: string, take = 20) => {
         return { data, nextCursor };
       }
 
-      case 0: {
+      case "Trending": {
         const posts = await prisma.$queryRaw<PostWithUser[]>`
           SELECT
             p.id,

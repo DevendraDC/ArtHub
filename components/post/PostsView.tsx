@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { postTime } from "@/utils/postUtils";
 import { PostWithUser } from "@/data/dal/Post/queriesActions";
 import Link from "next/link";
 import { cloudinaryTransform } from "@/utils/cloudinaryTransform";
@@ -64,15 +63,15 @@ const PostsView = memo(function PostsView({ posts }: { posts: PostWithUser[] }) 
                                                 />
                                             )}
                                             <div className="flex flex-col">
-                                                <div className="text-sm">{post.user.name}</div>
-                                                <div className="text-xs text-blue-100/40">
+                                                <h1 className="text-sm">{post.title}</h1>
+                                                <p className="text-xs text-blue-100/60">
                                                     {post.user.username}
-                                                </div>
+                                                </p>
                                             </div>
                                         </div>
-                                        <div className="text-blue-100/40 text-xs">
+                                        {/* <div className="text-blue-100/40 text-xs">
                                             {postTime(post.createdAt)}
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                             </motion.div>
