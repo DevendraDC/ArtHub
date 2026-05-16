@@ -18,7 +18,7 @@ type Props = {
 
 export function UserBox({ image, username, name }: { image: string, username: string, name: string }) {
     return (
-        <div className="flex gap-3 items-center text-sm hover:bg-(--surface2) p-3 rounded-lg cursor-pointer transition-all duration-300">
+        <div className="flex gap-3 items-center text-sm hover:bg-blue-400/10 p-3 rounded-lg cursor-pointer transition-all duration-300">
             {image ? <img src={image} className="w-10 h-10 object-cover rounded-full" alt="" /> : <svg viewBox="0 0 128 128" className="w-10 h-10">
                 <circle cx="64" cy="64" r="64" fill="#E5E7EB" />
                 <circle cx="64" cy="48" r="20" fill="#9CA3AF" />
@@ -26,7 +26,7 @@ export function UserBox({ image, username, name }: { image: string, username: st
             </svg>}
             <div>
                 <div className="font-serif">{name}</div>
-                <div className="text-xs text-(--text-subtle)">{username}</div>
+                <div className="text-xs text-muted-foreground">{username}</div>
             </div>
 
         </div>

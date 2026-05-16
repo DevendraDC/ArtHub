@@ -169,50 +169,7 @@ export const getSearchedPosts = async (
 
 export type SearchedPosts = Awaited<ReturnType<typeof getSearchedPosts>>;
 
-export const getPostStats = async (postId: string) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  try {
-    const postDetails = await prisma.post.findUnique({
-      where: {
-        id: postId,
-      },
-      select: {
-        id: true,
-        _count: {
-          select: {
-            comments: true,
-            likes: true,
-            Collections: true,
-          },
-        },
-        ...(session && {
-          likes: {
-            where: {
-              ownerId: session.user.id
-            }
-          }
-        })
-      },
-    });
-    return {
-      success: true,
-      data: {
-        post: postDetails,
-        userId: session?.user.id
-      }
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      success: false,
-      data: null
-    };
-  }
-};
 
-export type PostDetails = Awaited<ReturnType<typeof getPostStats>>;
 
 export const isLikedByUser = async (postId: string) => {
   try {

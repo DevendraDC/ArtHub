@@ -50,7 +50,7 @@ export function SearchPageClient() {
             />
           </div>
         </div>
-        <select onChange={(e) => setSortBy(e.target.value)} className="select h-full w-30 rounded-r-lg join-item focus:outline-0 bg-blue-700">
+        <select onChange={(e) => setSortBy(e.target.value)} className="select h-full w-30 rounded-r-lg join-item focus:outline-0 bg-white/15">
           <option>Latest</option>
           <option>Popular</option>
         </select>

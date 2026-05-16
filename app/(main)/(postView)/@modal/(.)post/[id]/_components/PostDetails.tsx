@@ -1,16 +1,15 @@
-import { Bookmark, Heart, MessageSquare } from "lucide-react";
+import { Bookmark, Copy, Heart, MessageSquare } from "lucide-react";
 import Link from "next/link";
-import { getPostStats } from "@/data/dal/Post/queriesActions";
+import { getPostStats } from "@/data/dal/Post/queries";
 import OptimisticLike from "@/components/User/OptimisticLike";
 import { Suspense } from "react";
 
-export default async function PostDetails({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = await params;
+export default async function PostDetails({ postId }: { postId: string }) {
     return (
         <div className="w-full flex flex-col gap-5">
             <div className="postDetails w-full flex flex-col gap-2 self-start">
                 <Suspense fallback={<PostStatFallback />}>
-                    <PostStats postId={id} />
+                    <PostStats postId={postId} />
                 </Suspense>
             </div>
         </div>

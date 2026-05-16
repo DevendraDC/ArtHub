@@ -92,11 +92,11 @@ export const getUsers = cache(async (keyword: string) => {
     return await prisma.user.findMany({
       where: {
         ...(keyword.trim() && {
-          AND: [
+          OR: [
             { name: { contains: keyword, mode: "insensitive" } },
             { username: { contains: keyword, mode: "insensitive" } },
-            { role: "USER" },
           ],
+          AND: {role: "USER"}
         }),
       },
       select: {

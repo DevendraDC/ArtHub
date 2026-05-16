@@ -65,6 +65,7 @@ model User {
 
   @@index([email])
   @@index([username])
+  @@index([name])
   @@map("user")
 }
 

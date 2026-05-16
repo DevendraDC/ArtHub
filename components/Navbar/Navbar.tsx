@@ -1,5 +1,3 @@
-"use server"
-
 import { SessionType } from "@/data/dal/getUserSession"
 import { BellIcon, PlusIcon, Search } from "lucide-react"
 import Link from "next/link"
@@ -8,18 +6,20 @@ import Image from "next/image"
 import { Button } from "../ui/button"
 import NavbarTabs from "./NavbarTabs"
 import { cloudinaryTransform } from "@/utils/cloudinaryTransform"
+import { SearchArtists } from "../SearchArtists"
 
 export default async function Navbar({ session }: { session: SessionType }) {
     return (
-        <nav className="top-0 relative z-999 bg-white/7 backdrop-blur-2xl p-3 w-full flex items-center justify-between">
+        <nav className="top-0 relative z-999 backdrop-blur-2xl p-3 w-full flex items-center justify-between">
             <section className="flex-1 flex items-center text-xl ml-10 gap-15">
-                <h1 className="font-sans font-bold text-blue-100/70">MER<span className="text-blue-600 border-b-2 border-blue-600 font-mono text-2xl tracking-wide font-extrabold">ART</span></h1>
+                <h1 className="font-logo font-bold text-blue-100/70">ART<span className="text-blue-600 font-logo text-xl font-bold">HUB</span></h1>
                 <NavbarTabs />
             </section>
             <section className="flex-1 flex justify-between items-center">
                 <section className="flex-2 relative max-w-80">
-                    <input placeholder="Search for artists" className="w-full rounded-2xl p-3 text-sm pl-12 pr-7 bg-white/7 placeholder:text-blue-100/50 focus:outline-0" />
-                    <Search size={34} className="absolute rounded-full bg-black p-1 left-1 top-1/2 -translate-y-1/2 text-white/80" />
+                    {/* <input placeholder="Search for artists" className="w-full rounded-2xl p-3 text-sm pl-12 pr-7 bg-white/7 placeholder:text-blue-100/50 focus:outline-0" />
+                    <Search size={34} className="absolute rounded-full bg-black p-1 left-1 top-1/2 -translate-y-1/2 text-white/80" /> */}
+                    <SearchArtists />
                 </section>
                 <NavAuth session={session} />
             </section>
@@ -32,7 +32,7 @@ function NavAuth({ session }: { session: SessionType }) {
     if (!session) {
         return (
             <section className="flex gap-10 text-sm items-center mr-10">
-                <Link href={"/login"}><button className="font-sans">Login</button></Link>
+                <Link href={"/login"}><button className="font-sans border rounded-sm">Login</button></Link>
                 <Link href={"/signup"}><button className="bg-blue-700 rounded-sm cursor-pointer p-1 px-3">Signup</button></Link>
             </section>
         )

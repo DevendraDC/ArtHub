@@ -21,7 +21,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <div className="flex-2 min-h-full">
                     <PostDetailsModal postDetails={
                         <Suspense>
-                            <PostDetails params={params} />
+                            <PostDetails postId={id} />
                         </Suspense>
                     }
                     postComments={

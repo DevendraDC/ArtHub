@@ -6,8 +6,7 @@ import { useDebounce } from "use-debounce";
 import { getUsers } from "../data/dal/user-queries";
 import { UserBox } from "./Navbar/UIComponent";
 import { toast } from "sonner";
-import { DialogTitle } from "@/components/ui/dialog";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";;
+import { Search} from "lucide-react";
 
 export function SearchArtists() {
     const [keyword, setkeyword] = useState("");
@@ -22,22 +21,27 @@ export function SearchArtists() {
         if (isError) toast(error.message);
     }, [isError, error]);
     return (
-        <>
-            <VisuallyHidden><DialogTitle>Search Artists</DialogTitle></VisuallyHidden>
-            <input type="text" placeholder="Search artists..." className="w-full p-2 rounded focus:outline-0" value={keyword} onChange={e => setkeyword(e.target.value)} />
-            {isLoading && (
-                <p className="text-sm text-muted-foreground">Searching...</p>
+        <main className="flex flex-col relative">
+            <section className="relative">
+                <input type="text" placeholder="Search artists..." className="w-full rounded-2xl p-3 text-sm pl-12 pr-7 bg-white/7 placeholder:text-blue-100/50 focus:outline-0" value={keyword} onChange={e => setkeyword(e.target.value)} />
+                <Search size={34} className="absolute rounded-full bg-black p-1 left-1 top-1/2 -translate-y-1/2 text-white/80" />
+            </section>
+            {data && (
+                <section className="bg-black min-h-50 p-2 absolute w-full top-12 rounded-lg">
+                    {data?.length === 0 && (
+                        <p className="text-xl text-center mt-15 text-muted-foreground">No artists found....</p>
+                    )}
+                    {data.length > 0 && (
+                        <div>
+                            {data.map(d => (
+                                <UserBox key={d.id} image={d.image ?? ""} name={d.name ?? ""} username={d.username ?? ""} />
+                            ))}
+                        </div>
+                    )}
+                </section>
             )}
-            {data?.length === 0 && (
-                <p className="text-sm text-muted-foreground">No artists found.</p>
-            )}
-            {data && data.length > 0 && (
-                <div>
-                    {data.map(d => (
-                        <UserBox key={d.id} image={d.image ?? ""} name={d.name ?? ""} username={d.username ?? ""} />
-                    ))}
-                </div>
-            )}
-        </>
+
+
+        </main>
     )
 }

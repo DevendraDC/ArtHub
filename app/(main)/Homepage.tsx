@@ -11,16 +11,6 @@ import { useQueryState } from "nuqs";
 import { useRouter, useSearchParams } from "next/navigation";
 
 
-// function groupOptions(id: number) {
-//     return queryOptions({
-//         queryKey: ['HomePagePosts', id],
-//         queryFn: async () => await getPosts(id),
-//         staleTime: 10 * 60 * 1000,
-//         refetchOnWindowFocus: false,
-//         refetchOnMount: false,
-//     })
-// }
-
 export function HomePageClient() {
     const router = useRouter();
     const searchParams = useSearchParams();

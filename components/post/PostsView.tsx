@@ -35,7 +35,7 @@ const PostsView = memo(function PostsView({ posts }: { posts: PostWithUser[] }) 
                         <Link href={`/post/${post.id}`} key={post.id} onClick={() => setPreview(previewData)}>
                             <motion.div
                                 key={post.id}
-                                className="w-60 h-60 aspect-square relative bg-transparent rounded-sm group"
+                                className="w-60 h-60 aspect-square relative bg-transparent group"
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.3, ease: "easeOut" }}
@@ -46,7 +46,7 @@ const PostsView = memo(function PostsView({ posts }: { posts: PostWithUser[] }) 
                                     src={previewUrl}
                                     alt=""
                                     fill
-                                    className="object-cover rounded-sm"
+                                    className="object-cover"
                                 />
                                 <div
                                     className="p-2 flex flex-col gap-3 absolute bottom-0 justify-end opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out inset-0 z-9 bg-black mask-t-from-1% to-transparent"

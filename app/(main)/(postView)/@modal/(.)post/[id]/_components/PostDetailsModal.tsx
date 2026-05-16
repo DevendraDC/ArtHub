@@ -4,8 +4,10 @@ import { usePostStore } from "@/store/usePostStore"
 import { mediumLabels } from "@/utils/postUtils";
 import { motion } from "framer-motion"
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function PostDetailsModal({ postDetails, postComments }: { postDetails: React.ReactNode, postComments: React.ReactNode }) {
+    const router = useRouter()
     const preview = usePostStore((s) => s.preview);
     if (!preview) return null;
     const date = new Date(preview?.createdAt ?? Date.now());
@@ -18,8 +20,8 @@ export default function PostDetailsModal({ postDetails, postComments }: { postDe
             transition={{ duration: 0.3, ease: "easeOut" }}>
             <div className="flex flex-col gap-5">
                 <div className="flex gap-3">
-                    <div>
-                        {preview?.user.image && <Image src={preview.user.image} alt="" width={60} height={60} className="rounded-full" />}
+                    <div onClick={() => router.push(`/profile/${preview.user.username}`)}>
+                        {preview?.user.image && <Image src={preview.user.image} alt="" width={60} height={60} className="rounded-full cursor-pointer" />}
                     </div>
                     <div>
                         <div className="font-serif">
@@ -72,7 +74,11 @@ export default function PostDetailsModal({ postDetails, postComments }: { postDe
 
                 <section className="mt-5 flex flex-col gap-5">
                     <h1>Comments</h1>
-                    <main>
+                    <main className="flex flex-col gap-10">
+                        <section>
+                            <textarea name="comment" placeholder="leave a comment" id="comment" maxLength={200} className="bg-white/10 min-h-20 focus:outline-0 mb-2 w-full resize-none p-3 text-sm" />
+                            <button className="bg-blue-700 h-fit p-1 rounded-sm px-2 font-sans">Submit</button>
+                        </section>
                         {postComments}
                     </main>
                 </section>

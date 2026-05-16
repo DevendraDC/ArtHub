@@ -20,7 +20,7 @@ import z from "zod";
 import { updateUser } from "@/data/dal/User/mutations";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { ProfileSettingsData, usernameExist } from "@/data/dal/User/queries";
+import { usernameExist } from "@/data/dal/User/queries";
 import { cloudinaryTransform } from "@/utils/cloudinaryTransform";
 import { uploadImage } from "@/lib/cloudinaryFunctions";
 import { Spinner } from "@/components/ui/spinner";
@@ -227,7 +227,7 @@ export default function Settings() {
                                             <FieldLabel htmlFor="location">Location</FieldLabel>
                                             <Input id="location" {...field} />
                                             <FieldDescription>
-                                                Your location/address (optional)
+                                                Your location/address (optional) (eg. California, USA)
                                             </FieldDescription>
                                             {fieldState.invalid && (
                                                 <FieldError errors={[fieldState.error]} />

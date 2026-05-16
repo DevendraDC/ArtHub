@@ -205,6 +205,7 @@ export const CommentScalarFieldEnum = {
   id: 'id',
   artPostId: 'artPostId',
   ownerId: 'ownerId',
+  content: 'content',
   likes: 'likes',
   commentId: 'commentId',
   createdAt: 'createdAt',

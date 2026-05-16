@@ -24,6 +24,11 @@ export const getArtImages = unstable_cache(async (postId: string) => {
 
 export type ArtImages = Awaited<ReturnType<typeof getArtImages>>;
 
+
+export const getPostInformation = cache(async (postId: string) => {
+  
+})
+
 export const getPostTitleAndDesc = cache(async (postId: string) => {
   try {
     const postDetails = await prisma.post.findUnique({
