@@ -61,42 +61,6 @@ export const getPostTitleAndDesc = cache(async (postId: string) => {
   }
 });
 
-export const getPostComments = cache(async (postId: string) => {
-  try {
-    const postComments = await prisma.comment.findMany({
-      where: {
-        artPostId: postId,
-      },
-      select: {
-        id: true,
-        artPostId: true,
-        ownerId: true,
-
-        user: {
-          select: {
-            id: true,
-            name: true,
-            username: true,
-            image: true,
-          },
-        },
-        createdAt: true,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-    return {
-      success: true,
-      data: postComments,
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      success: false,
-    };
-  }
-});
 
 export const getPostStats = cache(async (postId: string) => {
   const session = await auth.api.getSession({

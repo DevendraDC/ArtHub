@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { Prisma } from "@/lib/generated/prisma/client";
 import { auth } from "@/lib/better-auth/auth";
 import { headers } from "next/headers";
+import { cache } from "react";
 
 export type PostWithUser = {
   id: string;
@@ -169,8 +170,6 @@ export const getSearchedPosts = async (
 
 export type SearchedPosts = Awaited<ReturnType<typeof getSearchedPosts>>;
 
-
-
 export const isLikedByUser = async (postId: string) => {
   try {
     const session = await auth.api.getSession({
@@ -206,3 +205,70 @@ export const isLikedByUser = async (postId: string) => {
     };
   }
 };
+
+export const fetchPostsProfile = cache(async (userId: string) => {
+  return await prisma.post.findMany({
+    where: {
+      user: {
+        id: userId,
+      },
+    },
+    select: {
+      id: true,
+      thumbnail: true,
+      title: true,
+      description: true,
+      createdAt: true,
+      mediums: true,
+      tags: true,
+      user: {
+        select: { id: true, name: true, username: true, image: true },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+});
+
+export type PostsProfile = Awaited<ReturnType<typeof fetchPostsProfile>>;
+
+
+export const getPostComments = cache(async (postId: string) => {
+  try {
+    const postComments = await prisma.comment.findMany({
+      where: {
+        artPostId: postId,
+      },
+      select: {
+        id: true,
+        artPostId: true,
+        ownerId: true,
+        content: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+            username: true,
+            image: true,
+          },
+        },
+        createdAt: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    return {
+      success: true,
+      data: postComments,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      data: null
+    };
+  }
+});
+

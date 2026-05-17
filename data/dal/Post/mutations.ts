@@ -4,7 +4,9 @@ import { PostMedium } from "@/lib/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 import { getUserSession } from "../getUserSession";
 import { createPostSchemaServer } from "@/validators/post";
-import z from "zod";
+import z, { success } from "zod";
+import { auth } from "@/lib/better-auth/auth";
+import { headers } from "next/headers";
 
 export async function postUpload(formData: FormData) {
   try {
@@ -57,3 +59,29 @@ export async function postUpload(formData: FormData) {
     };
   }
 }
+
+export const createComment = async (postId: string, comment: string) => {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    if (!session) throw new Error("session not found");
+    const newComment = await prisma.comment.create({
+      data: {
+        artPostId: postId,
+        ownerId: session.user.id,
+        content: comment,
+      },
+    });
+    return {
+      success: true,
+      data: newComment
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      data: null
+    };
+  }
+};

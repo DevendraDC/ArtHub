@@ -5,14 +5,15 @@ import { PostWithUser } from "@/data/dal/Post/queriesActions";
 import Link from "next/link";
 import { cloudinaryTransform } from "@/utils/cloudinaryTransform";
 import { motion } from "motion/react"
-import { memo } from "react";
+import React, { memo } from "react";
 import { usePostStore } from "@/store/usePostStore";
+import { ClassNameValue, twMerge } from "tailwind-merge";
 
-const PostsView = memo(function PostsView({ posts }: { posts: PostWithUser[] }) {
+const PostsView = memo(function PostsView({ posts, className}: { posts: PostWithUser[], className: ClassNameValue}) {
     const setPreview = usePostStore((s) => s.setPreview)
     return (
         <div>
-            <div className="grid grid-cols-6 gap-4">
+            <div className={twMerge(`grid grid-cols-6 gap-4`, className)}>
                 {posts.map((post) => {
                     const url = post.thumbnail;
                     const previewUrl = cloudinaryTransform(url, "370")

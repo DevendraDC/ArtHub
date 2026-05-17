@@ -13,9 +13,6 @@ export default function PostImagesUpload({ selectedImages, setSelectedImages }: 
     const imagesUploadRef = useRef<HTMLInputElement>(null);
     return (
         <div className="images flex flex-col gap-5 p-6 rounded-xl cursor-pointer">
-            {/* <div className="font-sans text-blue-200">
-                <span className="text-blue-500">&middot; </span>IMAGES
-            </div> */}
             <div
                 onClick={() => imagesUploadRef.current?.click()}
                 className="flex flex-col items-center gap-1 border-2 text-sm p-7 rounded-lg hover:bg-blue-400/10 hover:border-blue-400 transition-all duration-300"

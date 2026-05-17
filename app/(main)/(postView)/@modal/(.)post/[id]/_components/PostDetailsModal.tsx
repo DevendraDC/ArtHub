@@ -5,6 +5,7 @@ import { mediumLabels } from "@/utils/postUtils";
 import { motion } from "framer-motion"
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Suspense } from "react";
 
 export default function PostDetailsModal({ postDetails, postComments }: { postDetails: React.ReactNode, postComments: React.ReactNode }) {
     const router = useRouter()
@@ -72,16 +73,9 @@ export default function PostDetailsModal({ postDetails, postComments }: { postDe
                     </div>
                 )}
 
-                <section className="mt-5 flex flex-col gap-5">
-                    <h1>Comments</h1>
-                    <main className="flex flex-col gap-10">
-                        <section>
-                            <textarea name="comment" placeholder="leave a comment" id="comment" maxLength={200} className="bg-white/10 min-h-20 focus:outline-0 mb-2 w-full resize-none p-3 text-sm" />
-                            <button className="bg-blue-700 h-fit p-1 rounded-sm px-2 font-sans">Submit</button>
-                        </section>
-                        {postComments}
-                    </main>
-                </section>
+                <Suspense>
+                    {postComments}
+                </Suspense>
 
             </div>
         </motion.div>

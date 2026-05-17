@@ -1,4 +1,4 @@
-import { Bookmark, Copy, Heart, MessageSquare } from "lucide-react";
+import { Bookmark, Heart, MessageSquare } from "lucide-react";
 import Link from "next/link";
 import { getPostStats } from "@/data/dal/Post/queries";
 import OptimisticLike from "@/components/User/OptimisticLike";

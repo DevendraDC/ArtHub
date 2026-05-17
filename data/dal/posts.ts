@@ -2,7 +2,6 @@
 
 import { prisma } from "@/lib/prisma";
 import { cache } from "react";
-import { getUserSession } from "./getUserSession";
 
 export const getAllPosts = cache(async () => {
   try {
@@ -162,30 +161,3 @@ export const toggleLike = async (
   }
 };
 
-export const fetchPostsProfile = cache(async (userId: string) => {
-  return await prisma.post.findMany({
-    where: {
-      user: {
-        id: userId,
-      },
-    },
-    select: {
-      id: true,
-      createdAt: true,
-      artImages: {
-        orderBy: {
-          order: "asc",
-        },
-        take: 1,
-        select: {
-          url: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-});
-
-export type PostsProfile = Awaited<ReturnType<typeof fetchPostsProfile>>;

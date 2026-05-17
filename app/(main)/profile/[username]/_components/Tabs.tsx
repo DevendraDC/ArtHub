@@ -1,8 +1,8 @@
 "use client"
 
 import FollowList from "@/components/FollowList";
-import ProfilePostsGrid from "@/components/Navbar/UIComponent";
-import { getProfileData, ProfileData } from "@/data/dal/user-queries";
+import PostsView from "@/components/post/PostsView";
+import { getProfileData, ProfileData } from "@/data/dal/User/queriesActions";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -23,12 +23,13 @@ function groupOptions(id: number, userId: string) {
         queryKey: ["ProfilePage", id, userId],
         queryFn: async () => await getProfileData(id, userId),
         staleTime: 10 * 60 * 1000,
+        refetchOnMount: true
     });
 }
 
 const TABS = [
     { label: "Posts", icon: ImageIcon },
-    { label: "Saved", icon: Palette },
+    { label: "Collections", icon: Palette },
     { label: "Followers", icon: Users },
     { label: "Following", icon: UserPlus },
 ];
@@ -120,7 +121,7 @@ function ProfileTabContent({ data }: { data: ProfileData }) {
                     </div>
                 );
             }
-            return <ProfilePostsGrid posts={data.data} />;
+            return <PostsView posts={data.data} className="grid-cols-5" />;
         case "followers":
             if (!data.data || data.data.length === 0) {
                 return (

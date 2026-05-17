@@ -1,5 +1,3 @@
-"use client"
-
 import Link from "next/link";
 import Image from "next/image";
 
@@ -18,18 +16,17 @@ type Props = {
 
 export function UserBox({ image, username, name }: { image: string, username: string, name: string }) {
     return (
-        <div className="flex gap-3 items-center text-sm hover:bg-blue-400/10 p-3 rounded-lg cursor-pointer transition-all duration-300">
-            {image ? <img src={image} className="w-10 h-10 object-cover rounded-full" alt="" /> : <svg viewBox="0 0 128 128" className="w-10 h-10">
-                <circle cx="64" cy="64" r="64" fill="#E5E7EB" />
-                <circle cx="64" cy="48" r="20" fill="#9CA3AF" />
-                <path d="M32 104c0-18 14-30 32-30s32 12 32 30" fill="#9CA3AF" />
-            </svg>}
-            <div>
-                <div className="font-serif">{name}</div>
-                <div className="text-xs text-muted-foreground">{username}</div>
-            </div>
+        <Link href={`/profile/${username}`}>
+            <div className="flex gap-3 items-center text-sm hover:bg-blue-400/10 p-3 rounded-lg cursor-pointer transition-all duration-300">
+                <img src={image} className="w-10 h-10 object-cover rounded-full" alt="" />
+                <div>
+                    <div className="font-serif">{name}</div>
+                    <div className="text-xs text-muted-foreground">{username}</div>
+                </div>
 
-        </div>
+            </div>
+        </Link>
+
     )
 }
 

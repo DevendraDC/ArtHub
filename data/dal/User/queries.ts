@@ -1,5 +1,3 @@
-"use server";
-
 import { prisma } from "@/lib/prisma";
 import { getUserSession } from "../getUserSession";
 import { cache } from "react";
@@ -64,22 +62,11 @@ export const getUserData2 = async () => {
   }
 };
 
-export const usernameExist = async (username: string) => {
-  const user = await prisma.user.findUnique({
-    where: { username },
-    select: { id: true },
-  });
-  return !!user;
-};
-
 export const getProfile = cache(async (username: string) => {
   try {
-    const session = await getUserSession();
-    if (!session || !session.user.id) throw new Error("Session not found");
-    if(!session.user.username) throw new Error("profile not found")
     const user = await prisma.user.findUnique({
       where: {
-        username
+        username,
       },
       select: {
         id: true,
@@ -90,11 +77,6 @@ export const getProfile = cache(async (username: string) => {
         bio: true,
         location: true,
         portfolio: true,
-        followers: {
-          where: {
-            followerId: session.user.id,
-          },
-        },
         _count: {
           select: {
             artPosts: true,
@@ -112,8 +94,34 @@ export const getProfile = cache(async (username: string) => {
     console.error(error);
     return {
       success: false,
+      userData: null,
     };
   }
 });
 
 export type UserProfile = Awaited<ReturnType<typeof getProfile>>;
+
+export const isUserFollowing = cache(
+  async (userId: string, sessionUserId: string) => {
+    try {
+      const isFollowing = await prisma.follow.findUnique({
+        where: {
+          followerId_followingId: {
+            followerId: sessionUserId,
+            followingId: userId,
+          },
+        },
+      });
+      return {
+        success: true,
+        data: isFollowing,
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        success: false,
+        data: null,
+      };
+    }
+  },
+);

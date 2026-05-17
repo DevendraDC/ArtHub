@@ -18,7 +18,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                         </Suspense>
                     </div>
                 </div>
-                <div className="flex-2 min-h-full">
+                <div className="flex-2 min-h-full overflow-auto">
                     <PostDetailsModal postDetails={
                         <Suspense>
                             <PostDetails postId={id} />

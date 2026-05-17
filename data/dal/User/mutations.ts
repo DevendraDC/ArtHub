@@ -44,11 +44,7 @@ export const updateUser = async (userData: userData) => {
   }
 };
 
-export const toggleFollow = async (
-  followerId: string,
-  followingId: string,
-  isFollowing: boolean,
-) => {
+export const toggleFollow = async (followerId: string, followingId: string, isFollowing: boolean) => {
   if (isFollowing) {
     await prisma.follow.delete({
       where: {
@@ -58,12 +54,13 @@ export const toggleFollow = async (
         },
       },
     });
-  } else {
+  } else
     await prisma.follow.create({
       data: {
         followerId,
         followingId,
       },
     });
-  }
+
+  revalidatePath("/profile");
 };

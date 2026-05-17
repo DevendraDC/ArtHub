@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { getPosts } from "@/data/dal/Post/queriesActions";
 import PostsView from "@/components/post/PostsView";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -81,15 +81,15 @@ export function HomePageClient() {
                 </div>
 
                 {isLoading ? (
-                    <div className="scale-110 absolute left-1/2 top-1/2 -translate-1/2">
-                        <LoadingDots />
+                    <div className="absolute left-1/2 top-1/2 -translate-1/2">
+                        <div className="loading loading-dots loading-xl text-primary"></div>
                     </div>
                 ) : (
                     <>
-                        <PostsView posts={posts} />
+                        <PostsView posts={posts} className="grid-cols-6"/>
                         <div ref={ref} className="h-10" />
                         {isFetchingNextPage && (
-                            <div className="scale-110 py-4"><LoadingDots /></div>
+                            <div className="loading loading-dots loading-xl text-primary"></div>
                         )}
                     </>
                 )}

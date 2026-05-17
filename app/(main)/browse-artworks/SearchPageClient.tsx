@@ -34,7 +34,7 @@ export function SearchPageClient() {
   });
 
   return (
-    <main className="w-[88%] p-3 mx-auto flex flex-col gap-10">
+    <main className="w-[80%] p-3 mx-auto flex flex-col items-center gap-10">
       <section className="join z-10 mx-auto h-12">
         <div className="join-item px-3 bg-white/10 rounded-l-lg flex justify-center items-center">
           <Search />
@@ -74,9 +74,11 @@ export function SearchPageClient() {
         </div>
       </section>
 
-
-      {isFetching && <div className="opacity-50 pointer-events-none"><PostsView posts={posts ?? []} /></div>}
-      {!isFetching && <PostsView posts={posts ?? []} />}
+      <PostsView posts={posts ?? []} className="grid-cols-5" />
+      {isFetching && (<div className="loading loading-dots text-primary loading-xl"></div>)}
+      {posts?.length === 0 && (<h1 className="text-blue-200/70">No Posts Found.....</h1>)}
+      {/* {isFetching && <div className="opacity-50 pointer-events-none"><PostsView posts={posts ?? []} /></div>}
+      {!isFetching && <PostsView posts={posts ?? []} columns={5}/>} */}
 
     </main>
   );

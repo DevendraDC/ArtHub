@@ -20,7 +20,7 @@ import z from "zod";
 import { updateUser } from "@/data/dal/User/mutations";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { usernameExist } from "@/data/dal/User/queries";
+import { usernameExist } from "@/data/dal/User/queriesActions";
 import { cloudinaryTransform } from "@/utils/cloudinaryTransform";
 import { uploadImage } from "@/lib/cloudinaryFunctions";
 import { Spinner } from "@/components/ui/spinner";
