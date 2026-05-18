@@ -28,13 +28,6 @@ export const signupUser = async (data: z.infer<typeof authSchema>) => {
       },
     });
 
-    await auth.api.sendVerificationOTP({
-      body: {
-        email,
-        type: "email-verification",
-      },
-    });
-
     return {
       success: true,
     };
@@ -65,6 +58,7 @@ export const loginUser = async (data: z.infer<typeof authSchema>) => {
       body: { email, password },
       headers: await headers(),
     });
+    console.log(user);
     if(!user.emailVerified){
       throw new Error("email not verified");
     }
@@ -85,30 +79,30 @@ export const loginUser = async (data: z.infer<typeof authSchema>) => {
   }
 };
 
-export const verifyEmail = async (otp: string, email: string) => {
-  try {
-    if (otp.length < 6) {
-      throw new Error("Please enter the complete 6 digit verification code");
-    }
+// export const verifyEmail = async (otp: string, email: string) => {
+//   try {
+//     if (otp.length < 6) {
+//       throw new Error("Please enter the complete 6 digit verification code");
+//     }
 
-    await auth.api.verifyEmailOTP({
-      body: { email, otp },
-    });
+//     await auth.api.verifyEmailOTP({
+//       body: { email, otp },
+//     });
 
-    return { success: true };
-  } catch (error) {
-    console.error(error);
+//     return { success: true };
+//   } catch (error) {
+//     console.error(error);
 
-    if (error instanceof APIError) {
-      return {
-        success: false,
-        error: error.body?.message ?? "Verification failed",
-      };
-    }
+//     if (error instanceof APIError) {
+//       return {
+//         success: false,
+//         error: error.body?.message ?? "Verification failed",
+//       };
+//     }
 
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : "Something went wrong",
-    };
-  }
-};
+//     return {
+//       success: false,
+//       error: error instanceof Error ? error.message : "Something went wrong",
+//     };
+//   }
+// };

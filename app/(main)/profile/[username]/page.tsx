@@ -4,10 +4,9 @@ import { getProfile, isUserFollowing } from "@/data/dal/User/queries";
 import Link from "next/link";
 import Tabs from "./_components/Tabs";
 import { MapPin } from "lucide-react";
-import { auth } from "@/lib/better-auth/auth";
-import { headers } from "next/headers";
 import { Suspense } from "react";
 import OptimisticFollow from "@/components/User/OptimisticFollow";
+import { getUserSession } from "@/data/dal/getUserSession";
 
 export default async function Page({ params }: { params: Promise<{ username: string }> }) {
   const userParam = await params;
@@ -76,10 +75,8 @@ export default async function Page({ params }: { params: Promise<{ username: str
 
 
 export async function Follow({ userId }: { userId: string }) {
-  const session = await auth.api.getSession({
-    headers: await headers()
-  })
-  if (!session || session.user.id === userId) return null;
+  const session = await getUserSession()
+  if (!session || session.user.id === userId || !session.user.username || !session.user.name) return null;
   const result = await isUserFollowing(userId, session.user.id);
   if (!result.success) return null;
   const isFollowing = !!result.data

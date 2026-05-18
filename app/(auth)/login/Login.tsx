@@ -22,16 +22,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import { loginUser } from "@/data/dal/auth/queries";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import EmailVerify from "@/components/VerifyEmail";
+import { authClient } from "@/lib/better-auth/auth-client";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const [email, setEmail] = useState<string | null>(null)
   const router = useRouter();
   const {
     handleSubmit,
@@ -45,11 +42,10 @@ export function LoginForm({
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof authSchema>) => {
-    const { success, error } = await loginUser(data);
-    if (!success) {
-      toast.error(error);
-      if(error === "email not verified") setEmail(data.email);
+  const onSubmit = async (validatedData: z.infer<typeof authSchema>) => {
+    const {data, error} = await authClient.signIn.email(validatedData);
+    if (error) {
+      toast.error(error.message);
     }
     else {
       toast.success("Sign in successfull");
@@ -57,7 +53,6 @@ export function LoginForm({
     }
   };
 
-  if(email) return <EmailVerify email={email}/>
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>

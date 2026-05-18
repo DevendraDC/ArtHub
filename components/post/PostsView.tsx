@@ -1,45 +1,34 @@
-"use client";
-
 import Image from "next/image";
-import { PostWithUser } from "@/data/dal/Post/queriesActions";
 import Link from "next/link";
 import { cloudinaryTransform } from "@/utils/cloudinaryTransform";
-import { motion } from "motion/react"
-import React, { memo } from "react";
-import { usePostStore } from "@/store/usePostStore";
 import { ClassNameValue, twMerge } from "tailwind-merge";
 
-const PostsView = memo(function PostsView({ posts, className}: { posts: PostWithUser[], className: ClassNameValue}) {
-    const setPreview = usePostStore((s) => s.setPreview)
+type Posts = ({
+    id: string;
+    title: string;
+    thumbnail: string;
+    createdAt: Date;
+    user: {
+        id: string;
+        name: string | null;
+        username: string | null;
+        image: string | null;
+    };
+} | null)[]
+
+export default function PostsView({ posts, className }: { posts: Posts, className: ClassNameValue }) {
     return (
         <div>
-            <div className={twMerge(`grid grid-cols-6 gap-4`, className)}>
+            <div className={twMerge(`grid grid-cols-6 gap-2`, className)}>
                 {posts.map((post) => {
+                    if (!post) return null;
                     const url = post.thumbnail;
                     const previewUrl = cloudinaryTransform(url, "370")
-                    const previewData = {
-                        id: post.id,
-                        thumbnail: post.thumbnail,
-                        title: post.title,
-                        description: post.description,
-                        tags: post.tags,
-                        mediums: post.mediums,
-                        createdAt: post.createdAt,
-                        user: {
-                            id: post.id,
-                            name: post.user.name,
-                            image: post.user.image ?? "",
-                            username: post.user.username ?? ""
-                        }
-                    }
                     return (
-                        <Link href={`/post/${post.id}`} key={post.id} onClick={() => setPreview(previewData)}>
-                            <motion.div
+                        <Link href={`/post/${post.id}`} key={post.id}>
+                            <div
                                 key={post.id}
                                 className="w-60 h-60 aspect-square relative bg-transparent group"
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.3, ease: "easeOut" }}
                             >
                                 <Image
                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -75,13 +64,11 @@ const PostsView = memo(function PostsView({ posts, className}: { posts: PostWith
                                         </div> */}
                                     </div>
                                 </div>
-                            </motion.div>
+                            </div>
                         </Link>
                     )
                 })}
             </div>
         </div>
     );
-})
-
-export default PostsView;
+}

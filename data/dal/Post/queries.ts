@@ -24,10 +24,43 @@ export const getArtImages = unstable_cache(async (postId: string) => {
 
 export type ArtImages = Awaited<ReturnType<typeof getArtImages>>;
 
-
 export const getPostInformation = cache(async (postId: string) => {
-  
-})
+  try {
+    const postInfo = await prisma.post.findUnique({
+      where: {
+        id: postId,
+      },
+      select: {
+        id: true,
+        authorId: true,
+        title: true,
+        description: true,
+        createdAt: true,
+        user: {
+          select: {
+            name: true,
+            username: true,
+            image: true,
+          },
+        },
+        mediums: true,
+        tags: true,
+      },
+    });
+    return {
+      success: true,
+      data: postInfo,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      data: null,
+    };
+  }
+});
+
+export type PostInformation = Awaited<ReturnType<typeof getPostInformation>>;
 
 export const getPostTitleAndDesc = cache(async (postId: string) => {
   try {
@@ -61,7 +94,6 @@ export const getPostTitleAndDesc = cache(async (postId: string) => {
   }
 });
 
-
 export const getPostStats = cache(async (postId: string) => {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -93,7 +125,7 @@ export const getPostStats = cache(async (postId: string) => {
       success: true,
       data: {
         post: postDetails,
-        userId: session?.user.id,
+        session: session,
       },
     };
   } catch (error) {
@@ -104,3 +136,5 @@ export const getPostStats = cache(async (postId: string) => {
     };
   }
 });
+
+export type PostStatsType = Awaited<ReturnType<typeof getPostStats>>;

@@ -23,7 +23,6 @@ import z from "zod"
 import { toast } from "sonner"
 import { signupUser } from "@/data/dal/auth/queries"
 import { useState } from "react"
-import EmailVerify from "@/components/VerifyEmail"
 
 export function SignupForm() {
   const [email, setEmail] = useState<string | null>(null);
@@ -46,7 +45,6 @@ export function SignupForm() {
     }
   }
 
-  if(email) return <EmailVerify email={email}/>
 
   return (
     <Card className="bg-transparent border-0">

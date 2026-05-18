@@ -1,44 +1,45 @@
-"use client"
-
-import { usePostStore } from "@/store/usePostStore"
+import { getPostInformation, getPostStats } from "@/data/dal/Post/queries";
 import { mediumLabels } from "@/utils/postUtils";
-import { motion } from "framer-motion"
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { Suspense } from "react";
+import PostDetails from "./PostStats";
+import Comments from "./PostComments";
+import { auth } from "@/lib/better-auth/auth";
+import { headers } from "next/headers";
+import Link from "next/link";
 
-export default function PostDetailsModal({ postDetails, postComments }: { postDetails: React.ReactNode, postComments: React.ReactNode }) {
-    const router = useRouter()
-    const preview = usePostStore((s) => s.preview);
-    if (!preview) return null;
-    const date = new Date(preview?.createdAt ?? Date.now());
+export default async function PostDetailsModal({ postId }: { postId: string }) {
+    const postInfoResult = getPostInformation(postId);
+    const postStatsResult = getPostStats(postId);
+    const { data, success } = await postInfoResult;
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+    const date = new Date(data?.createdAt ?? Date.now());
     const time = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }).toLowerCase();
     const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     return (
-        <motion.div className="w-full min-h-full flex flex-col gap-8 bg-black p-5 rounded-r-2xl"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}>
+        <div className="w-full min-h-full flex flex-col gap-8 bg-black p-5 rounded-r-2xl">
             <div className="flex flex-col gap-5">
                 <div className="flex gap-3">
-                    <div onClick={() => router.push(`/profile/${preview.user.username}`)}>
-                        {preview?.user.image && <Image src={preview.user.image} alt="" width={60} height={60} className="rounded-full cursor-pointer" />}
+                    <div>
+                        {data?.user.image && <Link href={`/profile/${data.user.username}`}><Image src={data.user.image} alt="" width={60} height={60} className="rounded-full cursor-pointer" /></Link>}
                     </div>
                     <div>
                         <div className="font-serif">
-                            {preview?.user.name}
+                            {data?.user.name}
                         </div>
                         <div className="text-sm text-white/40">
-                            {preview?.user.username}
+                            {data?.user.username}
                         </div>
                     </div>
                 </div>
                 <section>
                     <div className="text-2xl font-serif">
-                        {preview?.title}
+                        {data?.title}
                     </div>
-                    {preview?.description && <div className="text-white/60 wrap-break-word min-w-0">
-                        {preview?.description}
+                    {data?.description && <div className="text-white/60 wrap-break-word min-w-0">
+                        {data?.description}
                     </div>}
                     <div className="text-sm text-white/30 flex gap-2 items-center">
                         {time}
@@ -47,24 +48,25 @@ export default function PostDetailsModal({ postDetails, postComments }: { postDe
                     </div>
                 </section>
                 <section>
-                    {postDetails}
+                    <Suspense>
+                        <PostDetails promise={postStatsResult} />
+                    </Suspense>
                 </section>
-
                 <div className="Mediums flex flex-col gap-3">
                     <h1>Mediums</h1>
                     <div className="flex flex-wrap gap-3">
-                        {preview?.mediums.map((med, i) => (
+                        {data?.mediums.map((med, i) => (
                             <div key={i} className="p-2 rounded-lg border border-white/35 text-white/70 text-xs">
                                 {mediumLabels[med]}
                             </div>
                         ))}
                     </div>
                 </div>
-                {!!preview?.tags.length && (
+                {!!data?.tags.length && (
                     <div className="tags flex flex-col gap-3">
                         <h1>Tags</h1>
                         <div className="flex flex-wrap gap-3">
-                            {preview?.tags.map((tag, i) => (
+                            {data?.tags.map((tag, i) => (
                                 <div key={i} className="text-blue-400/80 font-sans text-sm">
                                     #{tag}
                                 </div>
@@ -74,10 +76,10 @@ export default function PostDetailsModal({ postDetails, postComments }: { postDe
                 )}
 
                 <Suspense>
-                    {postComments}
+                    <Comments session={session} postId={postId} />
                 </Suspense>
 
             </div>
-        </motion.div>
+        </div>
     )
 }

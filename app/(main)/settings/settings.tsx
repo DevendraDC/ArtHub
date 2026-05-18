@@ -25,6 +25,7 @@ import { cloudinaryTransform } from "@/utils/cloudinaryTransform";
 import { uploadImage } from "@/lib/cloudinaryFunctions";
 import { Spinner } from "@/components/ui/spinner";
 import { useSession } from "../Providers";
+import { SessionType } from "@/data/dal/getUserSession";
 
 
 type data = {
@@ -38,10 +39,9 @@ type data = {
     location: string | null;
 }
 
-export default function Settings() {
+export default function Settings({ session }: { session: SessionType }) {
+    if (!session) return null;
     const router = useRouter()
-    const session = useSession();
-    if(!session || !session.user) return null;
     const { username, name, bio, image, email, portfolio, location, id } = session.user;
     const uploadFileRef = useRef<HTMLInputElement | null>(null);
     const [avatar, setAvatar] = useState<File | null>(null);
@@ -65,7 +65,7 @@ export default function Settings() {
     });
 
     const formSubmit = async (resolvedData: z.infer<typeof profileSchema>) => {
-        if(!id) return;
+        if (!id) return;
         console.log("hello")
         const userData = {
             id: id,

@@ -7,11 +7,12 @@ import { createPostSchemaServer } from "@/validators/post";
 import z, { success } from "zod";
 import { auth } from "@/lib/better-auth/auth";
 import { headers } from "next/headers";
+import { revalidatePath } from "next/cache";
 
 export async function postUpload(formData: FormData) {
   try {
     const session = await getUserSession();
-    if (!session || !session.user.id) throw new Error("session not found");
+    if (!session) throw new Error("User not authenticated!");
     const authorId = session.user.id;
     const title = formData.get("title") as string;
     const description = formData.get("description") as string;
@@ -48,6 +49,7 @@ export async function postUpload(formData: FormData) {
         },
       },
     });
+    revalidatePath("/")
     return {
       isSuccess: true,
     };
@@ -75,13 +77,13 @@ export const createComment = async (postId: string, comment: string) => {
     });
     return {
       success: true,
-      data: newComment
+      data: newComment,
     };
   } catch (error) {
     console.error(error);
     return {
       success: false,
-      data: null
+      data: null,
     };
   }
 };

@@ -6,7 +6,6 @@ import PostsView from "@/components/post/PostsView";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
-import { LoadingDots } from "@/components/animations";
 import { useQueryState } from "nuqs";
 import { useRouter, useSearchParams } from "next/navigation";
 

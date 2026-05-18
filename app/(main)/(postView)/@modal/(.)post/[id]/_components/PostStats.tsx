@@ -1,15 +1,14 @@
 import { Bookmark, Heart, MessageSquare } from "lucide-react";
-import Link from "next/link";
-import { getPostStats } from "@/data/dal/Post/queries";
+import { PostStatsType } from "@/data/dal/Post/queries";
 import OptimisticLike from "@/components/User/OptimisticLike";
 import { Suspense } from "react";
 
-export default async function PostDetails({ postId }: { postId: string }) {
+export default async function PostDetails({ promise }: { promise: Promise<PostStatsType> }) {
     return (
         <div className="w-full flex flex-col gap-5">
             <div className="postDetails w-full flex flex-col gap-2 self-start">
-                <Suspense fallback={<PostStatFallback />}>
-                    <PostStats postId={postId} />
+                <Suspense>
+                    <PostStats promise={promise} />
                 </Suspense>
             </div>
         </div>
@@ -43,37 +42,36 @@ export function PostStatFallback() {
     )
 }
 
-export async function PostStats({ postId }: { postId: string }) {
-    const data = await getPostStats(postId);
-    const userId = data?.data?.userId;
-    const isLiked = !!data?.data?.post?.likes.length;
-    const comments = data?.data?.post?._count.comments;
-    const likes = data?.data?.post?._count.likes;
-    const collections = data?.data?.post?._count.Collections;
+export async function PostStats({ promise }: { promise: Promise<PostStatsType> }) {
+    const result = await promise;
+    if (!result.success || !result.data?.post) return null;
+    const comments = result?.data?.post?._count.comments;
+    const likes = result?.data?.post?._count.likes;
+    const collections = result?.data?.post?._count.Collections;
+    if (!result.data.session || !result.data.session.user.username || !result.data.session.user.name) {
+        return (
+            <ul className="flex gap-3 text-white/70 items-center text-sm">
+                <li>{likes} likes</li>
+                <li className="scale-180">&middot;</li>
+                <li>{comments} comments</li>
+                <li className="scale-180">&middot;</li>
+                <li>{collections} saves</li>
+            </ul>
+        )
+    }
+    const postId = result.data?.post?.id;
+    const userId = result?.data?.session?.user.id;
+    const isLiked = !!result?.data?.post?.likes.length;
     return (
         <>
             <div className="border border-white/20"></div>
             <div className="flex gap-10 text-(--text-light)">
-                {userId ? (
-                    <OptimisticLike data={{
-                        isLiked,
-                        likes: likes ?? 0,
-                        postId,
-                        userId
-                    }} />
-
-                ) : (
-                    <div className="flex gap-2 hover:bg-white/10 cursor-pointer w-fit p-2 rounded-lg transition-colors">
-                        <Link href={"/login"}>
-                            <Heart
-                                size={22}
-                                className="transition-colors stroke-current"
-                            />
-                        </Link>
-
-                        <div className="text-white/45">{likes}</div>
-                    </div>
-                )}
+                <OptimisticLike data={{
+                    isLiked,
+                    likes: likes ?? 0,
+                    postId,
+                    userId
+                }} />
 
                 <div className="flex gap-2 w-fit p-2">
                     <MessageSquare size={22} />

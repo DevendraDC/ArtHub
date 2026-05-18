@@ -1,14 +1,13 @@
-import { SessionType } from "@/data/dal/getUserSession"
-import { BellIcon, PlusIcon, Search } from "lucide-react"
+import { getUserSession, SessionType } from "@/data/dal/getUserSession"
+import { BellIcon, PlusIcon } from "lucide-react"
 import Link from "next/link"
 import { ProfileDropdown } from "./ProfileDropdown"
-import Image from "next/image"
 import { Button } from "../ui/button"
 import NavbarTabs from "./NavbarTabs"
-import { cloudinaryTransform } from "@/utils/cloudinaryTransform"
 import { SearchArtists } from "../SearchArtists"
 
-export default async function Navbar({ session }: { session: SessionType }) {
+export default async function Navbar() {
+    const session = await getUserSession();
     return (
         <nav className="top-0 relative z-999 backdrop-blur-2xl p-3 w-full flex items-center justify-between">
             <section className="flex-1 flex items-center text-xl ml-10 gap-15">
@@ -37,7 +36,7 @@ function NavAuth({ session }: { session: SessionType }) {
             </section>
         )
     }
-    else if (session && (!session.user.username || !session.user.name)) {
+    else if ((!session.user.username || !session.user.name)) {
         return (
             <Link href={"/settings"}><Button className="text-sm">Setup Profile</Button></Link>
         )
@@ -45,20 +44,9 @@ function NavAuth({ session }: { session: SessionType }) {
     else {
 
         return (<div className="flex items-center gap-10 mr-5">
-            <Link href={"/create-post"} className="hover-col cursor-pointer"><button className="bg-blue-700 py-1 px-2 text-sm text-blue-200 hover:shadow-[0px_0px_40px] transition-all duration-300 hover:shadow-blue-400/40 flex items-center rounded-sm"><PlusIcon className="inline w-4 h-4" /> Post</button></Link>
-            <Link href={"/notifications"}><BellIcon size={20} /></Link>
-            <ProfileDropdown username={session.user.username ?? ""}>
-                <section className="flex gap-2 p-2 items-center hover:bg-white/5 rounded-lg">
-                    {session.user.image && <Image src={cloudinaryTransform(
-                        session.user.image,
-                        "50",
-                    )} width={40} height={40} className="object-cover rounded-full" alt="" />}
-                    <div>
-                        <div className="font-serif text-sm">{session.user.name}</div>
-                        <div className="text-xs text-blue-200/42">{session.user.username}</div>
-                    </div>
-                </section>
-            </ProfileDropdown>
+            <Link href={"/create-post"} className="hover-col cursor-pointer"><button className="bg-blue-700 py-1 px-2 text-sm text-blue-200 hover:shadow-[0px_0px_40px] transition-all cursor-pointer duration-300 hover:shadow-blue-400/40 flex items-center rounded-sm"><PlusIcon className="inline w-4 h-4" /> Post</button></Link>
+            {/* <Link href={"/notifications"}><BellIcon size={20} /></Link> */}
+            <ProfileDropdown name={session.user.name} image={session.user.image ?? ""} username={session.user.username ?? ""} />
         </div>)
     }
 }

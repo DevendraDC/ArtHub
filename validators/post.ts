@@ -14,7 +14,9 @@ export const createPostSchemaClient = z.object({
   description: z.string().max(500, "description cannot be more than 500 words"),
 });
 
-export type ZodTreeError = ReturnType<typeof z.treeifyError>;
+export type ZodFormErrors = z.ZodFlattenedError<
+  z.infer<typeof createPostSchemaClient>
+>;
 
 export const createPostSchemaServer = z.object({
   title: z.string().min(1, "Title is required"),

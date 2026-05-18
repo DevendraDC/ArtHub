@@ -11,9 +11,10 @@ export default async function ArtImages({ params }: { params: Promise<{ id: stri
                 <div
                     key={img.id}
                     className="carousel-item h-full mx-auto"
+                    
                 >
                     <Image
-                        src={cloudinaryTransform(img.url, "1000")}
+                        src={img.url}
                         alt=""
                         width={1000}
                         height={1000}
@@ -25,3 +26,5 @@ export default async function ArtImages({ params }: { params: Promise<{ id: stri
         </div>
     )
 }
+
+// cloudinaryTransform(img.url, "1000")

@@ -1,7 +1,7 @@
 "use client"
 
 
-import { Bell, Bookmark, Compass, Image } from "lucide-react";
+import { Bookmark, Compass, Image } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -13,11 +13,11 @@ export default function NavbarTabs() {
             name: "Discover",
             link: "/"
         },
-        {
-            icon: Bookmark,
-            name: "Collections",
-            link: ""
-        },
+        // {
+        //     icon: Bookmark,
+        //     name: "Collections",
+        //     link: ""
+        // },
         {
             icon: Image,
             name: "Browse Artworks",

@@ -11,9 +11,6 @@ export type PostWithUser = {
   id: string;
   thumbnail: string;
   title: string;
-  description: string | null;
-  tags: string[];
-  mediums: PostMedium[];
   createdAt: Date;
   user: {
     id: string;
@@ -37,10 +34,7 @@ export const getPosts = async (filter: string, cursor?: string, take = 20) => {
             id: true,
             thumbnail: true,
             title: true,
-            description: true,
             createdAt: true,
-            mediums: true,
-            tags: true,
             user: {
               select: { id: true, name: true, username: true, image: true },
             },
@@ -61,10 +55,7 @@ export const getPosts = async (filter: string, cursor?: string, take = 20) => {
             p.id,
             p.thumbnail,
             p.title,
-            p.description,
             p."createdAt",
-            to_json(p.mediums) AS mediums,
-            p.tags,
             json_build_object(
               'id', u.id,
               'name', u.name,
@@ -95,11 +86,11 @@ export const getPosts = async (filter: string, cursor?: string, take = 20) => {
       }
 
       default:
-        return { data: [], nextCursor: null };
+        return { data: null, nextCursor: null };
     }
   } catch (error) {
     console.error(error);
-    return { data: [], nextCursor: null };
+    return { data: null, nextCursor: null };
   }
 };
 

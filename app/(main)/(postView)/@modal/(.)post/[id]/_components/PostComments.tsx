@@ -1,54 +1,3 @@
-// import { getPostComments } from "@/data/dal/Post/queries";
-// import { MessageSquareOff } from "lucide-react";
-// import { useOptimistic } from "react";
-
-// type Comments = {
-//     id: string;
-//     artPostId: string;
-//     ownerId: string;
-//     content: string
-//     createdAt: Date;
-//     user: {
-//         id: string;
-//         name: string | null;
-//         username: string | null;
-//         image: string | null;
-//     };
-// }
-
-// export default async function PostComments({ postId }: { postId: string }) {
-//     const { success, data } = await getPostComments(postId);
-//     if (!success) return null;
-//     return (
-//         <main className="mt-5 flex flex-col gap-5">
-//             <h1>Comments</h1>
-//             <section className="flex flex-col gap-10">
-//                 <section>
-//                     <textarea name="comment" placeholder="leave a comment" id="comment" maxLength={200} className="bg-white/10 min-h-20 focus:outline-0 mb-2 w-full resize-none p-3 text-sm" />
-//                     <button className="bg-blue-700 h-fit p-1 rounded-sm px-2 font-sans">Submit</button>
-//                 </section>
-//                 {!data || data.length === 0 && (
-//                     <div className="text-white text-center">
-//                         <MessageSquareOff size={40} className="mx-auto mb-3" />
-//                         <p>There are no comments for this post yet</p>
-//                     </div>
-//                 )}
-//             </section>
-//         </main>
-//     )
-// }
-
-// export function hello({comments}: {comments: Comments[]}){
-//     "use client"
-//     const [optimisticComments, addOptimisticComment] = useOptimistic(
-//         comments,
-//         (oldComments, newComment: string) => {
-//             return [...oldComments, newComment]
-//         }
-//     )
-//     return <h1>hi</h1>
-// }
-
 "use client";
 
 import { getPostComments } from "@/data/dal/Post/queriesActions";
@@ -57,11 +6,14 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import Image from "next/image";
 import { toast } from "sonner";
+import { SessionType } from "@/data/dal/getUserSession";
 
 export default function Comments({
     postId,
+    session
 }: {
-    postId: string;
+    postId: string,
+    session: SessionType
 }) {
     const [comment, setComment] = useState("");
 
@@ -92,29 +44,32 @@ export default function Comments({
                 queryKey: ["comments", postId],
             });
         },
+
     });
 
     return (
         <main className="mt-5 flex flex-col gap-5">
             <h1>Comments</h1>
+            {!(!session || !session.user.username || !session.user.name) && (
+                <section>
+                    <textarea
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                        placeholder="leave a comment"
+                        maxLength={200}
+                        className="bg-white/10 rounded-lg min-h-20 focus:outline-0 mb-2 w-full resize-none p-3 text-sm"
+                    />
 
-            <section>
-                <textarea
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                    placeholder="leave a comment"
-                    maxLength={200}
-                    className="bg-white/10 rounded-lg min-h-20 focus:outline-0 mb-2 w-full resize-none p-3 text-sm"
-                />
+                    <button
+                        disabled={mutation.isPending}
+                        onClick={() => mutation.mutate()}
+                        className="bg-blue-700 h-fit p-1 rounded-sm px-2 font-sans"
+                    >
+                        {mutation.isPending ? (<span className="loading loading-spinner"></span>) : "Submit"}
+                    </button>
+                </section>
+            )}
 
-                <button
-                    disabled={mutation.isPending}
-                    onClick={() => mutation.mutate()}
-                    className="bg-blue-700 h-fit p-1 rounded-sm px-2 font-sans"
-                >
-                    {mutation.isPending ? (<span className="loading loading-spinner"></span>): "Submit"}
-                </button>
-            </section>
 
             <section className="flex flex-col items-center gap-5">
                 {isPending && <p className="loading loading-spinner text-primary text-center"></p>}
