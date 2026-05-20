@@ -77,6 +77,11 @@ export type Post = Prisma.PostModel
  */
 export type PostImages = Prisma.PostImagesModel
 /**
+ * Model Save
+ * 
+ */
+export type Save = Prisma.SaveModel
+/**
  * Model Collection
  * 
  */

@@ -12,7 +12,7 @@ import { revalidatePath } from "next/cache";
 export async function postUpload(formData: FormData) {
   try {
     const session = await getUserSession();
-    if (!session) throw new Error("User not authenticated!");
+    if (!session || !session.user.name || !session.user.username) throw new Error("User not authenticated!");
     const authorId = session.user.id;
     const title = formData.get("title") as string;
     const description = formData.get("description") as string;
@@ -27,10 +27,7 @@ export async function postUpload(formData: FormData) {
       description,
     });
     if (!validatedData.success) {
-      return {
-        isSuccess: false,
-        formError: z.treeifyError(validatedData.error),
-      };
+      throw new Error("validation failed")
     }
 
     await prisma.post.create({
@@ -51,12 +48,12 @@ export async function postUpload(formData: FormData) {
     });
     revalidatePath("/")
     return {
-      isSuccess: true,
+      success: true,
     };
   } catch (error) {
     console.error(error);
     return {
-      isSuccess: false,
+      success: false,
       error: error instanceof Error ? error.message : "Failed to publish post",
     };
   }

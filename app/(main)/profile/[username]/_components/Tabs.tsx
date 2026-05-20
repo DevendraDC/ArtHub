@@ -6,9 +6,6 @@ import { getProfileData, ProfileData } from "@/data/dal/User/queriesActions";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-    Edit,
-    MapPin,
-    Link as LinkIcon,
     Palette,
     Image as ImageIcon,
     Users,
@@ -29,7 +26,7 @@ function groupOptions(id: number, userId: string) {
 
 const TABS = [
     { label: "Posts", icon: ImageIcon },
-    { label: "Collections", icon: Palette },
+    { label: "Saves", icon: Palette },
     { label: "Followers", icon: Users },
     { label: "Following", icon: UserPlus },
 ];
@@ -107,7 +104,6 @@ function ProfileTabContent({ data }: { data: ProfileData }) {
     if (!data) return null;
     switch (data.type) {
         case "posts":
-        case "saved":
             if (!data.data || data.data.length === 0) {
                 return (
                     <div className="flex flex-col items-center justify-center h-64 text-muted-foreground bg-secondary/20 rounded-3xl border border-border/50 border-dashed">
@@ -122,6 +118,37 @@ function ProfileTabContent({ data }: { data: ProfileData }) {
                 );
             }
             return <PostsView posts={data.data} className="grid-cols-5" />;
+        case "saved":
+            if (!data.data || data.data.length === 0) {
+                return (
+                    <div className="flex flex-col items-center justify-center h-64 text-muted-foreground bg-secondary/20 rounded-3xl border border-border/50 border-dashed">
+                        <Palette className="w-12 h-12 mb-4 opacity-50" />
+                        <h3 className="text-lg font-medium text-foreground">
+                            No {data.type} yet
+                        </h3>
+                        <p className="text-sm mt-1">
+                            When you create or save posts, they'll appear here.
+                        </p>
+                    </div>
+                );
+            }
+            else {
+                const savedData = data.data.map((dt) => {
+                    return {
+                        id: dt.post.id,
+                        title: dt.post.title,
+                        thumbnail: dt.post.thumbnail,
+                        createdAt: dt.post.createdAt,
+                        user: {
+                            id: dt.user.id,
+                            name: dt.user.name,
+                            username: dt.user.username,
+                            image: dt.user.image
+                        }
+                    }
+                })
+                return <PostsView posts={savedData} className="grid-cols-5" />
+            }
         case "followers":
             if (!data.data || data.data.length === 0) {
                 return (

@@ -20,12 +20,12 @@ export default function PostsView({ posts, className }: { posts: Posts, classNam
     return (
         <div>
             <div className={twMerge(`grid grid-cols-6 gap-2`, className)}>
-                {posts.map((post) => {
+                {posts.map((post, i) => {
                     if (!post) return null;
                     const url = post.thumbnail;
                     const previewUrl = cloudinaryTransform(url, "370")
                     return (
-                        <Link href={`/post/${post.id}`} key={post.id}>
+                        <Link href={`/post/${post.id}`} key={i}>
                             <div
                                 key={post.id}
                                 className="w-60 h-60 aspect-square relative bg-transparent group"

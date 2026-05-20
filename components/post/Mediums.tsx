@@ -1,8 +1,30 @@
 import { PostMedium } from "@/lib/generated/prisma/enums";
 import { Controller } from "@/utils/types/controller";
 
-export function SelectMediums({ mediumsController }: { mediumsController : Controller<PostMedium[]>}) {
-    const {value, setValue} = mediumsController;
+export const Mediums = [
+    { value: PostMedium.DIGITAL, label: "Digital" },
+    { value: PostMedium.OIL_PAINT, label: "Oil Paint" },
+    { value: PostMedium.WATERCOLOR, label: "Watercolor" },
+    { value: PostMedium.PHOTOGRAPHY, label: "Photography" },
+    { value: PostMedium.ACRYLIC, label: "Acrylic" },
+    { value: PostMedium.SCULPTURE, label: "Sculpture" },
+    { value: PostMedium.MIXED_MEDIA, label: "Mixed Media" },
+    { value: PostMedium.SKETCH, label: "Sketch" },
+    { value: PostMedium.THREE_D, label: "3D" },
+    { value: PostMedium.ANIMATION, label: "Animation" },
+    { value: PostMedium.TWO_D, label: "2D" },
+    { value: PostMedium.VFX, label: "VFX" },
+    { value: PostMedium.INK, label: "Ink" },
+    { value: PostMedium.CRAYON, label: "Crayon" },
+    { value: PostMedium.PASTELS, label: "Pastels" },
+    { value: PostMedium.ALCOHOL_MARKERS, label: "Alcohol Markers" },
+    { value: PostMedium.COLORED_PENCIL, label: "Colored Pencils" },
+    { value: PostMedium.TRADITIONAL_ART, label: "Traditional Art" },
+    { value: PostMedium.OTHER, label: "Other" },
+];
+
+export function SelectMediums({ mediumsController }: { mediumsController: Controller<PostMedium[]> }) {
+    const { value, setValue } = mediumsController;
     const addMediums = (med: { value: PostMedium, label: string }) => {
         if (!value.includes(med.value)) {
             setValue(prev => [...prev, med.value]);
@@ -12,29 +34,11 @@ export function SelectMediums({ mediumsController }: { mediumsController : Contr
             setValue(newMedium);
         }
     }
-    const mediums = [
-        { value: PostMedium.DIGITAL, label: "Digital" },
-        { value: PostMedium.OIL_PAINT, label: "Oil Paint" },
-        { value: PostMedium.WATERCOLOR, label: "Watercolor" },
-        { value: PostMedium.PHOTOGRAPHY, label: "Photography" },
-        { value: PostMedium.ILLUSTRATION, label: "Illustration" },
-        { value: PostMedium.SCULPTURE, label: "Sculpture" },
-        { value: PostMedium.MIXED_MEDIA, label: "Mixed Media" },
-        { value: PostMedium.SKETCH, label: "Sketch" },
-        { value: PostMedium.THREE_D, label: "3D" },
-        { value: PostMedium.ANIMATION, label: "Animation" },
-        { value: PostMedium.LINEART, label: "Lineart" },
-        { value: PostMedium.CONCEPT_ART, label: "Concept Art" },
-        { value: PostMedium.ANIME_ART, label: "Anime Art" },
-        { value: PostMedium.MANGA_ART, label: "Manga Art" },
-        { value: PostMedium.PIXEL_ART, label: "Pixel Art" },
-        { value: PostMedium.TRADITIONAL_ART, label: "Traditional Art" },
-        { value: PostMedium.OTHER, label: "Other" },
-    ];
+
 
     return (
         <div className="flex flex-wrap gap-3">
-            {mediums.map((med) => (
+            {Mediums.map((med) => (
                 <div
                     key={med.value}
                     onClick={() => addMediums(med)}

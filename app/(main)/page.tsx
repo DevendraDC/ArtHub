@@ -1,10 +1,11 @@
+import { Suspense } from "react";
 import { HomePageClient } from "./Homepage";
 
 export default async function Page() {
     return (
-        <div>
+        <Suspense>
             <HomePageClient />
-        </div>
+        </Suspense>
     )
 }
 

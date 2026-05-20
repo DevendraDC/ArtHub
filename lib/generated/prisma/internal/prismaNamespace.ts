@@ -391,6 +391,7 @@ export const ModelName = {
   Follow: 'Follow',
   Post: 'Post',
   PostImages: 'PostImages',
+  Save: 'Save',
   Collection: 'Collection',
   Like: 'Like',
   Comment: 'Comment'
@@ -409,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "follow" | "post" | "postImages" | "collection" | "like" | "comment"
+    modelProps: "user" | "session" | "account" | "verification" | "follow" | "post" | "postImages" | "save" | "collection" | "like" | "comment"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -931,6 +932,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Save: {
+      payload: Prisma.$SavePayload<ExtArgs>
+      fields: Prisma.SaveFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SaveFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SaveFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavePayload>
+        }
+        findFirst: {
+          args: Prisma.SaveFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SaveFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavePayload>
+        }
+        findMany: {
+          args: Prisma.SaveFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavePayload>[]
+        }
+        create: {
+          args: Prisma.SaveCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavePayload>
+        }
+        createMany: {
+          args: Prisma.SaveCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SaveCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavePayload>[]
+        }
+        delete: {
+          args: Prisma.SaveDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavePayload>
+        }
+        update: {
+          args: Prisma.SaveUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavePayload>
+        }
+        deleteMany: {
+          args: Prisma.SaveDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SaveUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SaveUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavePayload>[]
+        }
+        upsert: {
+          args: Prisma.SaveUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavePayload>
+        }
+        aggregate: {
+          args: Prisma.SaveAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSave>
+        }
+        groupBy: {
+          args: Prisma.SaveGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SaveGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SaveCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SaveCountAggregateOutputType> | number
+        }
+      }
+    }
     Collection: {
       payload: Prisma.$CollectionPayload<ExtArgs>
       fields: Prisma.CollectionFieldRefs
@@ -1293,6 +1368,15 @@ export const PostImagesScalarFieldEnum = {
 export type PostImagesScalarFieldEnum = (typeof PostImagesScalarFieldEnum)[keyof typeof PostImagesScalarFieldEnum]
 
 
+export const SaveScalarFieldEnum = {
+  userId: 'userId',
+  postId: 'postId',
+  createdAt: 'createdAt'
+} as const
+
+export type SaveScalarFieldEnum = (typeof SaveScalarFieldEnum)[keyof typeof SaveScalarFieldEnum]
+
+
 export const CollectionScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -1564,6 +1648,7 @@ export type GlobalOmitConfig = {
   follow?: Prisma.FollowOmit
   post?: Prisma.PostOmit
   postImages?: Prisma.PostImagesOmit
+  save?: Prisma.SaveOmit
   collection?: Prisma.CollectionOmit
   like?: Prisma.LikeOmit
   comment?: Prisma.CommentOmit

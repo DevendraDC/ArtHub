@@ -26,7 +26,7 @@ export default function NavbarTabs() {
     ]
 
     return (
-        <ul className="flex gap-12 text-sm font-sans items-center">
+        <ul className="flex gap-12 text-sm items-center">
             {
                 navTabs.map((op, index) => (
                     <Link key={index} className={`p-2 flex gap-1 items-center ${pathname === op.link ? "text-blue-600 border-b border-blue-600" : "hover:text-blue-600 transition-all duration-300"}`} href={op.link}>

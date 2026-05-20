@@ -9,19 +9,17 @@ import { SearchArtists } from "../SearchArtists"
 export default async function Navbar() {
     const session = await getUserSession();
     return (
-        <nav className="top-0 relative z-999 backdrop-blur-2xl p-3 w-full flex items-center justify-between">
-            <section className="flex-1 flex items-center text-xl ml-10 gap-15">
-                <h1 className="font-logo font-bold text-blue-100/70">ART<span className="text-blue-600 font-logo text-xl font-bold">HUB</span></h1>
-                <NavbarTabs />
-            </section>
-            <section className="flex-1 flex justify-between items-center">
+        <nav className="top-0 relative z-999 backdrop-blur-2xl p-2 w-full flex items-center justify-around">
+            <h1 className="font-bold scale-120 text-blue-100/70">Art<span className="text-blue-600 text-xl font-bold">HUB</span></h1>
+            <NavbarTabs />
+            <SearchArtists />
+            <NavAuth session={session} />
+            {/* <section className="flex-1 flex justify-between items-center">
                 <section className="flex-2 relative max-w-80">
-                    {/* <input placeholder="Search for artists" className="w-full rounded-2xl p-3 text-sm pl-12 pr-7 bg-white/7 placeholder:text-blue-100/50 focus:outline-0" />
-                    <Search size={34} className="absolute rounded-full bg-black p-1 left-1 top-1/2 -translate-y-1/2 text-white/80" /> */}
                     <SearchArtists />
                 </section>
                 <NavAuth session={session} />
-            </section>
+            </section> */}
         </nav>
     )
 }

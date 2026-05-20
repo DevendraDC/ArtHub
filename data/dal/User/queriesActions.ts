@@ -4,10 +4,9 @@ import { prisma } from "@/lib/prisma";
 import { cache } from "react";
 import { fetchPostsProfile } from "../Post/queriesActions";
 
-
 export type ProfileData =
   | { type: "posts"; data: Awaited<ReturnType<typeof fetchPostsProfile>> }
-  | { type: "saved"; data: [] }
+  | { type: "saved"; data: Awaited<ReturnType<typeof getSaves>> }
   | { type: "followers"; data: Awaited<ReturnType<typeof getFollowers>> }
   | { type: "following"; data: Awaited<ReturnType<typeof getFollowing>> };
 
@@ -49,7 +48,6 @@ export const usernameExist = async (username: string) => {
   return !!user;
 };
 
-
 export const getProfileData = cache(
   async (tab: number, userId: string): Promise<ProfileData | null> => {
     try {
@@ -58,7 +56,8 @@ export const getProfileData = cache(
           type: "posts" as const,
           data: await fetchPostsProfile(userId),
         };
-      if (tab === 1) return { type: "saved" as const, data: [] as [] };
+      if (tab === 1)
+        return { type: "saved" as const, data: await getSaves(userId) };
       if (tab === 2)
         return { type: "followers" as const, data: await getFollowers(userId) };
       if (tab === 3)
@@ -71,6 +70,29 @@ export const getProfileData = cache(
   },
 );
 
+const getSaves = async (userId: string) => {
+  return await prisma.save.findMany({
+    where: {
+      userId,
+    },
+    select: {
+      post: {
+        select: {
+          id: true,
+          thumbnail: true,
+          title: true,
+          createdAt: true,
+        },
+      },
+      user: {
+        select: { id: true, name: true, username: true, image: true },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
 
 const getFollowers = cache(async (userId: string) => {
   return await prisma.follow.findMany({

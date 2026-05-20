@@ -58,6 +58,7 @@ export const ModelName = {
   Follow: 'Follow',
   Post: 'Post',
   PostImages: 'PostImages',
+  Save: 'Save',
   Collection: 'Collection',
   Like: 'Like',
   Comment: 'Comment'
@@ -178,6 +179,15 @@ export const PostImagesScalarFieldEnum = {
 } as const
 
 export type PostImagesScalarFieldEnum = (typeof PostImagesScalarFieldEnum)[keyof typeof PostImagesScalarFieldEnum]
+
+
+export const SaveScalarFieldEnum = {
+  userId: 'userId',
+  postId: 'postId',
+  createdAt: 'createdAt'
+} as const
+
+export type SaveScalarFieldEnum = (typeof SaveScalarFieldEnum)[keyof typeof SaveScalarFieldEnum]
 
 
 export const CollectionScalarFieldEnum = {

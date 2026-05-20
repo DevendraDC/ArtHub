@@ -30,37 +30,6 @@ export type ProfileSettingsData = Awaited<
   ReturnType<typeof getProfileSettingsData>
 >;
 
-export const getUserData2 = async () => {
-  try {
-    const session = await getUserSession();
-    if (!session || !session.user.id) throw new Error("Session not found");
-    const data = await prisma.user.findUnique({
-      where: {
-        id: session.user.id,
-      },
-      select: {
-        bio: true,
-        _count: {
-          select: {
-            artPosts: true,
-            followers: true,
-            following: true,
-            likes: true,
-          },
-        },
-      },
-    });
-    return {
-      success: true,
-      data: data,
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      success: false,
-    };
-  }
-};
 
 export const getProfile = cache(async (username: string) => {
   try {

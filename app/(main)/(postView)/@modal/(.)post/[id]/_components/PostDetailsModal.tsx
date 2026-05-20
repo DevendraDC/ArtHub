@@ -4,18 +4,15 @@ import Image from "next/image";
 import { Suspense } from "react";
 import PostDetails from "./PostStats";
 import Comments from "./PostComments";
-import { auth } from "@/lib/better-auth/auth";
-import { headers } from "next/headers";
 import Link from "next/link";
+import { getUserSession } from "@/data/dal/getUserSession";
 
 export default async function PostDetailsModal({ postId }: { postId: string }) {
     const postInfoResult = getPostInformation(postId);
     const postStatsResult = getPostStats(postId);
-    const { data, success } = await postInfoResult;
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
-    const date = new Date(data?.createdAt ?? Date.now());
+    const session = getUserSession()
+    const res = await Promise.all([postInfoResult, postStatsResult, session])
+    const date = new Date(res[0].data?.createdAt ?? Date.now());
     const time = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }).toLowerCase();
     const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     return (
@@ -23,23 +20,23 @@ export default async function PostDetailsModal({ postId }: { postId: string }) {
             <div className="flex flex-col gap-5">
                 <div className="flex gap-3">
                     <div>
-                        {data?.user.image && <Link href={`/profile/${data.user.username}`}><Image src={data.user.image} alt="" width={60} height={60} className="rounded-full cursor-pointer" /></Link>}
+                        {res[0].data?.user.image && <Link href={`/profile/${res[0].data.user.username}`}><Image src={res[0].data.user.image} alt="" width={60} height={60} className="rounded-full cursor-pointer" /></Link>}
                     </div>
                     <div>
                         <div className="font-serif">
-                            {data?.user.name}
+                            {res[0].data?.user.name}
                         </div>
                         <div className="text-sm text-white/40">
-                            {data?.user.username}
+                            {res[0].data?.user.username}
                         </div>
                     </div>
                 </div>
                 <section>
                     <div className="text-2xl font-serif">
-                        {data?.title}
+                        {res[0].data?.title}
                     </div>
-                    {data?.description && <div className="text-white/60 wrap-break-word min-w-0">
-                        {data?.description}
+                    {res[0].data?.description && <div className="text-white/60 wrap-break-word min-w-0">
+                        {res[0].data?.description}
                     </div>}
                     <div className="text-sm text-white/30 flex gap-2 items-center">
                         {time}
@@ -49,24 +46,24 @@ export default async function PostDetailsModal({ postId }: { postId: string }) {
                 </section>
                 <section>
                     <Suspense>
-                        <PostDetails promise={postStatsResult} />
+                        <PostDetails postStats={res[1]} />
                     </Suspense>
                 </section>
                 <div className="Mediums flex flex-col gap-3">
                     <h1>Mediums</h1>
                     <div className="flex flex-wrap gap-3">
-                        {data?.mediums.map((med, i) => (
+                        {res[0].data?.mediums.map((med, i) => (
                             <div key={i} className="p-2 rounded-lg border border-white/35 text-white/70 text-xs">
                                 {mediumLabels[med]}
                             </div>
                         ))}
                     </div>
                 </div>
-                {!!data?.tags.length && (
+                {!!res[0].data?.tags.length && (
                     <div className="tags flex flex-col gap-3">
                         <h1>Tags</h1>
                         <div className="flex flex-wrap gap-3">
-                            {data?.tags.map((tag, i) => (
+                            {res[0].data?.tags.map((tag, i) => (
                                 <div key={i} className="text-blue-400/80 font-sans text-sm">
                                     #{tag}
                                 </div>
@@ -76,7 +73,7 @@ export default async function PostDetailsModal({ postId }: { postId: string }) {
                 )}
 
                 <Suspense>
-                    <Comments session={session} postId={postId} />
+                    <Comments session={res[2]} postId={postId} />
                 </Suspense>
 
             </div>

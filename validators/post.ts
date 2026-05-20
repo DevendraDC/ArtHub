@@ -14,6 +14,7 @@ export const createPostSchemaClient = z.object({
   description: z.string().max(500, "description cannot be more than 500 words"),
 });
 
+
 export type ZodFormErrors = z.ZodFlattenedError<
   z.infer<typeof createPostSchemaClient>
 >;

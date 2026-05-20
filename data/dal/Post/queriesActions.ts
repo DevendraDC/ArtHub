@@ -76,11 +76,14 @@ export const getPosts = async (filter: string, cursor?: string, take = 20) => {
           GROUP BY p.id, u.id
           ORDER BY score DESC
           LIMIT ${take + 1}
+          OFFSET ${cursor ? Number(cursor) : 0}
         `;
 
         const hasNextPage = posts.length > take;
         const data = hasNextPage ? posts.slice(0, -1) : posts;
-        const nextCursor = hasNextPage ? data[data.length - 1].id : null;
+        const nextCursor = hasNextPage
+          ? String(Number(cursor ?? 0) + take)
+          : null;
 
         return { data, nextCursor };
       }
@@ -102,7 +105,6 @@ export const getSearchedPosts = async (
   sortBy: string,
   keyword: string,
 ) => {
-  "use server";
   try {
     return await prisma.post.findMany({
       where: {
@@ -127,10 +129,7 @@ export const getSearchedPosts = async (
         id: true,
         thumbnail: true,
         title: true,
-        description: true,
         createdAt: true,
-        mediums: true,
-        tags: true,
         user: {
           select: {
             id: true,
@@ -161,43 +160,8 @@ export const getSearchedPosts = async (
 
 export type SearchedPosts = Awaited<ReturnType<typeof getSearchedPosts>>;
 
-export const isLikedByUser = async (postId: string) => {
-  try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
-    if (!session || !session.user.id) throw new Error("session not found");
-    const isLiked = await prisma.like.findUnique({
-      where: {
-        artPostId_ownerId: {
-          artPostId: postId,
-          ownerId: session.user.id,
-        },
-      },
-    });
-    if (isLiked)
-      return {
-        success: true,
-        isLiked: true,
-        userId: session.user.id,
-      };
-    else
-      return {
-        success: true,
-        isLiked: false,
-        userId: session.user.id,
-      };
-  } catch (error) {
-    console.error(error);
-    return {
-      success: false,
-      isLiked: null,
-      userId: null,
-    };
-  }
-};
 
-export const fetchPostsProfile = cache(async (userId: string) => {
+export const fetchPostsProfile = async (userId: string) => {
   return await prisma.post.findMany({
     where: {
       user: {
@@ -208,10 +172,7 @@ export const fetchPostsProfile = cache(async (userId: string) => {
       id: true,
       thumbnail: true,
       title: true,
-      description: true,
       createdAt: true,
-      mediums: true,
-      tags: true,
       user: {
         select: { id: true, name: true, username: true, image: true },
       },
@@ -220,10 +181,9 @@ export const fetchPostsProfile = cache(async (userId: string) => {
       createdAt: "desc",
     },
   });
-});
+}
 
 export type PostsProfile = Awaited<ReturnType<typeof fetchPostsProfile>>;
-
 
 export const getPostComments = cache(async (postId: string) => {
   try {
@@ -258,8 +218,57 @@ export const getPostComments = cache(async (postId: string) => {
     console.error(error);
     return {
       success: false,
-      data: null
+      data: null,
     };
   }
 });
 
+export type PostComments = Awaited<ReturnType<typeof getPostComments>>;
+
+export const toggleLike = async (
+  artPostId: string,
+  ownerId: string,
+  isLiked: boolean,
+) => {
+  if (isLiked) {
+    await prisma.like.delete({
+      where: {
+        artPostId_ownerId: {
+          artPostId,
+          ownerId,
+        },
+      },
+    });
+  } else {
+    await prisma.like.create({
+      data: {
+        artPostId,
+        ownerId,
+      },
+    });
+  }
+};
+
+export const toggleSave = async (
+  artPostId: string,
+  ownerId: string,
+  isSaved: boolean,
+) => {
+  if (isSaved) {
+    await prisma.save.delete({
+      where: {
+        userId_postId: {
+          userId: ownerId,
+          postId: artPostId,
+        },
+      },
+    });
+  } else {
+    await prisma.save.create({
+      data: {
+        userId: ownerId,
+        postId: artPostId,
+      },
+    });
+  }
+};

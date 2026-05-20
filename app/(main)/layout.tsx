@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar/Navbar";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { QueryProviders } from "./Providers";
 
 export default async function MainLayout({
     children,
@@ -12,7 +13,9 @@ export default async function MainLayout({
             <Navbar />
             <div className="mt-5">
                 <NuqsAdapter>
-                    {children}
+                    <QueryProviders>
+                        {children}
+                    </QueryProviders>
                 </NuqsAdapter>
             </div>
         </div>

@@ -121,43 +121,5 @@ export type PopularPosts = Awaited<ReturnType<typeof getPopularPosts>>;
 
 // export type FollowingPosts = Awaited<ReturnType<typeof getFollowingPosts>>;
 
-export const getPostComments = cache(async (postId: string) => {
-  try {
-    const postComments = await prisma.comment.findMany({
-      where: {
-        artPostId: postId,
-      },
-    });
-    return postComments;
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
-});
 
-export type PostComments = Awaited<ReturnType<typeof getPostComments>>;
-
-export const toggleLike = async (
-  artPostId: string,
-  ownerId: string,
-  isLiked: boolean,
-) => {
-  if (isLiked) {
-    await prisma.like.delete({
-      where: {
-        artPostId_ownerId: {
-          artPostId,
-          ownerId,
-        },
-      },
-    });
-  } else {
-    await prisma.like.create({
-      data: {
-        artPostId,
-        ownerId,
-      },
-    });
-  }
-};
 

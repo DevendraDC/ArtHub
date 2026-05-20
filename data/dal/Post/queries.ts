@@ -1,8 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { cache } from "react";
 import { unstable_cache } from "next/cache";
-import { headers } from "next/headers";
-import { auth } from "@/lib/better-auth/auth";
+import { getUserSession } from "../getUserSession";
 
 export const getArtImages = unstable_cache(async (postId: string) => {
   try {
@@ -95,9 +94,7 @@ export const getPostTitleAndDesc = cache(async (postId: string) => {
 });
 
 export const getPostStats = cache(async (postId: string) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await getUserSession()
   try {
     const postDetails = await prisma.post.findUnique({
       where: {
@@ -109,7 +106,7 @@ export const getPostStats = cache(async (postId: string) => {
           select: {
             comments: true,
             likes: true,
-            Collections: true,
+            savedBy: true,
           },
         },
         ...(session && {
@@ -118,6 +115,11 @@ export const getPostStats = cache(async (postId: string) => {
               ownerId: session.user.id,
             },
           },
+          savedBy: {
+            where: {
+              userId: session.user.id
+            }
+          }
         }),
       },
     });

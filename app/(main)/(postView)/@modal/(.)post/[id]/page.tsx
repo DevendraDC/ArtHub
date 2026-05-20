@@ -16,8 +16,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                         </Suspense>
                     </div>
                 </div>
-                <div className="flex-2 min-h-full overflow-auto">
-                    <Suspense>
+                <div className="flex-2 relative min-h-full overflow-auto">
+                    <Suspense fallback={<div className="loading-spinner absolute scale-140 loading top-1/2 left-1/2 -translate-1/2"></div>}>
                         <PostDetailsModal postId={id} />
                     </Suspense>
                 </div>

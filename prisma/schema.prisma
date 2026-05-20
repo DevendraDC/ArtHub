@@ -21,22 +21,77 @@ enum CollectionView {
   PUBLIC
 }
 
+enum PostCategories {
+  ABSTRACT
+  ANATOMY
+  ANIME
+  ANIMALS_WILDLIFE
+  ARCHITECTURAL_CONCEPTS
+  AUGMENTED_REALITY
+  BOOK_ILLUSTRATION
+  BOTANICAL_ART
+  CALLIGRAPHY
+  CHARACTER_ANIMATION
+  CHARACTER_DESIGN
+  COLLAGE
+  COMIC_ART
+  CONCEPT_ART
+  COSPLAY
+  COSTUME_DESIGN
+  COVER_ART
+  CERAMICS
+  CREATURES
+  EMBROIDERY
+  ENVIRONMENTAL_CONCEPT_ART
+  ENVIRONMENTAL_CONCEPT_DESIGN
+  FAN_ART
+  FANTASY
+  FASHION
+  FIGURE
+  FOOD
+  GAME_ART
+  GAMEPLAY_DESIGN
+  GAMES_ENVIRONMENT
+  GRAFFITI
+  GRAPHIC_DESIGN
+  HANDICRAFT
+  HAIR_STYLING
+  HORROR
+  ILLUSTRATION
+  INDUSTRIAL_DESIGN
+  JEWELRY
+  KNITTING
+  LEGO
+  LANDSCAPE
+  LEVEL_DESIGN
+  LIGHTING
+  MAKEUP
+  MANGA
+  MECHANICAL_DESIGN
+  MEDICAL
+  MECHA
+  MINIATURE_ART
+  MOTION_GRAPHICS
+}
+
 enum PostMedium {
   DIGITAL
   OIL_PAINT
   WATERCOLOR
   PHOTOGRAPHY
-  ILLUSTRATION
   SCULPTURE
   MIXED_MEDIA
   SKETCH
+  PASTELS
+  INK
+  COLORED_PENCIL
   THREE_D
+  CRAYON
+  ALCOHOL_MARKERS
+  ACRYLIC
+  TWO_D
+  VFX
   ANIMATION
-  LINEART
-  CONCEPT_ART
-  ANIME_ART
-  MANGA_ART
-  PIXEL_ART
   TRADITIONAL_ART
   OTHER
 }
@@ -62,6 +117,7 @@ model User {
   collections   Collection[]
   likes         Like[]
   comments      Comment[]
+  savedPosts    Save[]
 
   @@index([email])
   @@index([username])
@@ -149,6 +205,7 @@ model Post {
   scoreUpdatedAt DateTime?
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @default(now())
+  savedBy        Save[]
 
   @@index([authorId])
   @@index([createdAt(sort: Desc)])
@@ -168,6 +225,20 @@ model PostImages {
   @@unique([postId, order])
   @@index([postId])
   @@map("post_images")
+}
+
+model Save {
+  userId String
+  postId String
+
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@id([userId, postId])
+  @@index([userId])
+  @@index([postId])
+  @@map("save")
 }
 
 model Collection {
@@ -192,7 +263,7 @@ model Like {
   user      User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 
-  @@unique([artPostId, ownerId])
+  @@id([artPostId, ownerId])
   @@index([artPostId])
   @@index([ownerId])
   @@map("like")
