@@ -23,6 +23,7 @@ import z from "zod"
 import { toast } from "sonner"
 import { signupUser } from "@/data/dal/auth/queries"
 import { useState } from "react"
+import { authClient } from "@/lib/better-auth/auth-client"
 
 export function SignupForm() {
   const [email, setEmail] = useState<string | null>(null);
@@ -94,7 +95,11 @@ export function SignupForm() {
             <FieldGroup>
               <Field>
                 <Button type="submit" disabled={isSubmitting} className="h-12">Create Account</Button>
-                <Button variant="outline" type="button" disabled={isSubmitting} className="h-12">
+                <Button variant="outline" type="button" onClick={async () => {
+                  const data = await authClient.signIn.social({
+                    provider: "google",
+                  });
+                }} disabled={isSubmitting} className="h-12">
                   Sign up with Google
                 </Button>
                 <FieldDescription className="px-6 text-center">
@@ -105,6 +110,6 @@ export function SignupForm() {
           </FieldGroup>
         </form>
       </CardContent>
-    </Card>
+    </Card >
   )
 }

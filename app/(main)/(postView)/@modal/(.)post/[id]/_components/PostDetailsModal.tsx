@@ -6,6 +6,7 @@ import PostDetails from "./PostStats";
 import Comments from "./PostComments";
 import Link from "next/link";
 import { getUserSession } from "@/data/dal/getUserSession";
+import DeletePostComponent from "./DeletePost";
 
 export default async function PostDetailsModal({ postId }: { postId: string }) {
     const postInfoResult = getPostInformation(postId);
@@ -18,18 +19,25 @@ export default async function PostDetailsModal({ postId }: { postId: string }) {
     return (
         <div className="w-full min-h-full flex flex-col gap-8 bg-black p-5 rounded-r-2xl">
             <div className="flex flex-col gap-5">
-                <div className="flex gap-3">
-                    <div>
-                        {res[0].data?.user.image && <Link href={`/profile/${res[0].data.user.username}`}><Image src={res[0].data.user.image} alt="" width={60} height={60} className="rounded-full cursor-pointer" /></Link>}
-                    </div>
-                    <div>
-                        <div className="font-serif">
-                            {res[0].data?.user.name}
+                <div className="flex justify-between items-center">
+                    <section className="flex gap-3">
+                        <div>
+                            {res[0].data?.user.image && <Link href={`/profile/${res[0].data.user.username}`}><Image src={res[0].data.user.image} alt="" width={60} height={60} className="rounded-full cursor-pointer" /></Link>}
                         </div>
-                        <div className="text-sm text-white/40">
-                            {res[0].data?.user.username}
+                        <div>
+                            <div className="font-serif">
+                                {res[0].data?.user.name}
+                            </div>
+                            <div className="text-sm text-white/40">
+                                {res[0].data?.user.username}
+                            </div>
                         </div>
-                    </div>
+                    </section>
+
+                    {res[0].data && res[2] && res[2].user.username && res[2].user.id === res[0].data.authorId && (
+                        // <button className="cursor-pointer"><Trash className="text-red-700"/></button>
+                        <DeletePostComponent postId={postId} username={res[2].user.username}/>
+                    )}
                 </div>
                 <section>
                     <div className="text-2xl font-serif">
@@ -80,3 +88,5 @@ export default async function PostDetailsModal({ postId }: { postId: string }) {
         </div>
     )
 }
+
+

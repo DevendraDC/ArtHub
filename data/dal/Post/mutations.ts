@@ -4,7 +4,6 @@ import { PostMedium } from "@/lib/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 import { getUserSession } from "../getUserSession";
 import { createPostSchemaServer } from "@/validators/post";
-import z, { success } from "zod";
 import { auth } from "@/lib/better-auth/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
@@ -12,7 +11,8 @@ import { revalidatePath } from "next/cache";
 export async function postUpload(formData: FormData) {
   try {
     const session = await getUserSession();
-    if (!session || !session.user.name || !session.user.username) throw new Error("User not authenticated!");
+    if (!session || !session.user.name || !session.user.username)
+      throw new Error("User not authenticated!");
     const authorId = session.user.id;
     const title = formData.get("title") as string;
     const description = formData.get("description") as string;
@@ -27,7 +27,7 @@ export async function postUpload(formData: FormData) {
       description,
     });
     if (!validatedData.success) {
-      throw new Error("validation failed")
+      throw new Error("validation failed");
     }
 
     await prisma.post.create({
@@ -46,7 +46,8 @@ export async function postUpload(formData: FormData) {
         },
       },
     });
-    revalidatePath("/")
+    revalidatePath("/");
+    revalidatePath(`/profile/${session.user.username}`);
     return {
       success: true,
     };
@@ -81,6 +82,41 @@ export const createComment = async (postId: string, comment: string) => {
     return {
       success: false,
       data: null,
+    };
+  }
+};
+
+export const deletePost = async (postId: string) => {
+  try {
+    const post = await prisma.post.findUnique({
+      where: {
+        id: postId,
+      },
+      select: {
+        authorId: true,
+      },
+    });
+    if (!post) throw new Error("post doesnt exist");
+    const session = await getUserSession();
+    if (!session) throw new Error("user not authenticated");
+    if (session.user.id !== post.authorId)
+      throw new Error("you are not permitted to delete this post");
+    await prisma.post.delete({
+      where: {
+        id: postId,
+      },
+    });
+    revalidatePath(`/profile/${session.user.username}`);
+    revalidatePath("/");
+    return {
+      success: true,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "failed to delete this post",
     };
   }
 };

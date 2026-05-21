@@ -11,7 +11,7 @@ export function ProfileDropdown({ image, name, username }: { image: string, name
     const router = useRouter()
     const options = [
         { to: `/profile/${username}`, icon: User, name: "Your Profile" },
-        { to: "/profile", icon: Bookmark, name: "Your Collections" },
+        // { to: "/profile", icon: Bookmark, name: "Your Collections" },
         { to: "/settings", icon: Settings, name: "Settings" },
         // { to: "/profile", icon: LogOut, name: "Logout" },
     ]

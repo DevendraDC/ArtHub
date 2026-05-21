@@ -43,7 +43,7 @@ export function LoginForm({
   });
 
   const onSubmit = async (validatedData: z.infer<typeof authSchema>) => {
-    const {data, error} = await authClient.signIn.email(validatedData);
+    const { data, error } = await authClient.signIn.email(validatedData);
     if (error) {
       toast.error(error.message);
     }
@@ -72,7 +72,7 @@ export function LoginForm({
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
                     <FieldLabel htmlFor="email" className="text-(--text-light)">Email</FieldLabel>
-                    <Input {...field} id="email" className="h-12"/>
+                    <Input {...field} id="email" className="h-12" />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
@@ -93,7 +93,7 @@ export function LoginForm({
                         Forgot your password?
                       </a>
                     </div>
-                    <Input {...field} id="password" type="password" className="h-12"/>
+                    <Input {...field} id="password" type="password" className="h-12" />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
@@ -105,7 +105,11 @@ export function LoginForm({
                 <Button type="submit" disabled={isSubmitting} className="h-12">
                   Login
                 </Button>
-                <Button variant="outline" type="button" disabled={isSubmitting} className="h-12">
+                <Button variant="outline" type="button" onClick={async () => {
+                  const data = await authClient.signIn.social({
+                    provider: "google",
+                  });
+                }} disabled={isSubmitting} className="h-12">
                   Login with Google
                 </Button>
                 <FieldDescription className="text-center">
