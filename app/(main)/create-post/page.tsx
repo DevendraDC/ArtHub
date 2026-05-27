@@ -12,7 +12,7 @@ export default async function page() {
     }
     else {
         return (
-            <CreatePost username={session.user.username}/>
+            <CreatePost session={session}/>
         )
     }
 }

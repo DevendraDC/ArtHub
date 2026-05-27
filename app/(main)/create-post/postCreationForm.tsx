@@ -14,14 +14,20 @@ import { SelectTags } from "@/components/post/Tags";
 import Form from "next/form"
 import { useRouter } from "next/navigation";
 import z from "zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { SessionType } from "@/data/dal/getUserSession";
+import { checkAi } from "@/utils/checkAi";
+import { useFormStatus } from "react-dom";
 
 
-export default function CreatePost({ username }: { username: string }) {
+export default function CreatePost({ session }: { session: SessionType }) {
+    const queryClient = useQueryClient();
     const router = useRouter()
+    const username = session?.user.username;
+    const userId = session?.user.id;
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [selectedImages, setSelectedImages] = useState<File[]>([]);
     const [selectedMediums, setSelectedMediums] = useState<PostMedium[]>([]);
-    const [isPublishing, setIsPublishing] = useState(false);
     const [errors, setErrors] = useState<ZodFormErrors | null>(null)
 
     const handlePublish = async (formData: FormData) => {
@@ -41,12 +47,27 @@ export default function CreatePost({ username }: { username: string }) {
         }
 
         try {
-            setIsPublishing(true);
-
             const uploaded = await uploadMultipleImages(selectedImages);
 
             if (!uploaded.success || !uploaded.data) {
                 toast.error("Failed to upload images");
+                return;
+            }
+
+            const aiCheckPromises = uploaded.data.map(img => checkAi(img.secure_url));
+            const aiCheckResults = await Promise.all(aiCheckPromises);
+
+            const systemErrorOccurred = aiCheckResults.some(res => !res.success);
+            const containsAiImage = aiCheckResults.some(res => res.success && res.result?.aiGenerated);
+
+
+            if (systemErrorOccurred) {
+                toast.error("An error occurred while scanning your images for AI content.");
+                return;
+            }
+
+            if (containsAiImage) {
+                toast.error("One or more images were flagged as AI-generated. Posts must be authentic human artwork.");
                 return;
             }
 
@@ -70,14 +91,13 @@ export default function CreatePost({ username }: { username: string }) {
             }
 
             toast.success("Post published successfully");
-
+            queryClient.invalidateQueries({
+                queryKey: ["ProfilePage", 0, userId]
+            })
             router.push(`/profile/${username}`);
-        } catch (e) {
-            console.error(e);
-
-            toast.error("Something went wrong");
-        } finally {
-            setIsPublishing(false);
+        } catch (error) {
+            console.error(error);
+            toast.error(error instanceof Error ? error.message : "failed to publish post");
         }
     };
 
@@ -171,16 +191,23 @@ export default function CreatePost({ username }: { username: string }) {
                             </div>
                         </div>
                         <div className="flex gap-7 bg-transparent p-5 rounded-xl">
-                            <button disabled={isPublishing} onClick={handleDiscard} type="reset" className="py-2 flex-2 px-4 border-2 border-blue-100/15 text-white/60 rounded-sm hover:border-red-700 hover:text-red-700 hover:bg-red-500/10 transition-colors duration-300">
+                            <button onClick={handleDiscard} type="reset" className="py-2 flex-2 px-4 border-2 border-blue-100/15 text-white/60 rounded-sm hover:border-red-700 hover:text-red-700 hover:bg-red-500/10 transition-colors duration-300">
                                 Discard
                             </button>
-                            <button disabled={isPublishing} type="submit" className="py-2 px-4 cursor-pointer flex-3 border text-center bg-blue-400 flex justify-center items-center font-sans font-semibold text-black rounded-lg hover:shadow-[0_0_30px] hover:shadow-blue-400/50 transition-all duration-300">
-                                {isPublishing ? <Spinner fontSize={20} /> : "Publish Post"}
-                            </button>
+                            <SubmitButton />
                         </div>
                     </Form>
                 </div>
             </motion.div>
         </div>
+    )
+}
+
+function SubmitButton() {
+    const { pending } = useFormStatus();
+    return (
+        <button disabled={pending} type="submit" className="py-2 px-4 cursor-pointer flex-3 border text-center bg-blue-400 flex justify-center items-center font-sans font-semibold text-black rounded-lg hover:shadow-[0_0_30px] hover:shadow-blue-400/50 transition-all duration-300">
+            {pending ? <Spinner fontSize={20} /> : "Publish Post"}
+        </button>
     )
 }

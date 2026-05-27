@@ -9,7 +9,7 @@ import { SearchArtists } from "../SearchArtists"
 export default async function Navbar() {
     const session = await getUserSession();
     return (
-        <nav className="top-0 relative z-999 backdrop-blur-2xl p-2 w-full flex items-center justify-around">
+        <nav className="top-0 relative bg-black/15 z-999 backdrop-blur-2xl p-2 w-full flex items-center justify-around">
             <h1 className="font-bold scale-120 text-blue-100/70">Art<span className="text-blue-600 text-xl font-bold">HUB</span></h1>
             <NavbarTabs />
             <SearchArtists />

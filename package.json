@@ -33,6 +33,7 @@
     "nextjs-toploader": "^3.9.17",
     "nodemailer": "^8.0.4",
     "nuqs": "^2.8.9",
+    "ogl": "^1.0.11",
     "radix-ui": "^1.4.3",
     "react": "19.2.3",
     "react-dom": "19.2.3",

@@ -36,7 +36,7 @@ export default async function PostDetailsModal({ postId }: { postId: string }) {
 
                     {res[0].data && res[2] && res[2].user.username && res[2].user.id === res[0].data.authorId && (
                         // <button className="cursor-pointer"><Trash className="text-red-700"/></button>
-                        <DeletePostComponent postId={postId} username={res[2].user.username}/>
+                        <DeletePostComponent postId={postId} username={res[2].user.username} />
                     )}
                 </div>
                 <section>
@@ -60,22 +60,26 @@ export default async function PostDetailsModal({ postId }: { postId: string }) {
                 <div className="Mediums flex flex-col gap-3">
                     <h1>Mediums</h1>
                     <div className="flex flex-wrap gap-3">
-                        {res[0].data?.mediums.map((med, i) => (
-                            <div key={i} className="p-2 rounded-lg border border-white/35 text-white/70 text-xs">
+                        {res[0].data?.mediums.map((med, i) => {
+                            if(med) return (
+                                <div key={i} className="p-2 rounded-lg border border-white/35 text-white/70 text-xs">
                                 {mediumLabels[med]}
                             </div>
-                        ))}
+                            )
+                        })}
                     </div>
                 </div>
-                {!!res[0].data?.tags.length && (
+                {res[0].data?.tags.length && (
                     <div className="tags flex flex-col gap-3">
                         <h1>Tags</h1>
                         <div className="flex flex-wrap gap-3">
-                            {res[0].data?.tags.map((tag, i) => (
-                                <div key={i} className="text-blue-400/80 font-sans text-sm">
-                                    #{tag}
-                                </div>
-                            ))}
+                            {res[0].data?.tags.map((tag, i) => {
+                                if (tag !== "") return (
+                                    <div key={i} className="text-blue-400/80 font-sans text-sm">
+                                        #{tag}
+                                    </div>
+                                )
+                            })}
                         </div>
                     </div>
                 )}

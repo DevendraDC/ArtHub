@@ -28,7 +28,7 @@ export default function PostsView({ posts, className }: { posts: Posts, classNam
                         <Link href={`/post/${post.id}`} key={i}>
                             <div
                                 key={post.id}
-                                className="w-60 h-60 aspect-square relative bg-transparent group"
+                                className="w-60 aspect-square relative bg-transparent group"
                             >
                                 <Image
                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -38,6 +38,9 @@ export default function PostsView({ posts, className }: { posts: Posts, classNam
                                     fill
                                     className="object-cover"
                                 />
+                                <div>
+                                    knsjfnsjn
+                                </div>
                                 <div
                                     className="p-2 flex flex-col gap-3 absolute bottom-0 justify-end opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out inset-0 z-9 bg-black mask-t-from-1% to-transparent"
                                 >

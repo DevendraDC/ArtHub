@@ -20,7 +20,7 @@ function groupOptions(id: number, userId: string) {
         queryKey: ["ProfilePage", id, userId],
         queryFn: async () => await getProfileData(id, userId),
         staleTime: 10 * 60 * 1000,
-        refetchOnMount: true
+        refetchOnMount: true,
     });
 }
 
