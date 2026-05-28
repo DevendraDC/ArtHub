@@ -1,6 +1,6 @@
 "use client";
 
-import { Upload } from "lucide-react";
+import { Trash2Icon, Upload } from "lucide-react";
 import {
     FieldGroup,
     FieldSet,
@@ -24,8 +24,8 @@ import { usernameExist } from "@/data/dal/User/queriesActions";
 import { cloudinaryTransform } from "@/utils/cloudinaryTransform";
 import { uploadImage } from "@/lib/cloudinaryFunctions";
 import { Spinner } from "@/components/ui/spinner";
-import { useSession } from "../Providers";
 import { SessionType } from "@/data/dal/getUserSession";
+import { deleteUser } from "better-auth/api";
 
 
 type data = {
@@ -243,6 +243,16 @@ export default function Settings({ session }: { session: SessionType }) {
                         </FieldSet>
                     </FieldGroup>
                 </form>
+                {session && session.user.username && session.user.name && (
+                    <button onClick={async () => {
+                        const result = await deleteUser();
+                        if (!result.success) toast.error("failed to delete your account");
+                        else {
+                            toast.success("account deleted successfully");
+                            router.push("/login");
+                        }
+                    }} className="flex gap-3 cursor-pointer bg-red-700/20 border border-red-500 text-red-700 rounded-lg w-fit p-2 px-4"><Trash2Icon /> delete account</button>
+                )}
             </div>
         </div>
     );

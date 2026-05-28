@@ -54,22 +54,22 @@ export default function CreatePost({ session }: { session: SessionType }) {
                 return;
             }
 
-            // const aiCheckPromises = uploaded.data.map(img => checkAi(img.secure_url));
-            // const aiCheckResults = await Promise.all(aiCheckPromises);
+            const aiCheckPromises = uploaded.data.map(img => checkAi(img.secure_url));
+            const aiCheckResults = await Promise.all(aiCheckPromises);
 
-            // const systemErrorOccurred = aiCheckResults.some(res => !res.success);
-            // const containsAiImage = aiCheckResults.some(res => res.success && res.result?.aiGenerated);
+            const systemErrorOccurred = aiCheckResults.some(res => !res.success);
+            const containsAiImage = aiCheckResults.some(res => res.success && res.result?.aiGenerated);
 
 
-            // if (systemErrorOccurred) {
-            //     toast.error("An error occurred while scanning your images for AI content.");
-            //     return;
-            // }
+            if (systemErrorOccurred) {
+                toast.error("An error occurred while scanning your images for AI content.");
+                return;
+            }
 
-            // if (containsAiImage) {
-            //     toast.error("One or more images were flagged as AI-generated. Posts must be authentic human artwork.");
-            //     return;
-            // }
+            if (containsAiImage) {
+                toast.error("One or more images were flagged as AI-generated. Posts must be authentic human artwork.");
+                return;
+            }
 
             selectedTags.forEach((tag) => {
                 formData.append("tags", tag);

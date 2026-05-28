@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { getUserSession } from "../getUserSession";
 
 type userData = {
   id: string;
@@ -64,3 +65,30 @@ export const toggleFollow = async (followerId: string, followingId: string, isFo
 
   revalidatePath("/profile");
 };
+
+
+export const deleteUser = async () => {
+  try {
+    const session = await getUserSession();
+    if(!session){
+      throw new Error("session not found!");
+    }
+    if(!session.user.username || !session.user.name) {
+      throw new Error("profile not created!");
+    }
+    await prisma.user.delete({
+      where: {
+        id: session.user.id
+      }
+    })
+    revalidatePath("/", "layout");
+    return {
+      success: true
+    }
+  } catch (error) {
+      console.error(error);
+      return {
+        success: false
+      }
+  }
+}

@@ -1,6 +1,7 @@
 "use client"
 
 import { toggleFollow } from "@/data/dal/User/mutations";
+import { useQueryClient } from "@tanstack/react-query";
 import { useOptimistic, useTransition } from "react";
 
 type data = {
@@ -10,6 +11,7 @@ type data = {
 }
 
 export default function OptimisticFollow({ data }: { data: data }) {
+    const queryClient = useQueryClient()
     const { isFollowing, postOwnerId, userId } = data;
     const [isPending, startTransition] = useTransition();
     const [optimisticFollowState, updateOptimisticFollow] = useOptimistic(
@@ -23,6 +25,9 @@ export default function OptimisticFollow({ data }: { data: data }) {
         startTransition(async () => {
             updateOptimisticFollow(newFollowState);
             await toggleFollow(userId, postOwnerId, !newFollowState)
+        })
+        queryClient.invalidateQueries({
+            queryKey: ["ProfilePage", 2, postOwnerId],
         })
     }
 
