@@ -36,7 +36,7 @@ export default async function PostDetailsModal({ postId }: { postId: string }) {
 
                     {res[0].data && res[2] && res[2].user.username && res[2].user.id === res[0].data.authorId && (
                         // <button className="cursor-pointer"><Trash className="text-red-700"/></button>
-                        <DeletePostComponent postId={postId} username={res[2].user.username} />
+                        <DeletePostComponent postId={postId} username={res[2].user.username} userId={res[2].user.id} />
                     )}
                 </div>
                 <section>

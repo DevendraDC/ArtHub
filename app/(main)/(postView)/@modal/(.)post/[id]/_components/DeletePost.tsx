@@ -1,11 +1,13 @@
 "use client";
 
 import { deletePost } from "@/data/dal/Post/mutations";
+import { useQueryClient } from "@tanstack/react-query";
 import { Trash2 } from "lucide-react";
 import { redirect } from "next/navigation";
 import { toast } from "sonner";
 
-export default function DeletePostComponent({ postId, username }: { postId: string, username: string }) {
+export default function DeletePostComponent({ postId, username, userId }: { postId: string, username: string, userId: string }) {
+    const queryClient = useQueryClient()
     return (
         <>
             <label htmlFor="my_modal_6" className="btn bg-transparent border-0 text-red-600"><Trash2 /> Delete post</label>
@@ -22,6 +24,9 @@ export default function DeletePostComponent({ postId, username }: { postId: stri
                             }
                             else {
                                 toast.success("post deleted successfully");
+                                queryClient.invalidateQueries({
+                                    queryKey: ["ProfilePage", 0, userId]
+                                })
                                 redirect(`/profile/${username}`)
                             }
                         }} className="btn bg-white text-black">Yes</label>
