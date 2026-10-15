@@ -39,7 +39,7 @@ type data = {
     location: string | null;
 }
 
-export default function Settings({ session }: { session: SessionType }) {
+export default function settings({ session }: { session: SessionType }) {
     if (!session) return null;
     const router = useRouter()
     const { username, name, bio, image, email, portfolio, location, id } = session.user;
